@@ -157,19 +157,26 @@ async function getCurrentUser() {
 
 async function getProducts() {
   if (!supabaseConnected || !supabaseClient) {
+    console.error('❌ Supabase not connected');
     throw new Error('Supabase not connected');
   }
 
   try {
+    console.log('🔍 Fetching products...');
     const { data, error } = await supabaseClient
       .from('products')
       .select('*')
       .order('created_at', { ascending: true });
 
-    if (error) throw error;
+    if (error) {
+      console.error('❌ Products error:', error);
+      throw error;
+    }
+    
+    console.log('✅ Products loaded:', data?.length || 0);
     return data || [];
   } catch (e) {
-    console.error('Error fetching products:', e);
+    console.error('❌ Error fetching products:', e);
     throw e;
   }
 }
@@ -401,6 +408,12 @@ window.Pixlnex = {
   SUPABASE_BUCKET
 };
 
+// Auto-init when page loads
 document.addEventListener('DOMContentLoaded', function() {
   initSupabase();
 });
+
+// Also init immediately if DOM already loaded
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  initSupabase();
+}
