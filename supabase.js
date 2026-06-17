@@ -1,8 +1,8 @@
 // supabase.js - Centralized Supabase Configuration
 // ⚠️ REPLACE WITH YOUR ACTUAL CREDENTIALS
 
-const SUPABASE_URL = 'https://your-project.supabase.co';
-const SUPABASE_ANON_KEY = 'your-anon-key';
+const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
 const SUPABASE_BUCKET = 'product-images';
 
 let supabaseClient = null;
