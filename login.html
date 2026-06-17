@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixlnex · Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    body { background: #f8fafc; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .login-container { max-width: 420px; width: 100%; background: white; border-radius: 2.5rem; padding: 2.8rem 2.5rem; box-shadow: 0 12px 40px rgba(0,0,0,0.06); border: 1px solid #e9eef3; }
+    .login-container .logo { display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; text-decoration: none; margin-bottom: 0.5rem; }
+    .login-container .logo i { color: #2563eb; font-size: 2rem; }
+    .login-container h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.3rem; text-align: center; }
+    .login-container .sub { text-align: center; color: #64748b; margin-bottom: 2rem; font-size: 0.95rem; }
+    .login-container .sub i { color: #2563eb; }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: #1e293b; }
+    .form-group input { width: 100%; padding: 0.8rem 1.2rem; border-radius: 60px; border: 1px solid #e2e8f0; font-size: 1rem; transition: 0.2s; background: #f8fafc; }
+    .form-group input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); background: white; }
+    .login-btn { width: 100%; padding: 0.85rem; border-radius: 60px; border: none; background: #0f2b4b; color: white; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.7rem; }
+    .login-btn:hover { background: #1a3a5e; transform: scale(1.01); }
+    .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .login-footer { text-align: center; margin-top: 1.5rem; color: #64748b; font-size: 0.9rem; }
+    .login-footer a { color: #2563eb; text-decoration: none; font-weight: 600; }
+    .login-footer a:hover { text-decoration: underline; }
+    .demo-cred { background: #f1f6fe; padding: 0.8rem 1.2rem; border-radius: 60px; font-size: 0.85rem; color: #475569; text-align: center; margin-top: 1.2rem; border: 1px dashed #2563eb40; }
+    .demo-cred code { background: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-weight: 600; color: #2563eb; }
+    .error-msg { background: #fee2e2; color: #b91c1c; padding: 0.7rem 1rem; border-radius: 40px; font-size: 0.9rem; text-align: center; margin-bottom: 1rem; display: none; }
+    .error-msg.show { display: block; }
+    .web-badge { text-align: center; margin-top: 1rem; font-size: 0.8rem; color: #2563eb; font-weight: 600; }
+    .web-badge i { margin-right: 0.3rem; }
+    .back-link { display: inline-block; margin-top: 1rem; color: #64748b; text-decoration: none; font-size: 0.9rem; transition: 0.2s; text-align: center; width: 100%; }
+    .back-link:hover { color: #2563eb; }
+    .back-link i { margin-right: 0.4rem; }
+    .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 0.6s ease-in-out infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (max-width: 500px) { .login-container { padding: 2rem 1.5rem; } }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <a href="index.html" class="logo"><i class="fas fa-cube"></i><span>Pixlnex</span></a>
+  <h2>Welcome back</h2>
+  <p class="sub"><i class="fas fa-globe"></i> We only sell webs</p>
+  <div id="errorMsg" class="error-msg">⚠️ Invalid credentials. Try again.</div>
+  <form id="loginForm">
+    <div class="form-group"><label for="email"><i class="far fa-envelope"></i> Email</label><input type="email" id="email" placeholder="demo@pixlnex.com" required></div>
+    <div class="form-group"><label for="password"><i class="fas fa-lock"></i> Password</label><input type="password" id="password" placeholder="••••••••" required></div>
+    <button type="submit" class="login-btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Sign in</button>
+  </form>
+  <div class="demo-cred"><i class="fas fa-info-circle"></i> Demo: <code>demo@pixlnex.com</code> / <code>password123</code></div>
+  <div class="login-footer">Don't have an account? <a href="signup.html">Sign up</a></div>
+  <div class="web-badge"><i class="fas fa-spider"></i> We only sell webs</div>
+  <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to home</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const errorMsg = document.getElementById('errorMsg');
+    const loginBtn = document.getElementById('loginBtn');
+
+    errorMsg.classList.remove('show');
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<span class="loading-spinner"></span> Signing in...';
+
+    const result = await window.Pixlnex.signInUser(email, password);
+
+    loginBtn.disabled = false;
+    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign in';
+
+    if (result.success) {
+      window.location.href = 'index.html';
+    } else {
+      errorMsg.textContent = `⚠️ ${result.error || 'Invalid email or password'}`;
+      errorMsg.classList.add('show');
+    }
+  });
+</script>
+</body>
+</html>

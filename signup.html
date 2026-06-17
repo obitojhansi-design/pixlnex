@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixlnex · Sign Up</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    body { background: #f8fafc; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .signup-container { max-width: 460px; width: 100%; background: white; border-radius: 2.5rem; padding: 2.8rem 2.5rem; box-shadow: 0 12px 40px rgba(0,0,0,0.06); border: 1px solid #e9eef3; }
+    .signup-container .logo { display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; text-decoration: none; margin-bottom: 0.5rem; }
+    .signup-container .logo i { color: #2563eb; font-size: 2rem; }
+    .signup-container h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.3rem; text-align: center; }
+    .signup-container .sub { text-align: center; color: #64748b; margin-bottom: 2rem; font-size: 0.95rem; }
+    .signup-container .sub i { color: #2563eb; }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: #1e293b; }
+    .form-group input { width: 100%; padding: 0.8rem 1.2rem; border-radius: 60px; border: 1px solid #e2e8f0; font-size: 1rem; transition: 0.2s; background: #f8fafc; }
+    .form-group input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); background: white; }
+    .signup-btn { width: 100%; padding: 0.85rem; border-radius: 60px; border: none; background: #0f2b4b; color: white; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.7rem; margin-top: 0.5rem; }
+    .signup-btn:hover { background: #1a3a5e; transform: scale(1.01); }
+    .signup-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .signup-footer { text-align: center; margin-top: 1.5rem; color: #64748b; font-size: 0.9rem; }
+    .signup-footer a { color: #2563eb; text-decoration: none; font-weight: 600; }
+    .signup-footer a:hover { text-decoration: underline; }
+    .error-msg { background: #fee2e2; color: #b91c1c; padding: 0.7rem 1rem; border-radius: 40px; font-size: 0.9rem; text-align: center; margin-bottom: 1rem; display: none; }
+    .error-msg.show { display: block; }
+    .success-msg { background: #dcfce7; color: #166534; padding: 0.7rem 1rem; border-radius: 40px; font-size: 0.9rem; text-align: center; margin-bottom: 1rem; display: none; }
+    .success-msg.show { display: block; }
+    .web-badge { text-align: center; margin-top: 1rem; font-size: 0.8rem; color: #2563eb; font-weight: 600; }
+    .web-badge i { margin-right: 0.3rem; }
+    .back-link { display: inline-block; margin-top: 1rem; color: #64748b; text-decoration: none; font-size: 0.9rem; transition: 0.2s; text-align: center; width: 100%; }
+    .back-link:hover { color: #2563eb; }
+    .back-link i { margin-right: 0.4rem; }
+    .password-strength { margin-top: 0.3rem; display: flex; gap: 0.3rem; }
+    .password-strength .bar { height: 4px; flex: 1; border-radius: 4px; background: #e2e8f0; transition: 0.3s; }
+    .password-strength .bar.weak { background: #ef4444; }
+    .password-strength .bar.medium { background: #f59e0b; }
+    .password-strength .bar.strong { background: #22c55e; }
+    .password-strength-text { font-size: 0.75rem; color: #64748b; margin-top: 0.2rem; }
+    .password-strength-text.weak { color: #ef4444; }
+    .password-strength-text.medium { color: #f59e0b; }
+    .password-strength-text.strong { color: #22c55e; }
+    .terms { font-size: 0.8rem; color: #64748b; text-align: center; margin-top: 1rem; }
+    .terms a { color: #2563eb; text-decoration: none; }
+    .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 0.6s ease-in-out infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (max-width: 500px) { .signup-container { padding: 2rem 1.5rem; } }
+  </style>
+</head>
+<body>
+
+<div class="signup-container">
+  <a href="index.html" class="logo"><i class="fas fa-cube"></i><span>Pixlnex</span></a>
+  <h2>Create Account</h2>
+  <p class="sub"><i class="fas fa-globe"></i> Join us — we only sell webs</p>
+  <div id="errorMsg" class="error-msg">⚠️ Something went wrong. Please try again.</div>
+  <div id="successMsg" class="success-msg">✅ Account created! Redirecting...</div>
+  <form id="signupForm">
+    <div class="form-group"><label for="fullName"><i class="fas fa-user"></i> Full Name</label><input type="text" id="fullName" placeholder="John Doe" required /></div>
+    <div class="form-group"><label for="email"><i class="far fa-envelope"></i> Email Address</label><input type="email" id="email" placeholder="john@example.com" required /></div>
+    <div class="form-group"><label for="password"><i class="fas fa-lock"></i> Password</label><input type="password" id="password" placeholder="Min 8 characters" required minlength="8" />
+      <div class="password-strength" id="passwordStrength"><div class="bar" id="bar1"></div><div class="bar" id="bar2"></div><div class="bar" id="bar3"></div></div>
+      <div class="password-strength-text" id="strengthText">Enter a strong password</div>
+    </div>
+    <div class="form-group"><label for="confirmPassword"><i class="fas fa-check-circle"></i> Confirm Password</label><input type="password" id="confirmPassword" placeholder="Confirm your password" required /></div>
+    <button type="submit" class="signup-btn" id="signupBtn"><i class="fas fa-user-plus"></i> Create Account</button>
+  </form>
+  <div class="terms">By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></div>
+  <div class="signup-footer">Already have an account? <a href="login.html">Sign in</a></div>
+  <div class="web-badge"><i class="fas fa-spider"></i> We only sell webs — one person, one website at a time</div>
+  <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to home</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+  (function() {
+    const PX = window.Pixlnex;
+
+    const form = document.getElementById('signupForm');
+    const fullNameInput = document.getElementById('fullName');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const signupBtn = document.getElementById('signupBtn');
+    const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
+
+    const bar1 = document.getElementById('bar1');
+    const bar2 = document.getElementById('bar2');
+    const bar3 = document.getElementById('bar3');
+    const strengthText = document.getElementById('strengthText');
+
+    function checkPasswordStrength(password) {
+      let score = 0;
+      if (password.length >= 8) score++;
+      if (password.match(/[a-z]/) && password.match(/[A-Z]/)) score++;
+      if (password.match(/[0-9]/) || password.match(/[^a-zA-Z0-9]/)) score++;
+      return score;
+    }
+
+    passwordInput.addEventListener('input', function() {
+      const password = this.value;
+      const score = checkPasswordStrength(password);
+      bar1.className = 'bar';
+      bar2.className = 'bar';
+      bar3.className = 'bar';
+      if (password.length === 0) {
+        strengthText.textContent = 'Enter a strong password';
+        strengthText.className = 'password-strength-text';
+        return;
+      }
+      if (score <= 1) {
+        bar1.className = 'bar weak';
+        strengthText.textContent = 'Weak — add uppercase, numbers, or symbols';
+        strengthText.className = 'password-strength-text weak';
+      } else if (score === 2) {
+        bar1.className = 'bar medium';
+        bar2.className = 'bar medium';
+        strengthText.textContent = 'Medium — add more variety';
+        strengthText.className = 'password-strength-text medium';
+      } else {
+        bar1.className = 'bar strong';
+        bar2.className = 'bar strong';
+        bar3.className = 'bar strong';
+        strengthText.textContent = 'Strong password!';
+        strengthText.className = 'password-strength-text strong';
+      }
+    });
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const name = fullNameInput.value.trim();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+
+      errorMsg.classList.remove('show');
+      successMsg.classList.remove('show');
+
+      if (!name || name.length < 2) {
+        errorMsg.textContent = '⚠️ Please enter your full name.';
+        errorMsg.classList.add('show');
+        return;
+      }
+      if (!email || !email.includes('@')) {
+        errorMsg.textContent = '⚠️ Please enter a valid email address.';
+        errorMsg.classList.add('show');
+        return;
+      }
+      if (password.length < 8) {
+        errorMsg.textContent = '⚠️ Password must be at least 8 characters.';
+        errorMsg.classList.add('show');
+        return;
+      }
+      if (password !== confirmPassword) {
+        errorMsg.textContent = '⚠️ Passwords do not match.';
+        errorMsg.classList.add('show');
+        return;
+      }
+
+      signupBtn.disabled = true;
+      signupBtn.innerHTML = '<span class="loading-spinner"></span> Creating...';
+
+      const result = await PX.signUpUser(email, password, { full_name: name });
+
+      signupBtn.disabled = false;
+      signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+
+      if (result.success) {
+        successMsg.textContent = `✅ Account created successfully! Welcome ${name}! Redirecting...`;
+        successMsg.classList.add('show');
+        setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+      } else {
+        errorMsg.textContent = `⚠️ ${result.error || 'Something went wrong. Please try again.'}`;
+        errorMsg.classList.add('show');
+      }
+    });
+  })();
+</script>
+</body>
+</html>

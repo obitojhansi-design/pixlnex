@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixlnex · Profile</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    body { background: #f8fafc; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
+    .app { max-width: 1300px; margin: 0 auto; padding: 1.5rem 2rem; flex: 1; width: 100%; }
+    .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; padding: 0.75rem 0 1.5rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem; }
+    .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; letter-spacing: -0.5px; text-decoration: none; }
+    .logo i { color: #2563eb; font-size: 2rem; }
+    .nav-links { display: flex; align-items: center; gap: 2rem; font-weight: 500; flex-wrap: wrap; }
+    .nav-links a { text-decoration: none; color: #1e293b; font-size: 1rem; transition: color 0.2s; cursor: pointer; }
+    .nav-links a:hover, .nav-links a.active { color: #2563eb; }
+    .nav-links a.active { font-weight: 600; }
+    .auth-btn { background: #0f2b4b; color: white !important; padding: 0.5rem 1.2rem; border-radius: 40px; font-weight: 600; transition: 0.2s; }
+    .auth-btn:hover { background: #1a3a5e; transform: scale(1.02); }
+    .auth-btn.logout { background: #eef2f6; color: #1e293b !important; }
+    .auth-btn.logout:hover { background: #fee2e2; color: #b91c1c !important; }
+    .cart-icon { font-size: 1.4rem; background: #eef2f6; padding: 0.5rem 0.9rem; border-radius: 40px; display: flex; align-items: center; gap: 0.4rem; text-decoration: none; color: #0b1a2e; }
+    .cart-count { background: #2563eb; color: white; font-size: 0.75rem; font-weight: 600; padding: 0.15rem 0.55rem; border-radius: 30px; margin-left: 0.2rem; }
+    .profile-header { background: linear-gradient(145deg, #ffffff, #f1f6fe); padding: 2.5rem 2.8rem; border-radius: 2.5rem; margin-bottom: 2.8rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; box-shadow: 0 8px 20px rgba(0,20,40,0.04); }
+    .profile-avatar { display: flex; align-items: center; gap: 1.5rem; }
+    .profile-avatar .avatar-icon { width: 80px; height: 80px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.8rem; color: white; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+    .profile-avatar .user-info h1 { font-size: 2rem; font-weight: 700; }
+    .profile-avatar .user-info p { color: #64748b; font-size: 1rem; }
+    .profile-avatar .user-info .badge { display: inline-block; background: #2563eb10; color: #2563eb; padding: 0.2rem 1rem; border-radius: 40px; font-weight: 600; font-size: 0.8rem; border: 1px solid #2563eb20; margin-top: 0.3rem; }
+    .profile-stats { display: flex; gap: 2.5rem; }
+    .profile-stats .stat { text-align: center; }
+    .profile-stats .stat .number { font-size: 2rem; font-weight: 700; color: #0f2b4b; }
+    .profile-stats .stat .label { color: #64748b; font-size: 0.85rem; }
+    .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .profile-card { background: white; border-radius: 2rem; padding: 1.8rem 2.2rem; border: 1px solid #e9eef3; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+    .profile-card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
+    .profile-card h3 i { color: #2563eb; }
+    .profile-card .info-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid #f1f5f9; }
+    .profile-card .info-row:last-child { border-bottom: none; }
+    .profile-card .info-row .label { color: #64748b; font-weight: 500; }
+    .profile-card .info-row .value { font-weight: 600; color: #0b1a2e; }
+    .order-history { background: white; border-radius: 2rem; padding: 1.8rem 2.2rem; border: 1px solid #e9eef3; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-top: 2rem; grid-column: 1 / -1; }
+    .order-history h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
+    .order-history h3 i { color: #2563eb; }
+    .order-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid #f1f5f9; }
+    .order-item:last-child { border-bottom: none; }
+    .order-item .order-info { display: flex; flex-direction: column; gap: 0.2rem; }
+    .order-item .order-info .order-name { font-weight: 600; }
+    .order-item .order-info .order-date { font-size: 0.8rem; color: #94a3b8; }
+    .order-status { padding: 0.2rem 1rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600; }
+    .order-status.delivered { background: #dcfce7; color: #166534; }
+    .order-status.shipped { background: #fef9c3; color: #854d0e; }
+    .order-status.processing { background: #e0f2fe; color: #0369a1; }
+    .order-item .order-price { font-weight: 700; color: #0f2b4b; }
+    .no-orders { color: #94a3b8; text-align: center; padding: 1.5rem 0; font-style: italic; }
+    .edit-btn { background: #eef2f6; border: none; border-radius: 40px; padding: 0.4rem 1.2rem; font-weight: 600; color: #0f2b4b; cursor: pointer; transition: 0.15s; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .edit-btn:hover { background: #2563eb; color: white; }
+    .footer { margin-top: 4rem; border-top: 1px solid #e2e8f0; padding: 2rem 0 1rem 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: #475569; font-size: 0.9rem; }
+    .footer i { color: #2563eb; margin: 0 0.2rem; }
+    @media (max-width: 900px) { .profile-grid { grid-template-columns: 1fr; } .order-history { grid-column: 1; } .profile-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; } .profile-stats { width: 100%; justify-content: space-around; } }
+    @media (max-width: 700px) { .app { padding: 1rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .profile-header { padding: 1.5rem; } .profile-avatar .avatar-icon { width: 60px; height: 60px; font-size: 2rem; } .profile-avatar .user-info h1 { font-size: 1.5rem; } .profile-stats .stat .number { font-size: 1.5rem; } }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <header class="navbar">
+    <a href="index.html" class="logo"><i class="fas fa-cube"></i><span>Pixlnex</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="shop.html">Webs</a>
+      <a href="index.html#deals">Deals</a>
+      <a href="index.html#about">About</a>
+      <a href="profile.html" class="active auth-btn" id="authBtn"><i class="fas fa-user"></i> Profile</a>
+      <a href="shop.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCounter">0</span></a>
+    </div>
+  </header>
+
+  <div class="profile-header">
+    <div class="profile-avatar">
+      <div class="avatar-icon"><i class="fas fa-user"></i></div>
+      <div class="user-info">
+        <h1 id="userName">User</h1>
+        <p id="userEmail">user@example.com</p>
+        <span class="badge"><i class="fas fa-spider"></i> We only sell webs</span>
+      </div>
+    </div>
+    <div class="profile-stats">
+      <div class="stat"><div class="number" id="orderCount">0</div><div class="label">Webs Ordered</div></div>
+      <div class="stat"><div class="number" id="totalSpent">₨ 0</div><div class="label">Total Spent</div></div>
+      <div class="stat"><div class="number" id="memberSince">2026</div><div class="label">Member Since</div></div>
+    </div>
+  </div>
+
+  <div class="profile-grid">
+    <div class="profile-card">
+      <h3><i class="fas fa-id-card"></i> Personal Information</h3>
+      <div class="info-row"><span class="label">Full Name</span><span class="value" id="profileName">User</span></div>
+      <div class="info-row"><span class="label">Email</span><span class="value" id="profileEmail">user@example.com</span></div>
+      <div class="info-row"><span class="label">Member Since</span><span class="value" id="profileSince">2026</span></div>
+      <div class="info-row"><span class="label">Status</span><span class="value" style="color:#22c55e;"><i class="fas fa-circle" style="font-size:0.6rem;"></i> Active</span></div>
+      <div style="margin-top:1rem;"><button class="edit-btn" onclick="alert('✏️ Edit profile functionality would go here.')"><i class="fas fa-edit"></i> Edit Profile</button></div>
+    </div>
+
+    <div class="profile-card">
+      <h3><i class="fas fa-cog"></i> Account Settings</h3>
+      <div class="info-row"><span class="label">Password</span><span class="value">••••••••</span></div>
+      <div class="info-row"><span class="label">2FA Status</span><span class="value" style="color:#22c55e;"><i class="fas fa-check-circle"></i> Enabled</span></div>
+      <div class="info-row"><span class="label">Email Preferences</span><span class="value">Weekly updates</span></div>
+      <div class="info-row"><span class="label">Account Type</span><span class="value">Premium</span></div>
+      <div style="margin-top:1rem;display:flex;gap:0.8rem;flex-wrap:wrap;">
+        <button class="edit-btn" onclick="alert('🔐 Password change functionality would go here.')"><i class="fas fa-key"></i> Change Password</button>
+        <button class="edit-btn" style="background:#fee2e2;color:#b91c1c;" onclick="SW.signOutUser(); window.location.href='index.html';"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </div>
+
+    <div class="order-history">
+      <h3><i class="fas fa-clock-rotate"></i> Your Website Orders</h3>
+      <div id="orderList"><div class="no-orders">📦 No orders yet. Start shopping for your perfect web!</div></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span>© 2026 Pixlnex — <i class="fas fa-spider"></i> one person · one website at a time</span>
+    <span><i class="fab fa-twitter"></i> <i class="fab fa-github"></i> <i class="fab fa-linkedin"></i></span>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+  (function() {
+    const SW = window.pixlnexSupabase;
+    let currentUser = null;
+    let cart = [];
+    let orders = [];
+
+    const cartCounter = document.getElementById('cartCounter');
+    const authBtn = document.getElementById('authBtn');
+
+    async function updateAuthUI() {
+      currentUser = await SW.getCurrentUser();
+      if (currentUser) {
+        const name = currentUser.user_metadata?.full_name || currentUser.email || 'User';
+        authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
+        authBtn.className = 'active auth-btn';
+        authBtn.href = 'profile.html';
+      } else {
+        authBtn.innerHTML = '<i class="fas fa-user"></i> Login';
+        authBtn.className = 'auth-btn';
+        authBtn.href = 'login.html';
+        window.location.href = 'login.html';
+      }
+    }
+
+    function updateCartCount() {
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      cartCounter.textContent = totalItems;
+    }
+
+    async function renderProfile() {
+      if (!currentUser) { window.location.href = 'login.html'; return; }
+
+      const name = currentUser.user_metadata?.full_name || currentUser.email || 'User';
+      document.getElementById('userName').textContent = name;
+      document.getElementById('userEmail').textContent = currentUser.email || 'user@example.com';
+      document.getElementById('profileName').textContent = name;
+      document.getElementById('profileEmail').textContent = currentUser.email || 'user@example.com';
+      document.getElementById('profileSince').textContent = new Date(currentUser.created_at || Date.now()).getFullYear();
+
+      try {
+        orders = await SW.getUserOrders(currentUser.email);
+      } catch (e) {
+        orders = [];
+      }
+
+      const totalOrders = orders.length;
+      const totalSpent = orders.reduce((sum, o) => sum + (o.price || 0), 0);
+      document.getElementById('orderCount').textContent = totalOrders;
+      document.getElementById('totalSpent').textContent = SW.formatPKR(totalSpent);
+      document.getElementById('memberSince').textContent = new Date(currentUser.created_at || Date.now()).getFullYear();
+
+      const orderList = document.getElementById('orderList');
+      if (orders.length === 0) {
+        orderList.innerHTML = '<div class="no-orders">📦 No orders yet. Start shopping for your perfect web!</div>';
+      } else {
+        orderList.innerHTML = '';
+        orders.forEach(order => {
+          const div = document.createElement('div');
+          div.className = 'order-item';
+          const statusClass = order.status || 'processing';
+          const statusLabels = { 'delivered': 'Delivered ✅', 'shipped': 'Shipped 📦', 'processing': 'Processing ⏳' };
+          div.innerHTML = `
+            <div class="order-info">
+              <span class="order-name">${order.name}</span>
+              <span class="order-date">${order.order_id || '#ORD-' + Date.now()} · ${order.created_at ? new Date(order.created_at).toLocaleDateString() : '2026-06-16'}</span>
+            </div>
+            <span class="order-status ${statusClass}">${statusLabels[statusClass] || statusClass}</span>
+            <span class="order-price">${SW.formatPKR(order.price)}</span>
+          `;
+          orderList.appendChild(div);
+        });
+      }
+    }
+
+    async function init() {
+      await SW.initSupabase();
+      await updateAuthUI();
+      updateCartCount();
+      await renderProfile();
+    }
+
+    init();
+
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'pixlnex_cart') { cart = JSON.parse(e.newValue) || []; updateCartCount(); }
+    });
+  })();
+</script>
+</body>
+</html>
