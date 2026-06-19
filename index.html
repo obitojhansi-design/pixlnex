@@ -124,7 +124,7 @@
 
   <section id="dealsSection" class="page-section hidden">
     <div class="info-card">
-      <h2>🔥 Websites Deals</h2>
+      <h2>🔥 Web Deals</h2>
       <p>Limited-time offers on popular website packages. Grab yours!</p>
       <div class="deal-grid">
         <div class="deal-item"><i class="fas fa-tag"></i> Portfolio Web <span class="tag">-20%</span></div>
@@ -217,7 +217,13 @@
     const toastMsg = document.getElementById('toastMsg');
 
     let toastTimer;
-    function showToast(msg) { toastMsg.textContent = msg; toast.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove('show'), 2500); }
+
+    function showToast(msg) {
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+    }
 
     async function updateAuthUI() {
       currentUser = await PX.getCurrentUser();
@@ -235,15 +241,18 @@
 
     async function renderProducts() {
       try {
+        console.log('🔄 Loading products...');
         products = await PX.getProducts();
+        console.log('✅ Products loaded:', products.length);
       } catch (e) {
+        console.error('❌ Error loading products:', e);
         showToast('⚠️ Error loading products');
         return;
       }
 
       productGrid.innerHTML = '';
       if (!products || products.length === 0) {
-        productGrid.innerHTML = '<div style="text-align:center;padding:2rem;color:#94a3b8;">No products available.</div>';
+        productGrid.innerHTML = '<div style="text-align:center;padding:2rem;color:#94a3b8;">No products available. Add some in the admin panel!</div>';
         return;
       }
 
@@ -298,7 +307,7 @@
 
     async function orderNow(product) {
       currentUser = await PX.getCurrentUser();
-      if (!currentUser) { showToast('🔐 Please login first to order'); setTimeout(() => window.location.href='login.html', 800); return; }
+      if (!currentUser) { showToast('🔐 Please login first to order'); setTimeout(() => window.location.href = 'login.html', 800); return; }
       addToCart(product);
       const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
       try {
@@ -339,7 +348,7 @@
     checkoutBtn.addEventListener('click', async function() {
       if (cart.length === 0) return;
       currentUser = await PX.getCurrentUser();
-      if (!currentUser) { showToast('🔐 Please login first to checkout'); setTimeout(() => window.location.href='login.html', 800); return; }
+      if (!currentUser) { showToast('🔐 Please login first to checkout'); setTimeout(() => window.location.href = 'login.html', 800); return; }
       const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
       try {
         for (const item of cart) {
@@ -375,14 +384,14 @@
     document.getElementById('customOrderForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       currentUser = await PX.getCurrentUser();
-      if (!currentUser) { showToast('🔐 Please login first'); setTimeout(() => window.location.href='login.html', 800); return; }
+      if (!currentUser) { showToast('🔐 Please login first'); setTimeout(() => window.location.href = 'login.html', 800); return; }
       const name = document.getElementById('customName').value.trim();
       const email = document.getElementById('customEmail').value.trim();
       const type = document.getElementById('customType').value;
       const budget = document.getElementById('customBudget').value;
       const details = document.getElementById('customDetails').value.trim();
       if (!name || !email || !details) { showToast('⚠️ Please fill in all required fields'); return; }
-      const typeLabels = { 'portfolio':'Portfolio','business':'Business','ecommerce':'E‑commerce','blog':'Blog','landing':'Landing Page','other':'Other' };
+      const typeLabels = { 'portfolio': 'Portfolio', 'business': 'Business', 'ecommerce': 'E‑commerce', 'blog': 'Blog', 'landing': 'Landing Page', 'other': 'Other' };
       const budgetAmount = budget === '200000+' ? 200000 : parseInt(budget.split('-')[0]) || 50000;
       try {
         await PX.createOrder({ name: `Custom: ${typeLabels[type] || type}`, price: budgetAmount, customer_email: email, customer_name: name });
@@ -393,6 +402,7 @@
     });
 
     async function init() {
+      console.log('🚀 Initializing Pixlnex...');
       await PX.initSupabase();
       await updateAuthUI();
       await renderProducts();
@@ -402,9 +412,15 @@
       document.getElementById('aboutSection').classList.add('hidden');
       document.getElementById('productSection').classList.remove('hidden');
       document.getElementById('customOrder').classList.remove('hidden');
+      console.log('✅ Pixlnex initialized successfully!');
     }
 
-    init();
+    // Wait for DOM to load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   })();
 </script>
 </body>
