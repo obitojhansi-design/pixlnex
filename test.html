@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supabase Test</title>
+  <style>
+    body { font-family: Arial; padding: 2rem; background: #f8fafc; }
+    .card { background: white; padding: 2rem; border-radius: 1rem; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .success { color: #22c55e; }
+    .error { color: #ef4444; }
+    pre { background: #f1f5f9; padding: 1rem; border-radius: 0.5rem; overflow: auto; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🔌 Supabase Connection Test</h1>
+    <div id="results">Testing...</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+  </script>
+  <script>
+    const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
+
+    const results = document.getElementById('results');
+
+    async function runTests() {
+      let html = '';
+
+      // Test 1: Check Supabase SDK
+      try {
+        html += `<p>✅ Supabase SDK loaded: ${typeof supabase}</p>`;
+      } catch (e) {
+        html += `<p class="error">❌ Supabase SDK not loaded: ${e.message}</p>`;
+      }
+
+      // Test 2: Create client
+      try {
+        const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        html += `<p>✅ Supabase client created successfully</p>`;
+
+        // Test 3: Try to get products
+        try {
+          const { data, error } = await client.from('products').select('*').limit(5);
+          if (error) {
+            html += `<p class="error">❌ Products error: ${error.message}</p>`;
+            html += `<p>Error details: ${JSON.stringify(error, null, 2)}</p>`;
+          } else {
+            html += `<p class="success">✅ Products fetched: ${data?.length || 0} items</p>`;
+            html += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+          }
+        } catch (e) {
+          html += `<p class="error">❌ Fetch error: ${e.message}</p>`;
+        }
+
+        // Test 4: Check Auth
+        try {
+          const { data, error } = await client.auth.getSession();
+          if (error) {
+            html += `<p class="error">❌ Auth error: ${error.message}</p>`;
+          } else {
+            html += `<p class="success">✅ Auth session: ${data.session ? 'Active' : 'None'}</p>`;
+          }
+        } catch (e) {
+          html += `<p class="error">❌ Auth error: ${e.message}</p>`;
+        }
+
+      } catch (e) {
+        html += `<p class="error">❌ Client error: ${e.message}</p>`;
+      }
+
+      results.innerHTML = html;
+    }
+
+    runTests();
+  </script>
+</body>
+</html>
