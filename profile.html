@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Pixlnex · Profile</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
     body { background: #f8fafc; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
@@ -22,7 +25,18 @@
     .auth-btn.logout:hover { background: #fee2e2; color: #b91c1c !important; }
     .cart-icon { font-size: 1.4rem; background: #eef2f6; padding: 0.5rem 0.9rem; border-radius: 40px; display: flex; align-items: center; gap: 0.4rem; text-decoration: none; color: #0b1a2e; }
     .cart-count { background: #2563eb; color: white; font-size: 0.75rem; font-weight: 600; padding: 0.15rem 0.55rem; border-radius: 30px; margin-left: 0.2rem; }
-    .profile-header { background: linear-gradient(145deg, #ffffff, #f1f6fe); padding: 2.5rem 2.8rem; border-radius: 2.5rem; margin-bottom: 2.8rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; box-shadow: 0 8px 20px rgba(0,20,40,0.04); }
+
+    .profile-header {
+      background: linear-gradient(145deg, #ffffff, #f1f6fe);
+      padding: 2.5rem 2.8rem;
+      border-radius: 2.5rem;
+      margin-bottom: 2.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 8px 20px rgba(0,20,40,0.04);
+    }
     .profile-avatar { display: flex; align-items: center; gap: 1.5rem; }
     .profile-avatar .avatar-icon { width: 80px; height: 80px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.8rem; color: white; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
     .profile-avatar .user-info h1 { font-size: 2rem; font-weight: 700; }
@@ -32,6 +46,7 @@
     .profile-stats .stat { text-align: center; }
     .profile-stats .stat .number { font-size: 2rem; font-weight: 700; color: #0f2b4b; }
     .profile-stats .stat .label { color: #64748b; font-size: 0.85rem; }
+
     .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
     .profile-card { background: white; border-radius: 2rem; padding: 1.8rem 2.2rem; border: 1px solid #e9eef3; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
     .profile-card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
@@ -40,6 +55,7 @@
     .profile-card .info-row:last-child { border-bottom: none; }
     .profile-card .info-row .label { color: #64748b; font-weight: 500; }
     .profile-card .info-row .value { font-weight: 600; color: #0b1a2e; }
+
     .order-history { background: white; border-radius: 2rem; padding: 1.8rem 2.2rem; border: 1px solid #e9eef3; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-top: 2rem; grid-column: 1 / -1; }
     .order-history h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
     .order-history h3 i { color: #2563eb; }
@@ -54,10 +70,18 @@
     .order-status.processing { background: #e0f2fe; color: #0369a1; }
     .order-item .order-price { font-weight: 700; color: #0f2b4b; }
     .no-orders { color: #94a3b8; text-align: center; padding: 1.5rem 0; font-style: italic; }
-    .edit-btn { background: #eef2f6; border: none; border-radius: 40px; padding: 0.4rem 1.2rem; font-weight: 600; color: #0f2b4b; cursor: pointer; transition: 0.15s; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.4rem; }
-    .edit-btn:hover { background: #2563eb; color: white; }
+
+    /* Logout button in settings */
+    .logout-btn { background: #fee2e2; color: #b91c1c; border: none; border-radius: 40px; padding: 0.6rem 1.8rem; font-weight: 600; cursor: pointer; transition: 0.15s; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; }
+    .logout-btn:hover { background: #fecaca; transform: scale(1.02); }
+
     .footer { margin-top: 4rem; border-top: 1px solid #e2e8f0; padding: 2rem 0 1rem 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: #475569; font-size: 0.9rem; }
     .footer i { color: #2563eb; margin: 0 0.2rem; }
+
+    .toast { position: fixed; bottom: 2rem; right: 2rem; background: #0f2b4b; color: white; padding: 1rem 1.8rem; border-radius: 60px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); font-weight: 600; display: flex; align-items: center; gap: 0.7rem; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 999; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast i { color: #22c55e; font-size: 1.2rem; }
+
     @media (max-width: 900px) { .profile-grid { grid-template-columns: 1fr; } .order-history { grid-column: 1; } .profile-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; } .profile-stats { width: 100%; justify-content: space-around; } }
     @media (max-width: 700px) { .app { padding: 1rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .profile-header { padding: 1.5rem; } .profile-avatar .avatar-icon { width: 60px; height: 60px; font-size: 2rem; } .profile-avatar .user-info h1 { font-size: 1.5rem; } .profile-stats .stat .number { font-size: 1.5rem; } }
   </style>
@@ -65,6 +89,7 @@
 <body>
 <div class="app">
 
+  <!-- ─── NAVBAR ─── -->
   <header class="navbar">
     <a href="index.html" class="logo"><i class="fas fa-cube"></i><span>Pixlnex</span></a>
     <div class="nav-links">
@@ -77,145 +102,197 @@
     </div>
   </header>
 
-  <div class="profile-header">
+  <!-- ─── TOAST ─── -->
+  <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Done!</span></div>
+
+  <!-- ─── PROFILE CONTENT ─── -->
+  <div class="profile-header" id="profileHeader">
     <div class="profile-avatar">
       <div class="avatar-icon"><i class="fas fa-user"></i></div>
       <div class="user-info">
-        <h1 id="userName">User</h1>
-        <p id="userEmail">user@example.com</p>
+        <h1 id="userName">Loading...</h1>
+        <p id="userEmail">loading@email.com</p>
         <span class="badge"><i class="fas fa-spider"></i> We only sell webs</span>
       </div>
     </div>
     <div class="profile-stats">
       <div class="stat"><div class="number" id="orderCount">0</div><div class="label">Webs Ordered</div></div>
       <div class="stat"><div class="number" id="totalSpent">₨ 0</div><div class="label">Total Spent</div></div>
-      <div class="stat"><div class="number" id="memberSince">2026</div><div class="label">Member Since</div></div>
+      <div class="stat"><div class="number" id="memberSince">-</div><div class="label">Member Since</div></div>
     </div>
   </div>
 
   <div class="profile-grid">
+    <!-- Personal Information -->
     <div class="profile-card">
       <h3><i class="fas fa-id-card"></i> Personal Information</h3>
-      <div class="info-row"><span class="label">Full Name</span><span class="value" id="profileName">User</span></div>
-      <div class="info-row"><span class="label">Email</span><span class="value" id="profileEmail">user@example.com</span></div>
-      <div class="info-row"><span class="label">Member Since</span><span class="value" id="profileSince">2026</span></div>
+      <div class="info-row"><span class="label">Full Name</span><span class="value" id="profileName">-</span></div>
+      <div class="info-row"><span class="label">Email</span><span class="value" id="profileEmail">-</span></div>
+      <div class="info-row"><span class="label">Member Since</span><span class="value" id="profileSince">-</span></div>
       <div class="info-row"><span class="label">Status</span><span class="value" style="color:#22c55e;"><i class="fas fa-circle" style="font-size:0.6rem;"></i> Active</span></div>
-      <div style="margin-top:1rem;"><button class="edit-btn" onclick="alert('✏️ Edit profile functionality would go here.')"><i class="fas fa-edit"></i> Edit Profile</button></div>
     </div>
 
+    <!-- Account Settings -->
     <div class="profile-card">
       <h3><i class="fas fa-cog"></i> Account Settings</h3>
       <div class="info-row"><span class="label">Password</span><span class="value">••••••••</span></div>
       <div class="info-row"><span class="label">2FA Status</span><span class="value" style="color:#22c55e;"><i class="fas fa-check-circle"></i> Enabled</span></div>
       <div class="info-row"><span class="label">Email Preferences</span><span class="value">Weekly updates</span></div>
       <div class="info-row"><span class="label">Account Type</span><span class="value">Premium</span></div>
-      <div style="margin-top:1rem;display:flex;gap:0.8rem;flex-wrap:wrap;">
-        <button class="edit-btn" onclick="alert('🔐 Password change functionality would go here.')"><i class="fas fa-key"></i> Change Password</button>
-        <button class="edit-btn" style="background:#fee2e2;color:#b91c1c;" onclick="SW.signOutUser(); window.location.href='index.html';"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      <div style="margin-top:1rem;">
+        <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
       </div>
     </div>
 
+    <!-- Order History -->
     <div class="order-history">
       <h3><i class="fas fa-clock-rotate"></i> Your Website Orders</h3>
       <div id="orderList"><div class="no-orders">📦 No orders yet. Start shopping for your perfect web!</div></div>
     </div>
   </div>
 
+  <!-- ─── FOOTER ─── -->
   <footer class="footer">
-    <span>© 2026 Pixlnex — <i class="fas fa-spider"></i> one person . one website at a time</span>
+    <span>© 2026 Pixlnex — <i class="fas fa-spider"></i> one person · one website at a time</span>
     <span><i class="fab fa-twitter"></i> <i class="fab fa-github"></i> <i class="fab fa-linkedin"></i></span>
   </footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js?v=999"></script>
+<script src="supabase.js?v=4"></script>
 <script>
   (function() {
-    const SW = window.pixlnexSupabase;
-    let currentUser = null;
-    let cart = [];
-    let orders = [];
+    const PX = window.Pixlnex;
 
-    const cartCounter = document.getElementById('cartCounter');
+    // ─── DOM REFS ───
     const authBtn = document.getElementById('authBtn');
+    const cartCounter = document.getElementById('cartCounter');
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMsg');
 
-    async function updateAuthUI() {
-      currentUser = await SW.getCurrentUser();
-      if (currentUser) {
-        const name = currentUser.user_metadata?.full_name || currentUser.email || 'User';
-        authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
-        authBtn.className = 'active auth-btn';
-        authBtn.href = 'profile.html';
-      } else {
-        authBtn.innerHTML = '<i class="fas fa-user"></i> Login';
-        authBtn.className = 'auth-btn';
-        authBtn.href = 'login.html';
-        window.location.href = 'login.html';
-      }
+    // ─── TOAST ───
+    let toastTimer;
+    function showToast(msg) {
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    function updateCartCount() {
-      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-      cartCounter.textContent = totalItems;
+    // ─── UPDATE CART ───
+    function updateCart() {
+      const cart = JSON.parse(localStorage.getItem('pixlnex_cart') || '[]');
+      const total = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+      cartCounter.textContent = total;
     }
 
-    async function renderProfile() {
-      if (!currentUser) { window.location.href = 'login.html'; return; }
-
-      const name = currentUser.user_metadata?.full_name || currentUser.email || 'User';
-      document.getElementById('userName').textContent = name;
-      document.getElementById('userEmail').textContent = currentUser.email || 'user@example.com';
-      document.getElementById('profileName').textContent = name;
-      document.getElementById('profileEmail').textContent = currentUser.email || 'user@example.com';
-      document.getElementById('profileSince').textContent = new Date(currentUser.created_at || Date.now()).getFullYear();
-
+    // ─── LOGOUT ───
+    async function handleLogout() {
       try {
-        orders = await SW.getUserOrders(currentUser.email);
+        await PX.signOutUser();
+        localStorage.removeItem('pixlnex_cart'); // optional
+        window.location.href = 'index.html';
       } catch (e) {
-        orders = [];
-      }
-
-      const totalOrders = orders.length;
-      const totalSpent = orders.reduce((sum, o) => sum + (o.price || 0), 0);
-      document.getElementById('orderCount').textContent = totalOrders;
-      document.getElementById('totalSpent').textContent = SW.formatPKR(totalSpent);
-      document.getElementById('memberSince').textContent = new Date(currentUser.created_at || Date.now()).getFullYear();
-
-      const orderList = document.getElementById('orderList');
-      if (orders.length === 0) {
-        orderList.innerHTML = '<div class="no-orders">📦 No orders yet. Start shopping for your perfect web!</div>';
-      } else {
-        orderList.innerHTML = '';
-        orders.forEach(order => {
-          const div = document.createElement('div');
-          div.className = 'order-item';
-          const statusClass = order.status || 'processing';
-          const statusLabels = { 'delivered': 'Delivered ✅', 'shipped': 'Shipped 📦', 'processing': 'Processing ⏳' };
-          div.innerHTML = `
-            <div class="order-info">
-              <span class="order-name">${order.name}</span>
-              <span class="order-date">${order.order_id || '#ORD-' + Date.now()} · ${order.created_at ? new Date(order.created_at).toLocaleDateString() : '2026-06-16'}</span>
-            </div>
-            <span class="order-status ${statusClass}">${statusLabels[statusClass] || statusClass}</span>
-            <span class="order-price">${SW.formatPKR(order.price)}</span>
-          `;
-          orderList.appendChild(div);
-        });
+        showToast('⚠️ Error logging out');
       }
     }
 
-    async function init() {
-      await SW.initSupabase();
-      await updateAuthUI();
-      updateCartCount();
-      await renderProfile();
+    document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+
+    // ─── LOAD PROFILE ───
+    async function loadProfile() {
+      // Wait for Supabase to be ready
+      if (!PX || !PX.supabaseConnected) {
+        setTimeout(loadProfile, 500);
+        return;
+      }
+
+      const user = await PX.getCurrentUser();
+      if (!user) {
+        // Not logged in, redirect to login
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Update UI with user data
+      const name = user.user_metadata?.full_name || user.email || 'User';
+      const email = user.email || 'No email';
+
+      document.getElementById('userName').textContent = name;
+      document.getElementById('userEmail').textContent = email;
+      document.getElementById('profileName').textContent = name;
+      document.getElementById('profileEmail').textContent = email;
+
+      // Member since
+      const createdAt = user.created_at ? new Date(user.created_at).getFullYear() : '2026';
+      document.getElementById('profileSince').textContent = createdAt;
+      document.getElementById('memberSince').textContent = createdAt;
+
+      // Update auth button in navbar
+      authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
+      authBtn.className = 'auth-btn logout';
+      authBtn.href = 'profile.html';
+
+      // ─── LOAD ORDERS ───
+      try {
+        const orders = await PX.getUserOrders(email);
+        const orderList = document.getElementById('orderList');
+
+        if (!orders || orders.length === 0) {
+          orderList.innerHTML = '<div class="no-orders">📦 No orders yet. Start shopping for your perfect web!</div>';
+          document.getElementById('orderCount').textContent = '0';
+          document.getElementById('totalSpent').textContent = '₨ 0';
+        } else {
+          document.getElementById('orderCount').textContent = orders.length;
+          const totalSpent = orders.reduce((sum, o) => sum + (o.price || 0), 0);
+          document.getElementById('totalSpent').textContent = PX.formatPKR(totalSpent);
+
+          orderList.innerHTML = '';
+          orders.forEach(order => {
+            const div = document.createElement('div');
+            div.className = 'order-item';
+            const statusClass = order.status || 'processing';
+            const statusLabels = { 'delivered': 'Delivered ✅', 'shipped': 'Shipped 📦', 'processing': 'Processing ⏳' };
+            div.innerHTML = `
+              <div class="order-info">
+                <span class="order-name">${order.name}</span>
+                <span class="order-date">${order.order_id || '#ORD-' + Date.now()} · ${order.created_at ? new Date(order.created_at).toLocaleDateString() : 'N/A'}</span>
+              </div>
+              <span class="order-status ${statusClass}">${statusLabels[statusClass] || statusClass}</span>
+              <span class="order-price">${PX.formatPKR(order.price)}</span>
+            `;
+            orderList.appendChild(div);
+          });
+        }
+      } catch (e) {
+        console.error('Error loading orders:', e);
+        showToast('⚠️ Could not load order history');
+      }
     }
 
-    init();
+    // ─── INIT ───
+    function init() {
+      // Wait for Pixlnex to be defined
+      if (typeof PX === 'undefined' || !PX.initSupabase) {
+        setTimeout(init, 500);
+        return;
+      }
 
-    window.addEventListener('storage', function(e) {
-      if (e.key === 'pixlnex_cart') { cart = JSON.parse(e.newValue) || []; updateCartCount(); }
-    });
+      PX.initSupabase();
+      updateCart();
+      loadProfile();
+
+      // Listen for cart changes (optional)
+      window.addEventListener('storage', function(e) {
+        if (e.key === 'pixlnex_cart') updateCart();
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   })();
 </script>
 </body>
