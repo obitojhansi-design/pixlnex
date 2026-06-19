@@ -223,42 +223,12 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase.js?v=4"></script>
   <script>
-    // ─── SUPABASE CONFIG ───
-    const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
-    const SUPABASE_BUCKET = 'product-images';
-
+    // ─── USE THE GLOBAL Pixlnex OBJECT ───
+    // Don't redeclare variables - use window.Pixlnex
+    
     // ─── ADMIN CREDENTIALS ───
-    // ⚠️ CHANGE THESE TO YOUR OWN CREDENTIALS
     const ADMIN_EMAIL = 'faisalyousafyousaf3@gmail.com';
     const ADMIN_PASSWORD = "Obito's@wifu#akary'143";
-
-    let supabaseClient = null;
-    let supabaseConnected = false;
-
-    function initSupabase() {
-      try {
-        if (typeof supabase !== 'undefined') {
-          supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-          supabaseConnected = true;
-          document.getElementById('supabaseStatus').textContent = '✅ Connected';
-          document.getElementById('supabaseStatus').className = 'supabase-status connected';
-          return supabaseClient;
-        } else {
-          supabaseConnected = false;
-          document.getElementById('supabaseStatus').textContent = '❌ Not connected';
-          document.getElementById('supabaseStatus').className = 'supabase-status disconnected';
-          return null;
-        }
-      } catch (e) {
-        supabaseConnected = false;
-        document.getElementById('supabaseStatus').textContent = '❌ Error';
-        document.getElementById('supabaseStatus').className = 'supabase-status disconnected';
-        return null;
-      }
-    }
-
-    function formatPKR(amount) { return '₨ ' + (amount || 0).toLocaleString('en-PK'); }
 
     // ─── ADMIN AUTH ───
     function checkAdminSession() {
@@ -273,13 +243,11 @@
     }
 
     function loginAdmin(email, password) {
-      // Trim and compare
       const trimmedEmail = email.trim();
       const trimmedPassword = password.trim();
       
       console.log('🔍 Checking credentials...');
       console.log('Email entered:', trimmedEmail);
-      console.log('Expected email:', ADMIN_EMAIL);
       
       if (trimmedEmail === ADMIN_EMAIL && trimmedPassword === ADMIN_PASSWORD) {
         console.log('✅ Login successful!');
@@ -313,7 +281,6 @@
 
       errorMsg.classList.remove('show');
       
-      // Validate fields are not empty
       if (!email || !password) {
         errorMsg.textContent = '⚠️ Please enter both email and password.';
         errorMsg.classList.add('show');
@@ -323,12 +290,10 @@
       loginBtn.disabled = true;
       loginBtn.innerHTML = '<span class="loading-spinner"></span> Verifying...';
 
-      // Simulate a small delay for security
       setTimeout(() => {
         if (loginAdmin(email, password)) {
           loginBtn.disabled = false;
           loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Access Admin Panel';
-          // Load admin data
           setTimeout(() => {
             loadAdminData();
           }, 300);
@@ -337,8 +302,6 @@
           errorMsg.classList.add('show');
           loginBtn.disabled = false;
           loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Access Admin Panel';
-          
-          // Clear password field for security
           document.getElementById('adminPassword').value = '';
           document.getElementById('adminPassword').focus();
         }
@@ -358,26 +321,33 @@
 
     // ─── UPLOAD IMAGE ───
     async function uploadImage(file) {
-      if (!supabaseConnected || !supabaseClient) throw new Error('Supabase not connected');
+      const PX = window.Pixlnex;
+      if (!PX.supabaseConnected || !PX.supabaseClient) throw new Error('Supabase not connected');
       const fileExt = file.name.split('.').pop();
       const fileName = `${Date.now()}.${fileExt}`;
       const filePath = `products/${fileName}`;
-      const { error: uploadError } = await supabaseClient.storage.from(SUPABASE_BUCKET).upload(filePath, file);
+      const { error: uploadError } = await PX.supabaseClient.storage.from(PX.SUPABASE_BUCKET).upload(filePath, file);
       if (uploadError) throw new Error(uploadError.message);
-      const { data: urlData } = supabaseClient.storage.from(SUPABASE_BUCKET).getPublicUrl(filePath);
+      const { data: urlData } = PX.supabaseClient.storage.from(PX.SUPABASE_BUCKET).getPublicUrl(filePath);
       return { url: urlData.publicUrl, path: filePath };
     }
 
     // ─── LOAD DATA ───
     async function loadAdminData() {
-      if (!supabaseConnected || !supabaseClient) { 
+      const PX = window.Pixlnex;
+      
+      if (!PX.supabaseConnected || !PX.supabaseClient) { 
         showToast('⚠️ Supabase not connected'); 
         return; 
       }
 
       try {
+        // Update status
+        document.getElementById('supabaseStatus').textContent = '✅ Connected';
+        document.getElementById('supabaseStatus').className = 'supabase-status connected';
+
         // Load orders
-        const { data: ordersData, error: ordersError } = await supabaseClient
+        const { data: ordersData, error: ordersError } = await PX.supabaseClient
           .from('orders')
           .select('*')
           .order('created_at', { ascending: false });
@@ -386,7 +356,8 @@
         const orders = ordersData || [];
 
         // Load products
-        const { data: productsData, error: productsError } = await supabaseClient          .from('products')
+        const { data: productsData, error: productsError } = await PX.supabaseClient
+          .from('products')
           .select('*')
           .order('created_at', { ascending: true });
 
@@ -400,7 +371,7 @@
         const pending = orders.filter(o => o.status === 'processing' || o.status === 'shipped').length;
         
         document.getElementById('totalOrders').textContent = totalOrders;
-        document.getElementById('totalRevenue').textContent = formatPKR(totalRevenue);
+        document.getElementById('totalRevenue').textContent = PX.formatPKR(totalRevenue);
         document.getElementById('totalCustomers').textContent = customers || 0;
         document.getElementById('pendingOrders').textContent = pending;
 
@@ -429,7 +400,7 @@
                   <option value="shipped" ${statusClass === 'shipped' ? 'selected' : ''}>📦 Shipped</option>
                   <option value="delivered" ${statusClass === 'delivered' ? 'selected' : ''}>✅ Delivered</option>
                 </select>
-                <span class="order-price">${formatPKR(order.price)}</span>
+                <span class="order-price">${PX.formatPKR(order.price)}</span>
               </div>
             `;
             orderList.appendChild(div);
@@ -446,7 +417,7 @@
                 order.status = newStatus;
                 this.className = `order-status-select status-${newStatus}`;
                 try {
-                  await supabaseClient
+                  await PX.supabaseClient
                     .from('orders')
                     .update({ status: newStatus, updated_at: new Date().toISOString() })
                     .eq('id', order.id);
@@ -518,7 +489,7 @@
               }
             }
 
-            const { data, error } = await supabaseClient
+            const { data, error } = await PX.supabaseClient
               .from('products')
               .insert([{
                 name, description: desc, price, icon, features,
@@ -553,6 +524,7 @@
     }
 
     function renderProductsList(products) {
+      const PX = window.Pixlnex;
       const productList = document.getElementById('productList');
       const productCountBadge = document.getElementById('productCountBadge');
       if (!products || products.length === 0) {
@@ -569,7 +541,7 @@
         div.innerHTML = `
           <div class="product-info">${imgHtml}<span class="product-name">${p.name}</span></div>
           <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-            <span class="product-price">${formatPKR(p.price)}</span>
+            <span class="product-price">${PX.formatPKR(p.price)}</span>
             <div class="product-actions">
               <button class="edit-product" data-index="${index}"><i class="fas fa-edit"></i></button>
               <button class="delete delete-product" data-index="${index}"><i class="fas fa-trash-alt"></i></button>
@@ -581,13 +553,14 @@
 
       document.querySelectorAll('.delete-product').forEach(btn => {
         btn.addEventListener('click', async function() {
+          const PX2 = window.Pixlnex;
           const idx = parseInt(this.dataset.index);
           const product = products[idx];
           if (!product) return;
           if (confirm(`Delete "${product.name}"?`)) {
             try {
-              if (product.image_path) await supabaseClient.storage.from(SUPABASE_BUCKET).remove([product.image_path]);
-              await supabaseClient.from('products').delete().eq('id', product.id);
+              if (product.image_path) await PX2.supabaseClient.storage.from(PX2.SUPABASE_BUCKET).remove([product.image_path]);
+              await PX2.supabaseClient.from('products').delete().eq('id', product.id);
               products.splice(idx, 1);
               renderProductsList(products);
               showToast(`🗑️ "${product.name}" deleted`);
@@ -598,13 +571,14 @@
 
       document.querySelectorAll('.edit-product').forEach(btn => {
         btn.addEventListener('click', function() {
+          const PX2 = window.Pixlnex;
           const idx = parseInt(this.dataset.index);
           const p = products[idx];
           if (!p) return;
           const newPrice = prompt(`Edit price for "${p.name}" (PKR):`, p.price);
           if (newPrice !== null && !isNaN(newPrice) && parseInt(newPrice) > 0) {
             const updatedPrice = parseInt(newPrice);
-            supabaseClient
+            PX2.supabaseClient
               .from('products')
               .update({ price: updatedPrice, updated_at: new Date().toISOString() })
               .eq('id', p.id)
@@ -612,7 +586,7 @@
                 if (error) { showToast('⚠️ Error updating price'); } else {
                   p.price = updatedPrice;
                   renderProductsList(products);
-                  showToast(`✅ Price updated to ${formatPKR(updatedPrice)}`);
+                  showToast(`✅ Price updated to ${PX2.formatPKR(updatedPrice)}`);
                 }
               });
           }
@@ -622,7 +596,15 @@
 
     // ─── INIT ───
     function init() {
-      initSupabase();
+      const PX = window.Pixlnex;
+      
+      // Wait for Pixlnex to be ready
+      if (!PX || !PX.initSupabase) {
+        setTimeout(init, 500);
+        return;
+      }
+      
+      PX.initSupabase();
       
       if (checkAdminSession()) {
         loadAdminData();
