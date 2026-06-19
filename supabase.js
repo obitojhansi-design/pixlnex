@@ -1,4 +1,5 @@
-// supabase.js - Centralized Supabase Configuration
+// supabase.js - Pixlnex v2
+// ⚠️ This file is versioned. Update the version number in your HTML when making changes.
 
 // ─── YOUR ACTUAL CREDENTIALS ───
 const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
@@ -9,7 +10,9 @@ let supabaseClient = null;
 let supabaseConnected = false;
 let useFallback = false;
 
-// ─── FALLBACK DATA (works offline) ───
+console.log('📦 supabase.js v2 loaded'); // This will help you see if the new version loaded
+
+// ─── FALLBACK DATA ───
 const FALLBACK_PRODUCTS = [
   { id: 1, name: 'Portfolio Web', description: 'A sleek personal portfolio to showcase your work.', price: 34999, icon: 'fa-user-tie', features: ['1–5 pages', 'Contact form', 'Social links', 'Responsive design'], image_url: '' },
   { id: 2, name: 'Business Web', description: 'Professional website for your business or startup.', price: 59999, icon: 'fa-building', features: ['5–10 pages', 'Contact form', 'Google Maps', 'Newsletter signup', 'Responsive design'], image_url: '' },
@@ -18,12 +21,14 @@ const FALLBACK_PRODUCTS = [
 ];
 
 function initSupabase() {
+  console.log('🚀 Initializing Supabase...');
   try {
     if (typeof supabase !== 'undefined') {
       supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       supabaseConnected = true;
       useFallback = false;
-      console.log('✅ Supabase connected');
+      console.log('✅ Supabase connected successfully');
+      console.log('📍 URL:', SUPABASE_URL);
       return supabaseClient;
     } else {
       console.warn('⚠️ Supabase SDK not loaded, using fallback mode');
@@ -522,8 +527,11 @@ window.Pixlnex = {
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
   SUPABASE_BUCKET,
-  FALLBACK_PRODUCTS
+  FALLBACK_PRODUCTS,
+  VERSION: '2.0'  // ← ADD VERSION NUMBER
 };
+
+console.log('📦 Pixlnex supabase.js v2.0 loaded successfully!');
 
 // Auto-init when page loads
 document.addEventListener('DOMContentLoaded', function() {
