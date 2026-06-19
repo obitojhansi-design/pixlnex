@@ -44,15 +44,15 @@
     .product-card:hover { transform: translateY(-6px); box-shadow: 0 18px 30px -8px rgba(0,20,40,0.08); border-color: #d9e2ef; }
 
     /* ─── PRODUCT IMAGE CAROUSEL ─── */
-    .product-img { position: relative; background: #f1f6fc; border-radius: 1.5rem; aspect-ratio: 1/1; overflow: hidden; margin-bottom: 1.2rem; }
+    .product-img { position: relative; background: #f1f6fc; border-radius: 1.5rem; aspect-ratio: 1/1; overflow: hidden; margin-bottom: 1.2rem; cursor: pointer; }
     .product-img .carousel-container { width: 100%; height: 100%; position: relative; overflow: hidden; }
     .product-img .carousel-track { display: flex; transition: transform 0.5s ease; height: 100%; }
     .product-img .carousel-track img { width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; }
     .product-img .carousel-track .fallback-icon { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 4rem; color: #1e3a5f; flex-shrink: 0; background: #f1f6fc; }
 
     /* Carousel Buttons */
-    .product-img .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 0.8rem; z-index: 10; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
-    .product-img .carousel-btn:hover { background: rgba(0,0,0,0.8); }
+    .product-img .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 0.8rem; z-index: 10; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+    .product-img .carousel-btn:hover { background: rgba(0,0,0,0.8); transform: translateY(-50%) scale(1.1); }
     .product-img .carousel-btn.prev { left: 8px; }
     .product-img .carousel-btn.next { right: 8px; }
     .product-img .carousel-btn.hidden { display: none; }
@@ -62,7 +62,21 @@
     .product-img .carousel-dots .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; transition: 0.2s; border: none; }
     .product-img .carousel-dots .dot.active { background: white; transform: scale(1.2); }
 
-    .product-img .image-count-badge { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.6); color: white; font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 30px; z-index: 10; }
+    .product-img .image-count-badge { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); color: white; font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 30px; z-index: 10; }
+
+    /* ─── LIGHTBOX MODAL ─── */
+    .lightbox-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.92); z-index: 99999; display: none; align-items: center; justify-content: center; padding: 2rem; }
+    .lightbox-overlay.active { display: flex; }
+    .lightbox-overlay .close-lightbox { position: absolute; top: 20px; right: 30px; color: white; font-size: 2.5rem; cursor: pointer; z-index: 100000; transition: 0.2s; background: none; border: none; }
+    .lightbox-overlay .close-lightbox:hover { transform: scale(1.2); color: #ef4444; }
+    .lightbox-overlay .lightbox-container { width: 100%; max-width: 1200px; max-height: 85vh; position: relative; display: flex; align-items: center; justify-content: center; }
+    .lightbox-overlay .lightbox-container img { max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 0.5rem; }
+    .lightbox-overlay .lightbox-counter { position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+    .lightbox-overlay .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 1.5rem; z-index: 10; transition: 0.2s; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); }
+    .lightbox-overlay .lightbox-nav:hover { background: rgba(255,255,255,0.3); transform: translateY(-50%) scale(1.1); }
+    .lightbox-overlay .lightbox-nav.prev { left: 20px; }
+    .lightbox-overlay .lightbox-nav.next { right: 20px; }
+    .lightbox-overlay .lightbox-nav.hidden { display: none; }
 
     .product-card h3 { font-weight: 600; font-size: 1.25rem; margin-bottom: 0.2rem; }
     .product-desc { color: #475569; font-size: 0.9rem; margin: 0.25rem 0 0.7rem 0; flex: 1; }
@@ -117,7 +131,7 @@
     .custom-grid textarea { border-radius: 1.2rem; resize: vertical; min-height: 80px; }
     .submit-order-btn { background: #0f2b4b; color: white; border: none; padding: 0.85rem 2.5rem; border-radius: 60px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.7rem; margin-top: 0.5rem; }
     .submit-order-btn:hover { background: #1a3a5e; transform: scale(1.02); }
-    @media (max-width: 700px) { .app { padding: 1rem; } .hero { padding: 1.8rem; flex-direction: column; align-items: flex-start; } .hero-text h1 { font-size: 2rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .cart-panel { padding: 1.5rem; } .custom-section { padding: 1.5rem; } .custom-grid { grid-template-columns: 1fr; } .custom-grid .full { grid-column: 1; } .product-bottom { flex-direction: column; align-items: stretch; } .btn-group { justify-content: stretch; } .btn-add, .btn-order { flex: 1; justify-content: center; } .product-img .carousel-btn { width: 24px; height: 24px; font-size: 0.6rem; } }
+    @media (max-width: 700px) { .app { padding: 1rem; } .hero { padding: 1.8rem; flex-direction: column; align-items: flex-start; } .hero-text h1 { font-size: 2rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .cart-panel { padding: 1.5rem; } .custom-section { padding: 1.5rem; } .custom-grid { grid-template-columns: 1fr; } .custom-grid .full { grid-column: 1; } .product-bottom { flex-direction: column; align-items: stretch; } .btn-group { justify-content: stretch; } .btn-add, .btn-order { flex: 1; justify-content: center; } .product-img .carousel-btn { width: 24px; height: 24px; font-size: 0.6rem; } .lightbox-overlay .lightbox-nav { width: 36px; height: 36px; font-size: 1rem; } .lightbox-overlay .lightbox-nav.prev { left: 8px; } .lightbox-overlay .lightbox-nav.next { right: 8px; } .lightbox-overlay .close-lightbox { top: 12px; right: 16px; font-size: 1.8rem; } }
   </style>
 </head>
 <body>
@@ -225,6 +239,17 @@
   </footer>
 </div>
 
+<!-- ─── LIGHTBOX MODAL ─── -->
+<div class="lightbox-overlay" id="lightboxOverlay">
+  <button class="close-lightbox" id="closeLightbox">&times;</button>
+  <button class="lightbox-nav prev" id="lightboxPrev"><i class="fas fa-chevron-left"></i></button>
+  <button class="lightbox-nav next" id="lightboxNext"><i class="fas fa-chevron-right"></i></button>
+  <div class="lightbox-container">
+    <img id="lightboxImage" src="" alt="Full size" />
+  </div>
+  <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js?v=5"></script>
 <script>
@@ -242,6 +267,17 @@
     const authBtn = document.getElementById('authBtn');
     const toast = document.getElementById('toast');
     const toastMsg = document.getElementById('toastMsg');
+
+    // ─── LIGHTBOX ELEMENTS ───
+    const lightboxOverlay = document.getElementById('lightboxOverlay');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxCounter = document.getElementById('lightboxCounter');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+    const closeLightbox = document.getElementById('closeLightbox');
+
+    let lightboxImages = [];
+    let lightboxCurrentIndex = 0;
 
     let toastTimer;
 
@@ -276,7 +312,52 @@
       return [];
     }
 
-    // ─── CAROUSEL COMPONENT ───
+    // ─── LIGHTBOX FUNCTIONS ───
+    function openLightbox(images, index) {
+      lightboxImages = images;
+      lightboxCurrentIndex = index;
+      updateLightbox();
+      lightboxOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightboxFn() {
+      lightboxOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function updateLightbox() {
+      if (lightboxImages.length === 0) return;
+      lightboxImage.src = lightboxImages[lightboxCurrentIndex];
+      lightboxCounter.textContent = `${lightboxCurrentIndex + 1} / ${lightboxImages.length}`;
+
+      lightboxPrev.classList.toggle('hidden', lightboxImages.length <= 1);
+      lightboxNext.classList.toggle('hidden', lightboxImages.length <= 1);
+    }
+
+    function changeLightbox(direction) {
+      if (lightboxImages.length <= 1) return;
+      lightboxCurrentIndex = (lightboxCurrentIndex + direction + lightboxImages.length) % lightboxImages.length;
+      updateLightbox();
+    }
+
+    // ─── LIGHTBOX EVENT LISTENERS ───
+    lightboxPrev.addEventListener('click', () => changeLightbox(-1));
+    lightboxNext.addEventListener('click', () => changeLightbox(1));
+    closeLightbox.addEventListener('click', closeLightboxFn);
+    lightboxOverlay.addEventListener('click', function(e) {
+      if (e.target === this) closeLightboxFn();
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      if (!lightboxOverlay.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightboxFn();
+      if (e.key === 'ArrowLeft') changeLightbox(-1);
+      if (e.key === 'ArrowRight') changeLightbox(1);
+    });
+
+    // ─── CAROUSEL FUNCTIONS ───
     function createCarousel(images, productName, productId) {
       if (!images || images.length === 0) {
         return `<div class="fallback-icon"><i class="fas fa-cube"></i></div>`;
@@ -286,12 +367,12 @@
       const containerId = `carousel-${productId}`;
 
       let html = `
-        <div class="carousel-container" id="${containerId}">
+        <div class="carousel-container" id="${containerId}" data-images='${JSON.stringify(images)}'>
           <div class="carousel-track" id="${containerId}-track">
       `;
 
       images.forEach((img, idx) => {
-        html += `<img src="${img}" alt="${productName} - ${idx + 1}" loading="lazy" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'fallback-icon\\'><i class=\\'fas fa-cube\\'></i></div>';">`;
+        html += `<img src="${img}" alt="${productName} - ${idx + 1}" loading="lazy" data-index="${idx}" onerror="this.style.display='none';">`;
       });
 
       html += `
@@ -329,7 +410,6 @@
       container.dataset.currentIndex = newIndex;
       track.style.transform = `translateX(-${newIndex * 100}%)`;
 
-      // Update dots
       if (dots) {
         const dotElements = dots.querySelectorAll('.dot');
         dotElements.forEach((dot, idx) => {
@@ -338,7 +418,7 @@
       }
     };
 
-    function initCarousel(containerId, imageCount) {
+    function initCarousel(containerId, imageCount, images) {
       const container = document.getElementById(containerId);
       if (!container || imageCount <= 1) return;
 
@@ -358,12 +438,27 @@
         }
       }
 
-      // Auto-slide every 4 seconds
+      // Click on image to open lightbox
+      const track = document.getElementById(`${containerId}-track`);
+      if (track) {
+        const images = track.querySelectorAll('img');
+        images.forEach((img) => {
+          img.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const allImages = JSON.parse(container.dataset.images || '[]');
+            const index = parseInt(this.dataset.index || '0');
+            if (allImages.length > 0) {
+              openLightbox(allImages, index);
+            }
+          });
+        });
+      }
+
+      // Auto-slide
       let autoSlideInterval = setInterval(() => {
         window.changeSlide(containerId, 1);
       }, 4000);
 
-      // Pause on hover
       container.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
       container.addEventListener('mouseleave', () => {
         autoSlideInterval = setInterval(() => {
@@ -371,10 +466,10 @@
         }, 4000);
       });
 
-      // Store interval for cleanup
       container._autoSlideInterval = autoSlideInterval;
     }
 
+    // ─── RENDER PRODUCTS ───
     async function renderProducts() {
       try {
         console.log('🔄 Loading products...');
@@ -425,8 +520,8 @@
         const containerId = `carousel-${p.id || index}`;
         if (images.length > 1) {
           setTimeout(() => {
-            initCarousel(containerId, images.length);
-          }, 100);
+            initCarousel(containerId, images.length, images);
+          }, 150);
         }
       });
 
