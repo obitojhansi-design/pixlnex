@@ -164,7 +164,36 @@
 <script src="supabase.js?v=5"></script>
 <script>
   (function() {
-    const PX = window.Pixlnex;
+    // ─── DIRECT SUPABASE CONFIG ───
+    const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
+
+    let supabaseClient = null;
+    let supabaseConnected = false;
+
+    function initSupabase() {
+      try {
+        if (typeof supabase !== 'undefined') {
+          supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          supabaseConnected = true;
+          console.log('✅ Direct Supabase connected');
+          return supabaseClient;
+        } else {
+          console.error('❌ Supabase SDK not loaded');
+          supabaseConnected = false;
+          return null;
+        }
+      } catch (e) {
+        console.error('❌ Supabase connection error:', e);
+        supabaseConnected = false;
+        return null;
+      }
+    }
+
+    // ─── HELPER: Format PKR ───
+    function formatPKR(amount) {
+      return '₨ ' + (amount || 0).toLocaleString('en-PK');
+    }
 
     // ─── DOM REFS ───
     const authBtn = document.getElementById('authBtn');
@@ -193,10 +222,59 @@
       }
     }
 
+    // ─── GET CURRENT USER DIRECTLY ───
+    async function getCurrentUser() {
+      if (!supabaseConnected || !supabaseClient) {
+        console.warn('⚠️ Supabase not connected, trying to connect...');
+        initSupabase();
+        if (!supabaseConnected || !supabaseClient) {
+          return null;
+        }
+      }
+
+      try {
+        const { data, error } = await supabaseClient.auth.getUser();
+        if (error) {
+          console.error('❌ Get user error:', error);
+          return null;
+        }
+        return data.user;
+      } catch (e) {
+        console.error('❌ Get user exception:', e);
+        return null;
+      }
+    }
+
+    // ─── GET USER ORDERS DIRECTLY ───
+    async function getUserOrders(email) {
+      if (!supabaseConnected || !supabaseClient) {
+        return [];
+      }
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('orders')
+          .select('*')
+          .eq('customer_email', email)
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('❌ Orders error:', error);
+          return [];
+        }
+        return data || [];
+      } catch (e) {
+        console.error('❌ Orders exception:', e);
+        return [];
+      }
+    }
+
     // ─── LOGOUT ───
     async function handleLogout() {
       try {
-        await PX.signOutUser();
+        if (supabaseConnected && supabaseClient) {
+          await supabaseClient.auth.signOut();
+        }
         localStorage.removeItem('pixlnex_cart');
         localStorage.removeItem('pixlnex_user');
         window.location.href = 'index.html';
@@ -210,25 +288,22 @@
 
     // ─── LOAD PROFILE ───
     async function loadProfile() {
-      console.log('🔄 Loading profile...');
+      console.log('🔄 Loading profile with direct Supabase...');
 
-      // Wait for Supabase to be connected
-      let attempts = 0;
-      while (!PX || !PX.supabaseConnected) {
-        if (attempts > 20) {
-          console.error('❌ Supabase connection timeout');
-          showToast('⚠️ Could not connect to Supabase');
-          document.getElementById('userName').textContent = 'Connection Error';
-          document.getElementById('userEmail').textContent = 'Please refresh and try again';
-          return;
-        }
-        await new Promise(resolve => setTimeout(resolve, 300));
-        attempts++;
+      // Initialize Supabase
+      initSupabase();
+
+      if (!supabaseConnected || !supabaseClient) {
+        console.error('❌ Supabase not connected');
+        document.getElementById('userName').textContent = 'Connection Error';
+        document.getElementById('userEmail').textContent = 'Please refresh and try again';
+        showToast('⚠️ Could not connect to Supabase');
+        return;
       }
 
       try {
-        // Get current user from Supabase
-        const user = await PX.getCurrentUser();
+        // Get current user
+        const user = await getCurrentUser();
         console.log('👤 User data:', user);
 
         if (!user) {
@@ -261,7 +336,7 @@
         // ─── LOAD ORDERS ───
         try {
           console.log('📦 Fetching orders for:', email);
-          const orders = await PX.getUserOrders(email);
+          const orders = await getUserOrders(email);
           console.log('✅ Orders found:', orders?.length || 0);
 
           const orderList = document.getElementById('orderList');
@@ -273,7 +348,7 @@
           } else {
             document.getElementById('orderCount').textContent = orders.length;
             const totalSpent = orders.reduce((sum, o) => sum + (o.price || 0), 0);
-            document.getElementById('totalSpent').textContent = PX.formatPKR(totalSpent);
+            document.getElementById('totalSpent').textContent = formatPKR(totalSpent);
 
             orderList.innerHTML = '';
             orders.forEach(order => {
@@ -291,7 +366,7 @@
                   <span class="order-date">${order.order_id || '#ORD-' + Date.now()} · ${order.created_at ? new Date(order.created_at).toLocaleDateString() : 'N/A'}</span>
                 </div>
                 <span class="order-status ${statusClass}">${statusLabels[statusClass] || statusClass}</span>
-                <span class="order-price">${PX.formatPKR(order.price)}</span>
+                <span class="order-price">${formatPKR(order.price)}</span>
               `;
               orderList.appendChild(div);
             });
@@ -312,21 +387,7 @@
 
     // ─── INIT ───
     async function init() {
-      console.log('🚀 Profile page initializing...');
-
-      // Wait for Pixlnex to be defined
-      let attempts = 0;
-      while (typeof PX === 'undefined' || !PX.initSupabase) {
-        if (attempts > 20) {
-          console.error('❌ Pixlnex not loaded');
-          document.getElementById('userName').textContent = 'Error: Please refresh';
-          return;
-        }
-        await new Promise(resolve => setTimeout(resolve, 300));
-        attempts++;
-      }
-
-      PX.initSupabase();
+      console.log('🚀 Profile page initializing (direct mode)...');
       updateCart();
       await loadProfile();
 
