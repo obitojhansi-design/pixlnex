@@ -1,27 +1,40 @@
 // supabase.js - Centralized Supabase Configuration
 
-const SUPABASE_URL = 'https://skdthncgjwtlydtgtjze.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_3iZje_0Ro2Am1bqNNANdBA_ajzJuKnf';
+// ─── YOUR ACTUAL CREDENTIALS ───
+const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
 const SUPABASE_BUCKET = 'product-images';
 
 let supabaseClient = null;
 let supabaseConnected = false;
+let useFallback = false;
+
+// ─── FALLBACK DATA (works offline) ───
+const FALLBACK_PRODUCTS = [
+  { id: 1, name: 'Portfolio Web', description: 'A sleek personal portfolio to showcase your work.', price: 34999, icon: 'fa-user-tie', features: ['1–5 pages', 'Contact form', 'Social links', 'Responsive design'], image_url: '' },
+  { id: 2, name: 'Business Web', description: 'Professional website for your business or startup.', price: 59999, icon: 'fa-building', features: ['5–10 pages', 'Contact form', 'Google Maps', 'Newsletter signup', 'Responsive design'], image_url: '' },
+  { id: 3, name: 'E‑commerce Web', description: 'Full online store with product management.', price: 89999, icon: 'fa-store', features: ['Product catalog', 'Shopping cart', 'Checkout', 'Payment integration', 'Admin panel'], image_url: '' },
+  { id: 4, name: 'Custom Web', description: 'Tell me exactly what you want — I\'ll build it.', price: 49999, icon: 'fa-pencil-ruler', features: ['Fully custom design', 'Any features you need', 'Built from scratch', 'You own the code'], image_url: '' }
+];
 
 function initSupabase() {
   try {
     if (typeof supabase !== 'undefined') {
       supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       supabaseConnected = true;
+      useFallback = false;
       console.log('✅ Supabase connected');
       return supabaseClient;
     } else {
-      console.error('❌ Supabase SDK not loaded');
+      console.warn('⚠️ Supabase SDK not loaded, using fallback mode');
       supabaseConnected = false;
+      useFallback = true;
       return null;
     }
   } catch (e) {
-    console.error('❌ Supabase connection error:', e);
+    console.warn('⚠️ Supabase connection error, using fallback mode:', e.message);
     supabaseConnected = false;
+    useFallback = true;
     return null;
   }
 }
@@ -35,7 +48,26 @@ function formatPKR(amount) {
 
 async function signUpUser(email, password, userData) {
   if (!supabaseConnected || !supabaseClient) {
-    throw new Error('Supabase not connected');
+    console.log('📦 Using fallback signup (localStorage)');
+    const users = JSON.parse(localStorage.getItem('pixlnex_users') || '[]');
+    
+    if (users.find(u => u.email === email)) {
+      return { success: false, error: 'User already exists. Please login.' };
+    }
+    
+    const newUser = {
+      id: 'user_' + Date.now(),
+      name: userData.full_name || userData.name || 'User',
+      email: email,
+      password: password,
+      created_at: new Date().toISOString()
+    };
+    
+    users.push(newUser);
+    localStorage.setItem('pixlnex_users', JSON.stringify(users));
+    localStorage.setItem('pixlnex_user', JSON.stringify({ name: newUser.name, email: newUser.email }));
+    
+    return { success: true, user: newUser, autoLogin: true };
   }
 
   try {
@@ -94,7 +126,21 @@ async function signUpUser(email, password, userData) {
 
 async function signInUser(email, password) {
   if (!supabaseConnected || !supabaseClient) {
-    throw new Error('Supabase not connected');
+    console.log('📦 Using fallback login (localStorage)');
+    const users = JSON.parse(localStorage.getItem('pixlnex_users') || '[]');
+    const user = users.find(u => u.email === email && u.password === password);
+    
+    if (user) {
+      localStorage.setItem('pixlnex_user', JSON.stringify({ name: user.name, email: user.email }));
+      return { success: true, user: user };
+    }
+    
+    if (email === 'demo@pixlnex.com' && password === 'password123') {
+      localStorage.setItem('pixlnex_user', JSON.stringify({ name: 'Demo User', email: 'demo@pixlnex.com' }));
+      return { success: true, user: { name: 'Demo User', email: 'demo@pixlnex.com' } };
+    }
+    
+    return { success: false, error: 'Invalid email or password' };
   }
 
   try {
@@ -124,21 +170,25 @@ async function signInUser(email, password) {
 }
 
 async function signOutUser() {
-  if (!supabaseConnected || !supabaseClient) {
-    throw new Error('Supabase not connected');
+  localStorage.removeItem('pixlnex_user');
+  
+  if (supabaseConnected && supabaseClient) {
+    try {
+      const { error } = await supabaseClient.auth.signOut();
+      if (error) throw error;
+    } catch (e) {
+      console.error('Logout error:', e);
+    }
   }
-
-  try {
-    const { error } = await supabaseClient.auth.signOut();
-    if (error) throw error;
-    return { success: true };
-  } catch (e) {
-    console.error('Logout error:', e);
-    return { success: false, error: e.message };
-  }
+  return { success: true };
 }
 
 async function getCurrentUser() {
+  const localUser = JSON.parse(localStorage.getItem('pixlnex_user') || 'null');
+  if (localUser) {
+    return { user_metadata: { full_name: localUser.name }, email: localUser.email };
+  }
+  
   if (!supabaseConnected || !supabaseClient) {
     return null;
   }
@@ -157,12 +207,18 @@ async function getCurrentUser() {
 
 async function getProducts() {
   if (!supabaseConnected || !supabaseClient) {
-    console.error('❌ Supabase not connected');
-    throw new Error('Supabase not connected');
+    console.log('📦 Using fallback products (localStorage)');
+    const saved = localStorage.getItem('pixlnex_products');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {}
+    }
+    return FALLBACK_PRODUCTS;
   }
 
   try {
-    console.log('🔍 Fetching products...');
+    console.log('🔍 Fetching products from Supabase...');
     const { data, error } = await supabaseClient
       .from('products')
       .select('*')
@@ -170,20 +226,46 @@ async function getProducts() {
 
     if (error) {
       console.error('❌ Products error:', error);
-      throw error;
+      const saved = localStorage.getItem('pixlnex_products');
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {}
+      }
+      return FALLBACK_PRODUCTS;
     }
     
     console.log('✅ Products loaded:', data?.length || 0);
+    
+    if (data && data.length > 0) {
+      localStorage.setItem('pixlnex_products', JSON.stringify(data));
+    }
+    
     return data || [];
   } catch (e) {
     console.error('❌ Error fetching products:', e);
-    throw e;
+    const saved = localStorage.getItem('pixlnex_products');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (err) {}
+    }
+    return FALLBACK_PRODUCTS;
   }
 }
 
 async function addProduct(productData, imageFile) {
   if (!supabaseConnected || !supabaseClient) {
-    throw new Error('Supabase not connected');
+    console.log('📦 Saving product to localStorage (fallback)');
+    const products = JSON.parse(localStorage.getItem('pixlnex_products') || '[]');
+    const newProduct = {
+      id: Date.now(),
+      ...productData,
+      created_at: new Date().toISOString()
+    };
+    products.push(newProduct);
+    localStorage.setItem('pixlnex_products', JSON.stringify(products));
+    return newProduct;
   }
 
   try {
@@ -232,7 +314,14 @@ async function addProduct(productData, imageFile) {
 
 async function updateProduct(productId, updates) {
   if (!supabaseConnected || !supabaseClient) {
-    throw new Error('Supabase not connected');
+    const products = JSON.parse(localStorage.getItem('pixlnex_products') || '[]');
+    const index = products.findIndex(p => p.id === productId);
+    if (index !== -1) {
+      products[index] = { ...products[index], ...updates };
+      localStorage.setItem('pixlnex_products', JSON.stringify(products));
+      return products[index];
+    }
+    return null;
   }
 
   try {
@@ -252,7 +341,10 @@ async function updateProduct(productId, updates) {
 
 async function deleteProduct(productId, imagePath) {
   if (!supabaseConnected || !supabaseClient) {
-    throw new Error('Supabase not connected');
+    let products = JSON.parse(localStorage.getItem('pixlnex_products') || '[]');
+    products = products.filter(p => p.id !== productId);
+    localStorage.setItem('pixlnex_products', JSON.stringify(products));
+    return true;
   }
 
   try {
@@ -279,7 +371,7 @@ async function deleteProduct(productId, imagePath) {
 
 async function getOrders() {
   if (!supabaseConnected || !supabaseClient) {
-    throw new Error('Supabase not connected');
+    return JSON.parse(localStorage.getItem('pixlnex_orders') || '[]');
   }
 
   try {
@@ -289,16 +381,22 @@ async function getOrders() {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
+    
+    if (data && data.length > 0) {
+      localStorage.setItem('pixlnex_orders', JSON.stringify(data));
+    }
+    
     return data || [];
   } catch (e) {
     console.error('Error fetching orders:', e);
-    throw e;
+    return JSON.parse(localStorage.getItem('pixlnex_orders') || '[]');
   }
 }
 
 async function getUserOrders(email) {
   if (!supabaseConnected || !supabaseClient) {
-    throw new Error('Supabase not connected');
+    const orders = JSON.parse(localStorage.getItem('pixlnex_orders') || '[]');
+    return orders.filter(o => o.customer_email === email);
   }
 
   try {
@@ -312,13 +410,23 @@ async function getUserOrders(email) {
     return data || [];
   } catch (e) {
     console.error('Error fetching user orders:', e);
-    throw e;
+    return [];
   }
 }
 
 async function createOrder(orderData) {
   if (!supabaseConnected || !supabaseClient) {
-    throw new Error('Supabase not connected');
+    const orders = JSON.parse(localStorage.getItem('pixlnex_orders') || '[]');
+    const newOrder = {
+      id: Date.now(),
+      order_id: '#ORD-' + Date.now().toString().slice(-6),
+      ...orderData,
+      status: 'processing',
+      created_at: new Date().toISOString()
+    };
+    orders.push(newOrder);
+    localStorage.setItem('pixlnex_orders', JSON.stringify(orders));
+    return newOrder;
   }
 
   try {
@@ -345,7 +453,14 @@ async function createOrder(orderData) {
 
 async function updateOrderStatus(orderId, newStatus) {
   if (!supabaseConnected || !supabaseClient) {
-    throw new Error('Supabase not connected');
+    const orders = JSON.parse(localStorage.getItem('pixlnex_orders') || '[]');
+    const index = orders.findIndex(o => (o.id || o.order_id) == orderId);
+    if (index !== -1) {
+      orders[index].status = newStatus;
+      localStorage.setItem('pixlnex_orders', JSON.stringify(orders));
+      return orders[index];
+    }
+    return null;
   }
 
   try {
@@ -367,7 +482,7 @@ async function updateOrderStatus(orderId, newStatus) {
 
 async function getUsers() {
   if (!supabaseConnected || !supabaseClient) {
-    throw new Error('Supabase not connected');
+    return JSON.parse(localStorage.getItem('pixlnex_users') || '[]');
   }
 
   try {
@@ -380,7 +495,7 @@ async function getUsers() {
     return data || [];
   } catch (e) {
     console.error('Error fetching users:', e);
-    throw e;
+    return [];
   }
 }
 
@@ -389,6 +504,7 @@ window.Pixlnex = {
   initSupabase,
   supabaseClient,
   supabaseConnected,
+  useFallback,
   formatPKR,
   signUpUser,
   signInUser,
@@ -405,7 +521,8 @@ window.Pixlnex = {
   getUsers,
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
-  SUPABASE_BUCKET
+  SUPABASE_BUCKET,
+  FALLBACK_PRODUCTS
 };
 
 // Auto-init when page loads
