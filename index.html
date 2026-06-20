@@ -8,45 +8,16 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
     body { background: #f8fafc; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
-
     .app { max-width: 1300px; margin: 0 auto; padding: 1.5rem 2rem; flex: 1; width: 100%; }
 
-    /* ─── WHATSAPP FLOATING BUTTON ─── */
-    .whatsapp-float {
-      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
-      display: flex; align-items: center; gap: 12px;
-      background: #25D366; color: white; padding: 12px 20px 12px 16px;
-      border-radius: 50px; box-shadow: 0 4px 20px rgba(37,211,102,0.4);
-      text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: 0.3s;
-    }
+    .whatsapp-float { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; align-items: center; gap: 12px; background: #25D366; color: white; padding: 12px 20px 12px 16px; border-radius: 50px; box-shadow: 0 4px 20px rgba(37,211,102,0.4); text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: 0.3s; }
     .whatsapp-float:hover { transform: scale(1.05); }
     .whatsapp-float i { font-size: 1.8rem; }
     @media (max-width:600px) { .whatsapp-float .wa-text { display: none; } }
 
-    /* ─── OFFER BANNER ─── */
-    .offer-banner {
-      background: linear-gradient(135deg, #f59e0b, #d97706, #f59e0b);
-      background-size: 200% 200%;
-      animation: gradientMove 3s ease infinite;
-      color: white;
-      padding: 1rem 1.5rem;
-      border-radius: 1.5rem;
-      margin-bottom: 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
-      z-index: 100;
-      position: relative;
-    }
+    .offer-banner { background: linear-gradient(135deg, #f59e0b, #d97706, #f59e0b); background-size: 200% 200%; animation: gradientMove 3s ease infinite; color: white; padding: 1rem 1.5rem; border-radius: 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3); z-index: 100; position: relative; }
     .offer-banner.purple { background: linear-gradient(135deg, #7c3aed, #6d28d9, #7c3aed); }
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+    @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     .offer-banner .offer-text { display: flex; align-items: center; gap: 1rem; }
     .offer-banner .offer-text i { font-size: 2rem; }
     .offer-banner .offer-text h3 { font-size: 1.2rem; font-weight: 700; }
@@ -59,7 +30,6 @@
     .offer-banner .offer-price-tag { background: rgba(255,255,255,0.2); padding: 0.2rem 0.8rem; border-radius: 30px; font-size: 0.8rem; font-weight: 700; }
     .offer-banner.purple .offer-btn { color: #6d28d9; }
 
-    /* ─── NAVBAR ─── */
     .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; padding: 0.75rem 0 1.5rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem; }
     .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; text-decoration: none; }
     .logo i { color: #2563eb; font-size: 2rem; }
@@ -87,12 +57,10 @@
     .section-title h2 { font-size: 1.9rem; font-weight: 650; }
     .section-title a { color: #2563eb; text-decoration: none; font-weight: 500; cursor: pointer; }
 
-    /* ─── PRODUCT GRID ─── */
     .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
     .product-card { background: white; border-radius: 1.8rem; padding: 1.8rem 1.8rem 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02); transition: all 0.25s ease; border: 1px solid #edf2f7; display: flex; flex-direction: column; }
     .product-card:hover { transform: translateY(-6px); box-shadow: 0 18px 30px -8px rgba(0,20,40,0.08); border-color: #d9e2ef; }
 
-    /* ─── PRODUCT IMAGE CAROUSEL ─── */
     .product-img { position: relative; background: #f1f6fc; border-radius: 1.5rem; aspect-ratio: 1/1; overflow: hidden; margin-bottom: 1.2rem; cursor: pointer; }
     .product-img .carousel-container { width: 100%; height: 100%; position: relative; overflow: hidden; }
     .product-img .carousel-track { display: flex; transition: transform 0.5s ease; height: 100%; }
@@ -148,16 +116,9 @@
     .checkout-btn:hover { background: #1a3a5e; }
     .checkout-btn:disabled { opacity: 0.4; pointer-events: none; }
 
-    .payment-modal {
-      display: none;
-      position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
-      z-index: 99999; align-items: center; justify-content: center; padding: 1.5rem;
-    }
+    .payment-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 99999; align-items: center; justify-content: center; padding: 1.5rem; }
     .payment-modal.active { display: flex; }
-    .payment-modal .modal-content {
-      background: white; border-radius: 2rem; max-width: 520px; width: 100%;
-      padding: 2.5rem; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease;
-    }
+    .payment-modal .modal-content { background: white; border-radius: 2rem; max-width: 520px; width: 100%; padding: 2.5rem; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
     @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .payment-modal .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
     .payment-modal .modal-header h2 { font-size: 1.5rem; font-weight: 700; }
@@ -193,7 +154,6 @@
 
     .footer { margin-top: 4rem; border-top: 1px solid #e2e8f0; padding: 2rem 0 1rem 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: #475569; font-size: 0.9rem; }
     .footer i { color: #2563eb; margin: 0 0.2rem; }
-
     .toast { position: fixed; bottom: 90px; right: 24px; background: #0f2b4b; color: white; padding: 1rem 1.8rem; border-radius: 60px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); font-weight: 600; display: flex; align-items: center; gap: 0.7rem; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 10000; max-width: 90%; }
     .toast.show { transform: translateY(0); opacity: 1; }
     .toast i { color: #22c55e; font-size: 1.2rem; }
@@ -225,7 +185,7 @@
 <body>
 
 <div class="app">
-  <!-- ─── HEADER ─── -->
+  <!-- HEADER -->
   <header class="navbar">
     <a href="index.html" class="logo"><i class="fas fa-cube"></i><span>Pixlnex</span></a>
     <nav class="nav-links">
@@ -233,23 +193,17 @@
       <a href="shop.html">Webs</a>
       <a href="#" id="navAbout">About</a>
       <a href="profile.html" class="auth-btn" id="authBtn"><i class="fas fa-user"></i> Login</a>
-      <a href="shop.html" class="cart-icon">
-        <i class="fas fa-shopping-bag"></i>
-        <span class="cart-count" id="cartCounter">0</span>
-      </a>
+      <a href="shop.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCounter">0</span></a>
     </nav>
   </header>
 
   <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Added!</span></div>
 
-  <!-- ─── OFFER 1 ─── -->
+  <!-- OFFERS -->
   <div class="offer-banner" id="offerBanner1">
     <div class="offer-text">
       <i class="fas fa-gift"></i>
-      <div>
-        <h3>🎉 Special Portfolio Offer!</h3>
-        <p>First <strong>10 customers</strong> get Portfolio Website in <strong>only ₨ 300</strong> <span id="offerCountDisplay1">(0/10 claimed)</span></p>
-      </div>
+      <div><h3>🎉 Special Portfolio Offer!</h3><p>First <strong>10 customers</strong> get Portfolio Website in <strong>only ₨ 300</strong> <span id="offerCountDisplay1">(0/10 claimed)</span></p></div>
     </div>
     <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
       <span class="offer-price-tag">✨ ₨ 300 Only</span>
@@ -259,14 +213,10 @@
     </div>
   </div>
 
-  <!-- ─── OFFER 2 ─── -->
   <div class="offer-banner purple" id="offerBanner2">
     <div class="offer-text">
       <i class="fas fa-star"></i>
-      <div>
-        <h3>⭐ First Order Completely FREE!</h3>
-        <p><strong>Only 1 customer</strong> gets a completely FREE website! <span id="offerCountDisplay2">(0/1 claimed)</span></p>
-      </div>
+      <div><h3>⭐ First Order Completely FREE!</h3><p><strong>Only 1 customer</strong> gets a completely FREE website! <span id="offerCountDisplay2">(0/1 claimed)</span></p></div>
     </div>
     <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
       <span class="offer-price-tag">🎁 FREE</span>
@@ -276,7 +226,7 @@
     </div>
   </div>
 
-  <!-- ─── HOME ─── -->
+  <!-- HOME -->
   <section id="homeSection" class="page-section">
     <div class="hero">
       <div class="hero-text">
@@ -289,7 +239,7 @@
     </div>
   </section>
 
-  <!-- ─── PRODUCTS ─── -->
+  <!-- PRODUCTS -->
   <section id="productSection" class="page-section">
     <div class="section-title">
       <h2>⚡ Web Packages</h2>
@@ -298,7 +248,7 @@
     <div class="product-grid" id="productGrid"></div>
   </section>
 
-  <!-- ─── CUSTOM ORDER ─── -->
+  <!-- CUSTOM ORDER -->
   <section class="custom-section" id="customOrder">
     <h2>✏️ Tell me what you need</h2>
     <p class="sub">Describe your ideal website and I'll build it for you. One person, one project at a time.</p>
@@ -326,16 +276,14 @@
             <option value="20000+">₨ 20,000+</option>
           </select>
         </div>
-        <div class="full" id="dynamicQuestions">
-          <div id="questionContainer"></div>
-        </div>
+        <div class="full" id="dynamicQuestions"><div id="questionContainer"></div></div>
         <div class="full"><label for="customDetails">Additional Details</label><textarea id="customDetails" placeholder="Any other details you want to share..." style="min-height:60px;"></textarea></div>
         <div class="full"><button type="submit" class="submit-order-btn"><i class="fas fa-paper-plane"></i> Send Custom Order</button></div>
       </div>
     </form>
   </section>
 
-  <!-- ─── CART ─── -->
+  <!-- CART -->
   <section class="cart-panel">
     <div class="cart-header"><h3><i class="fas fa-bag-shopping" style="color:#2563eb;"></i> Your cart</h3><button class="checkout-btn" id="checkoutBtn"><i class="fas fa-lock"></i> Checkout</button></div>
     <div id="cartItemsContainer" class="cart-items"><div class="empty-cart-msg">🛒 Your cart is empty — add a web package!</div></div>
@@ -348,17 +296,13 @@
   </footer>
 </div>
 
-<!-- ─── WHATSAPP FLOATING BUTTON ─── -->
-<a href="https://wa.me/923277649422?text=Hi!%20I'm%20interested%20in%20a%20custom%20website" 
-   class="whatsapp-float" 
-   target="_blank" 
-   rel="noopener noreferrer"
-   aria-label="Chat on WhatsApp">
+<!-- WHATSAPP -->
+<a href="https://wa.me/923277649422?text=Hi!%20I'm%20interested%20in%20a%20custom%20website" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
   <i class="fab fa-whatsapp"></i>
   <span class="wa-text">Chat on WhatsApp</span>
 </a>
 
-<!-- ─── PAYMENT MODAL ─── -->
+<!-- PAYMENT MODAL -->
 <div class="payment-modal" id="paymentModal">
   <div class="modal-content">
     <div class="modal-header">
@@ -398,19 +342,374 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js?v=16"></script>
-
 <script>
+  // ============================================
+  // PIXLNEX - COMPLETE DIRECT SUPABASE INTEGRATION
+  // ============================================
+
+  // ─── SUPABASE CONFIG ───
+  const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
+
+  let supabaseClient = null;
+  let supabaseConnected = false;
+
+  // ─── INIT ───
+  function initSupabase() {
+    try {
+      if (typeof supabase !== 'undefined') {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        supabaseConnected = true;
+        console.log('✅ Supabase connected successfully');
+        return true;
+      } else {
+        console.error('❌ Supabase SDK not loaded');
+        return false;
+      }
+    } catch (e) {
+      console.error('❌ Supabase error:', e);
+      return false;
+    }
+  }
+
+  // ─── WAIT FOR CONNECTION ───
+  async function waitForSupabase() {
+    if (supabaseConnected && supabaseClient) return true;
+    
+    initSupabase();
+    
+    let attempts = 0;
+    while (!supabaseConnected || !supabaseClient) {
+      if (attempts > 20) {
+        console.error('❌ Supabase connection timeout');
+        return false;
+      }
+      await new Promise(resolve => setTimeout(resolve, 500));
+      attempts++;
+      initSupabase();
+    }
+    return true;
+  }
+
+  // ─── FORMAT PKR ───
+  function formatPKR(amount) {
+    return '₨ ' + (amount || 0).toLocaleString('en-PK');
+  }
+
+  // ─── GET PRODUCTS ───
+  async function getProducts() {
+    if (!supabaseConnected || !supabaseClient) {
+      console.warn('⚠️ Supabase not connected');
+      return [];
+    }
+    try {
+      console.log('🔍 Fetching products...');
+      const { data, error } = await supabaseClient
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: true });
+      if (error) throw error;
+      console.log('✅ Products fetched:', data?.length || 0);
+      return data || [];
+    } catch (e) {
+      console.error('Products error:', e);
+      return [];
+    }
+  }
+
+  // ─── GET OFFER STATUS ───
+  async function getOfferStatus(offerType) {
+    if (!supabaseConnected || !supabaseClient) return null;
+    try {
+      const { data, error } = await supabaseClient
+        .from('offers')
+        .select('*')
+        .eq('offer_type', offerType)
+        .single();
+      if (error) throw error;
+      return data;
+    } catch (e) {
+      console.error('Offer error:', e);
+      return null;
+    }
+  }
+
+  // ─── CLAIM OFFER ───
+  async function claimOffer(offerType, email) {
+    if (!supabaseConnected || !supabaseClient) {
+      throw new Error('Supabase not connected');
+    }
+    try {
+      const { data, error } = await supabaseClient
+        .from('offers')
+        .select('*')
+        .eq('offer_type', offerType)
+        .single();
+      if (error) throw error;
+
+      if (!data || data.is_active === false) {
+        throw new Error('Offer not active');
+      }
+
+      const claimedArray = data.claimed_by ? data.claimed_by.split(',').filter(Boolean) : [];
+
+      if (claimedArray.includes(email)) {
+        throw new Error('Already claimed');
+      }
+
+      if (claimedArray.length >= data.total_limit) {
+        throw new Error('Fully claimed');
+      }
+
+      claimedArray.push(email);
+      const { error: updateError } = await supabaseClient
+        .from('offers')
+        .update({
+          claimed_by: claimedArray.join(','),
+          claimed_at: new Date().toISOString()
+        })
+        .eq('offer_type', offerType);
+
+      if (updateError) throw updateError;
+      return { success: true };
+
+    } catch (e) {
+      console.error('Claim error:', e);
+      throw e;
+    }
+  }
+
+  // ─── GET CURRENT USER ───
+  async function getCurrentUser() {
+    if (!supabaseConnected || !supabaseClient) return null;
+    try {
+      const { data, error } = await supabaseClient.auth.getUser();
+      if (error) throw error;
+      return data.user;
+    } catch (e) {
+      console.error('User error:', e);
+      return null;
+    }
+  }
+
+  // ─── SIGN OUT ───
+  async function signOutUser() {
+    if (supabaseConnected && supabaseClient) {
+      try { await supabaseClient.auth.signOut(); } catch (e) { console.error(e); }
+    }
+    localStorage.removeItem('pixlnex_user');
+    window.location.href = 'index.html';
+  }
+
+  // ─── CREATE ORDER ───
+  async function createOrder(orderData) {
+    if (!supabaseConnected || !supabaseClient) {
+      throw new Error('Supabase not connected');
+    }
+    try {
+      const { data, error } = await supabaseClient
+        .from('orders')
+        .insert([{
+          order_id: '#ORD-' + Date.now().toString().slice(-6),
+          name: orderData.name,
+          price: orderData.price,
+          customer_email: orderData.customer_email,
+          customer_name: orderData.customer_name,
+          payment_method: orderData.payment_method || 'jazzcash',
+          payment_status: orderData.payment_status || 'pending',
+          status: orderData.status || 'processing',
+          is_custom: orderData.is_custom || false,
+          custom_details: orderData.custom_details || '',
+          custom_type: orderData.custom_type || '',
+          custom_budget: orderData.custom_budget || '',
+          created_at: new Date().toISOString()
+        }])
+        .select();
+      if (error) throw error;
+      return data ? data[0] : null;
+    } catch (e) {
+      console.error('Order error:', e);
+      throw e;
+    }
+  }
+
+  // ─── GET PRODUCT IMAGES ───
+  function getProductImages(product) {
+    if (product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0) {
+      return product.image_urls;
+    }
+    if (product.image_url) {
+      return [product.image_url];
+    }
+    return [];
+  }
+
+  // ─── CAROUSEL ───
+  function createCarousel(images, productName, productId) {
+    if (!images || images.length === 0) {
+      return `<div class="fallback-icon"><i class="fas fa-cube"></i></div>`;
+    }
+
+    const hasMultiple = images.length > 1;
+    const containerId = `carousel-${productId}`;
+
+    let html = `<div class="carousel-container" id="${containerId}" data-images='${JSON.stringify(images)}'>
+      <div class="carousel-track" id="${containerId}-track">`;
+
+    images.forEach((img, idx) => {
+      html += `<img src="${img}" alt="${productName} - ${idx + 1}" loading="lazy" data-index="${idx}" onerror="this.parentElement.innerHTML='<div class=\\'fallback-icon\\'><i class=\\'fas fa-cube\\'></i></div>';">`;
+    });
+
+    html += `</div>`;
+
+    if (hasMultiple) {
+      html += `
+        <button class="carousel-btn prev" onclick="window.changeSlide('${containerId}', -1)"><i class="fas fa-chevron-left"></i></button>
+        <button class="carousel-btn next" onclick="window.changeSlide('${containerId}', 1)"><i class="fas fa-chevron-right"></i></button>
+        <div class="carousel-dots" id="${containerId}-dots"></div>
+        <div class="image-count-badge">${images.length} 📸</div>
+      `;
+    }
+
+    html += `</div>`;
+    return html;
+  }
+
+  window.changeSlide = function(containerId, direction) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const track = document.getElementById(`${containerId}-track`);
+    const dots = document.getElementById(`${containerId}-dots`);
+    if (!track) return;
+    const images = track.querySelectorAll('img');
+    if (images.length <= 1) return;
+    const currentIndex = parseInt(container.dataset.currentIndex || '0');
+    let newIndex = currentIndex + direction;
+    if (newIndex < 0) newIndex = images.length - 1;
+    if (newIndex >= images.length) newIndex = 0;
+    container.dataset.currentIndex = newIndex;
+    track.style.transform = `translateX(-${newIndex * 100}%)`;
+    if (dots) {
+      const dotElements = dots.querySelectorAll('.dot');
+      dotElements.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === newIndex);
+      });
+    }
+  };
+
+  function initCarousel(containerId, imageCount, images) {
+    const container = document.getElementById(containerId);
+    if (!container || imageCount <= 1) return;
+    container.dataset.currentIndex = '0';
+    const dotsContainer = document.getElementById(`${containerId}-dots`);
+    if (dotsContainer) {
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i < imageCount; i++) {
+        const dot = document.createElement('button');
+        dot.className = `dot ${i === 0 ? 'active' : ''}`;
+        dot.addEventListener('click', () => {
+          window.changeSlide(containerId, i - parseInt(container.dataset.currentIndex || '0'));
+        });
+        dotsContainer.appendChild(dot);
+      }
+    }
+    let autoSlideInterval = setInterval(() => {
+      window.changeSlide(containerId, 1);
+    }, 4000);
+    container.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+    container.addEventListener('mouseleave', () => {
+      autoSlideInterval = setInterval(() => {
+        window.changeSlide(containerId, 1);
+      }, 4000);
+    });
+    container._autoSlideInterval = autoSlideInterval;
+  }
+
+  // ─── DYNAMIC QUESTIONS ───
+  const questionsData = {
+    portfolio: {
+      title: '📸 Portfolio Questions',
+      questions: [
+        { id: 'goal', label: 'What is the main goal?', type: 'select', options: ['Showcase work', 'Get freelance clients', 'Apply for jobs', 'Personal brand'] },
+        { id: 'projects', label: 'How many projects to display?', type: 'select', options: ['1-5', '6-10', '11-20', '20+'] },
+        { id: 'design', label: 'What design style?', type: 'select', options: ['Minimalist', 'Creative', 'Professional', 'Modern'] }
+      ]
+    },
+    business: {
+      title: '🏢 Business Questions',
+      questions: [
+        { id: 'goal', label: 'Business goal?', type: 'select', options: ['Lead generation', 'Brand awareness', 'Online sales', 'Customer support'] },
+        { id: 'pages', label: 'How many pages?', type: 'select', options: ['1-3', '4-6', '7-10', '10+'] },
+        { id: 'design', label: 'Design style?', type: 'select', options: ['Professional', 'Modern', 'Corporate', 'Creative'] }
+      ]
+    },
+    ecommerce: {
+      title: '🛒 E-commerce Questions',
+      questions: [
+        { id: 'products', label: 'How many products?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
+        { id: 'payment', label: 'Payment methods?', type: 'select', options: ['JazzCash', 'EasyPaisa', 'Both', 'Other'] }
+      ]
+    },
+    chat: {
+      title: '💬 Chat App Questions',
+      questions: [
+        { id: 'users', label: 'How many users?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
+        { id: 'features', label: 'Features needed?', type: 'select', options: ['Group chat', 'File sharing', 'Video call', 'All'] }
+      ]
+    },
+    landing: {
+      title: '🎯 Landing Page Questions',
+      questions: [
+        { id: 'goal', label: 'Main goal?', type: 'select', options: ['Lead capture', 'Product launch', 'Event registration', 'Sales'] },
+        { id: 'design', label: 'Design style?', type: 'select', options: ['Minimalist', 'Bold', 'Professional', 'Creative'] }
+      ]
+    },
+    other: {
+      title: '💡 New Idea Questions',
+      questions: [
+        { id: 'idea', label: 'Tell me about your idea', type: 'textarea', placeholder: 'Describe your website idea...' }
+      ]
+    }
+  };
+
+  function renderQuestions(type) {
+    const container = document.getElementById('questionContainer');
+    const data = questionsData[type];
+    if (!data) { container.innerHTML = ''; return; }
+
+    let html = `<h4 style="margin-bottom:0.8rem;color:#0f2b4b;">${data.title}</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">`;
+
+    data.questions.forEach(q => {
+      html += `<div style="${q.type === 'textarea' ? 'grid-column:1/-1;' : ''}">`;
+      html += `<label style="font-weight:600;font-size:0.85rem;display:block;margin-bottom:0.2rem;color:#1e293b;">${q.label}</label>`;
+
+      if (q.type === 'select') {
+        html += `<select id="q_${q.id}" style="width:100%;padding:0.6rem 1rem;border-radius:40px;border:1px solid #e2e8f0;font-size:0.9rem;background:#f8fafc;">`;
+        html += `<option value="">Select...</option>`;
+        q.options.forEach(opt => {
+          html += `<option value="${opt}">${opt}</option>`;
+        });
+        html += `</select>`;
+      } else if (q.type === 'textarea') {
+        html += `<textarea id="q_${q.id}" placeholder="${q.placeholder || ''}" style="width:100%;padding:0.6rem 1rem;border-radius:1rem;border:1px solid #e2e8f0;font-size:0.9rem;background:#f8fafc;min-height:60px;"></textarea>`;
+      }
+
+      html += `</div>`;
+    });
+
+    html += `</div>`;
+    container.innerHTML = html;
+  }
+
+  // ─── MAIN APP ───
   (function() {
-    const PX = window.Pixlnex;
     let products = [];
     let cart = JSON.parse(localStorage.getItem('pixlnex_cart')) || [];
     let currentUser = null;
     let pendingOrder = null;
     let selectedPayment = 'jazzcash';
-    let supabaseReady = false;
+    let offerData = {};
 
-    // ─── DOM REFS ───
     const productGrid = document.getElementById('productGrid');
     const cartItemsContainer = document.getElementById('cartItemsContainer');
     const cartTotalPrice = document.getElementById('cartTotalPrice');
@@ -440,127 +739,7 @@
       toastTimer = setTimeout(() => toast.classList.remove('show'), 4000);
     }
 
-    // ─── WAIT FOR SUPABASE ───
-    function waitForSupabase() {
-      return new Promise((resolve) => {
-        let attempts = 0;
-        const checkConnection = () => {
-          if (PX && PX.supabaseConnected) {
-            resolve(true);
-            return;
-          }
-          attempts++;
-          if (attempts > 30) {
-            resolve(false);
-            return;
-          }
-          setTimeout(checkConnection, 500);
-        };
-        checkConnection();
-      });
-    }
-
-    // ─── GET PRODUCT IMAGES ───
-    function getProductImages(product) {
-      if (product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0) {
-        return product.image_urls;
-      }
-      if (product.image_url) {
-        return [product.image_url];
-      }
-      return [];
-    }
-
-    // ─── CAROUSEL ───
-    function createCarousel(images, productName, productId) {
-      if (!images || images.length === 0) {
-        return `<div class="fallback-icon"><i class="fas fa-cube"></i></div>`;
-      }
-
-      const hasMultiple = images.length > 1;
-      const containerId = `carousel-${productId}`;
-
-      let html = `<div class="carousel-container" id="${containerId}" data-images='${JSON.stringify(images)}'>
-        <div class="carousel-track" id="${containerId}-track">`;
-
-      images.forEach((img, idx) => {
-        html += `<img src="${img}" alt="${productName} - ${idx + 1}" loading="lazy" data-index="${idx}" onerror="this.parentElement.innerHTML='<div class=\\'fallback-icon\\'><i class=\\'fas fa-cube\\'></i></div>';">`;
-      });
-
-      html += `</div>`;
-
-      if (hasMultiple) {
-        html += `
-          <button class="carousel-btn prev" onclick="window.changeSlide('${containerId}', -1)"><i class="fas fa-chevron-left"></i></button>
-          <button class="carousel-btn next" onclick="window.changeSlide('${containerId}', 1)"><i class="fas fa-chevron-right"></i></button>
-          <div class="carousel-dots" id="${containerId}-dots"></div>
-          <div class="image-count-badge">${images.length} 📸</div>
-        `;
-      }
-
-      html += `</div>`;
-      return html;
-    }
-
-    window.changeSlide = function(containerId, direction) {
-      const container = document.getElementById(containerId);
-      if (!container) return;
-      const track = document.getElementById(`${containerId}-track`);
-      const dots = document.getElementById(`${containerId}-dots`);
-      if (!track) return;
-      const images = track.querySelectorAll('img');
-      if (images.length <= 1) return;
-      const currentIndex = parseInt(container.dataset.currentIndex || '0');
-      let newIndex = currentIndex + direction;
-      if (newIndex < 0) newIndex = images.length - 1;
-      if (newIndex >= images.length) newIndex = 0;
-      container.dataset.currentIndex = newIndex;
-      track.style.transform = `translateX(-${newIndex * 100}%)`;
-      if (dots) {
-        const dotElements = dots.querySelectorAll('.dot');
-        dotElements.forEach((dot, idx) => {
-          dot.classList.toggle('active', idx === newIndex);
-        });
-      }
-    };
-
-    function initCarousel(containerId, imageCount, images) {
-      const container = document.getElementById(containerId);
-      if (!container || imageCount <= 1) return;
-      container.dataset.currentIndex = '0';
-      const dotsContainer = document.getElementById(`${containerId}-dots`);
-      if (dotsContainer) {
-        dotsContainer.innerHTML = '';
-        for (let i = 0; i < imageCount; i++) {
-          const dot = document.createElement('button');
-          dot.className = `dot ${i === 0 ? 'active' : ''}`;
-          dot.addEventListener('click', () => {
-            window.changeSlide(containerId, i - parseInt(container.dataset.currentIndex || '0'));
-          });
-          dotsContainer.appendChild(dot);
-        }
-      }
-      let autoSlideInterval = setInterval(() => {
-        window.changeSlide(containerId, 1);
-      }, 4000);
-      container.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
-      container.addEventListener('mouseleave', () => {
-        autoSlideInterval = setInterval(() => {
-          window.changeSlide(containerId, 1);
-        }, 4000);
-      });
-      container._autoSlideInterval = autoSlideInterval;
-    }
-
-    // ─── UPDATE AUTH ───
-    async function updateAuthUI() {
-      try {
-        if (PX && PX.getCurrentUser) {
-          currentUser = await PX.getCurrentUser();
-        }
-      } catch (e) {
-        currentUser = null;
-      }
+    function updateAuthUI() {
       if (currentUser) {
         const name = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
         authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
@@ -568,9 +747,7 @@
         authBtn.href = 'profile.html';
         authBtn.onclick = function(e) {
           e.preventDefault();
-          if (PX && PX.signOutUser) {
-            PX.signOutUser();
-          }
+          signOutUser();
         };
         setTimeout(loadOfferStatus, 500);
       } else {
@@ -581,16 +758,15 @@
       }
     }
 
-    // ─── LOAD OFFER STATUS ───
     async function loadOfferStatus() {
       try {
-        if (!PX || !PX.supabaseConnected || !PX.getOfferStatus) {
+        if (!supabaseConnected || !supabaseClient) {
           console.warn('Supabase not ready for offers');
           return;
         }
 
         // Offer 1: Portfolio in Rs 300
-        const data1 = await PX.getOfferStatus('free_portfolio');
+        const data1 = await getOfferStatus('free_portfolio');
         if (data1) {
           const claimedArray = data1.claimed_by ? data1.claimed_by.split(',').filter(Boolean) : [];
           const count = claimedArray.length;
@@ -611,7 +787,7 @@
         }
 
         // Offer 2: Completely Free
-        const data2 = await PX.getOfferStatus('first_order_free');
+        const data2 = await getOfferStatus('first_order_free');
         if (data2) {
           const claimedArray = data2.claimed_by ? data2.claimed_by.split(',').filter(Boolean) : [];
           const count = claimedArray.length;
@@ -638,11 +814,11 @@
 
     // ─── CLAIM OFFER 1 ───
     claimOfferBtn1.addEventListener('click', async function() {
-      if (!PX || !PX.claimOffer) {
+      if (!supabaseConnected || !supabaseClient) {
         showToast('⚠️ System not ready');
         return;
       }
-      const user = await PX.getCurrentUser();
+      const user = await getCurrentUser();
       if (!user) {
         showToast('🔐 Please login first');
         setTimeout(() => window.location.href = 'login.html', 800);
@@ -657,7 +833,7 @@
       }
 
       try {
-        await PX.claimOffer('free_portfolio', email);
+        await claimOffer('free_portfolio', email);
         showToast('🎉 Portfolio in ₨ 300 claimed!');
         claimOfferBtn1.disabled = true;
         claimOfferBtn1.textContent = '✅ Claimed';
@@ -669,11 +845,11 @@
 
     // ─── CLAIM OFFER 2 ───
     claimOfferBtn2.addEventListener('click', async function() {
-      if (!PX || !PX.claimOffer) {
+      if (!supabaseConnected || !supabaseClient) {
         showToast('⚠️ System not ready');
         return;
       }
-      const user = await PX.getCurrentUser();
+      const user = await getCurrentUser();
       if (!user) {
         showToast('🔐 Please login first');
         setTimeout(() => window.location.href = 'login.html', 800);
@@ -688,7 +864,7 @@
       }
 
       try {
-        await PX.claimOffer('first_order_free', email);
+        await claimOffer('first_order_free', email);
         showToast('⭐ Completely Free Website claimed!');
         claimOfferBtn2.disabled = true;
         claimOfferBtn2.textContent = '✅ Claimed';
@@ -709,8 +885,7 @@
     function openPaymentModal(orderData, isCustom) {
       pendingOrder = orderData;
       paymentProductName.textContent = orderData.name || 'Web Package';
-      const price = PX && PX.formatPKR ? PX.formatPKR(orderData.price) : formatPKR(orderData.price);
-      paymentAmount.textContent = price;
+      paymentAmount.textContent = formatPKR(orderData.price);
       paymentType.textContent = isCustom ? 'Custom Web' : 'Pre-made Web';
       paymentModal.classList.add('active');
       document.body.style.overflow = 'hidden';
@@ -730,7 +905,7 @@
 
     document.getElementById('confirmPaymentBtn').addEventListener('click', async function() {
       if (!pendingOrder) return;
-      const user = await PX.getCurrentUser();
+      const user = await getCurrentUser();
       if (!user) {
         showToast('🔐 Please login first');
         setTimeout(() => window.location.href = 'login.html', 800);
@@ -755,11 +930,10 @@
           is_custom: pendingOrder.isCustom || false
         };
 
-        const result = await PX.createOrder(orderData);
+        const result = await createOrder(orderData);
         console.log('✅ Order created:', result);
 
-        const price = PX && PX.formatPKR ? PX.formatPKR(pendingOrder.price) : formatPKR(pendingOrder.price);
-        let msg = `✅ Order Confirmed!\n\nOrder: ${pendingOrder.name}\nAmount: ${price}\nMethod: ${selectedPayment === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}\n\n📌 Send payment screenshot on WhatsApp: 0332-7649422`;
+        let msg = `✅ Order Confirmed!\n\nOrder: ${pendingOrder.name}\nAmount: ${formatPKR(pendingOrder.price)}\nMethod: ${selectedPayment === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}\n\n📌 Send payment screenshot on WhatsApp: 0332-7649422`;
         alert(msg);
 
         if (!pendingOrder.isCustom) {
@@ -783,11 +957,7 @@
     // ─── RENDER PRODUCTS ───
     async function renderProducts() {
       try {
-        if (!PX || !PX.getProducts) {
-          showToast('⚠️ System not ready');
-          return;
-        }
-        products = await PX.getProducts();
+        products = await getProducts();
         console.log('✅ Products loaded:', products.length);
         if (products.length > 0) {
           console.log('📸 First product images:', products[0].image_urls);
@@ -821,7 +991,7 @@
           <div class="product-desc">${p.description || p.desc || ''}</div>
           <ul class="product-features">${featuresHtml}</ul>
           <div class="product-bottom">
-            <span class="price">${PX && PX.formatPKR ? PX.formatPKR(p.price) : formatPKR(p.price)}</span>
+            <span class="price">${formatPKR(p.price)}</span>
             <div class="btn-group">
               <button class="btn-add" data-id="${p.id || index}"><i class="fas fa-plus"></i> Add</button>
               <button class="btn-order" data-id="${p.id || index}"><i class="fas fa-bolt"></i> Order Now</button>
@@ -896,7 +1066,7 @@
           div.className = 'cart-item';
           div.innerHTML = `
             <span>${item.name} <span style="opacity:0.7;font-weight:400;">×${item.quantity}</span></span>
-            <span class="item-price">${PX && PX.formatPKR ? PX.formatPKR(item.price * item.quantity) : formatPKR(item.price * item.quantity)}</span>
+            <span class="item-price">${formatPKR(item.price * item.quantity)}</span>
             <button class="remove-item" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
           `;
           cartItemsContainer.appendChild(div);
@@ -906,13 +1076,13 @@
         }));
       }
       const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      cartTotalPrice.textContent = PX && PX.formatPKR ? PX.formatPKR(total) : formatPKR(total);
+      cartTotalPrice.textContent = formatPKR(total);
       checkoutBtn.disabled = cart.length === 0;
     }
 
     checkoutBtn.addEventListener('click', async function() {
       if (cart.length === 0) return;
-      const user = await PX.getCurrentUser();
+      const user = await getCurrentUser();
       if (!user) { showToast('🔐 Please login first to checkout'); setTimeout(() => window.location.href = 'login.html', 800); return; }
 
       const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -927,90 +1097,11 @@
       openPaymentModal(orderData, false);
     });
 
-    // ─── DYNAMIC QUESTIONS ───
-    const questionsData = {
-      portfolio: {
-        title: '📸 Portfolio Questions',
-        questions: [
-          { id: 'goal', label: 'What is the main goal?', type: 'select', options: ['Showcase work', 'Get freelance clients', 'Apply for jobs', 'Personal brand'] },
-          { id: 'projects', label: 'How many projects to display?', type: 'select', options: ['1-5', '6-10', '11-20', '20+'] },
-          { id: 'design', label: 'What design style?', type: 'select', options: ['Minimalist', 'Creative', 'Professional', 'Modern'] }
-        ]
-      },
-      business: {
-        title: '🏢 Business Questions',
-        questions: [
-          { id: 'goal', label: 'Business goal?', type: 'select', options: ['Lead generation', 'Brand awareness', 'Online sales', 'Customer support'] },
-          { id: 'pages', label: 'How many pages?', type: 'select', options: ['1-3', '4-6', '7-10', '10+'] },
-          { id: 'design', label: 'Design style?', type: 'select', options: ['Professional', 'Modern', 'Corporate', 'Creative'] }
-        ]
-      },
-      ecommerce: {
-        title: '🛒 E-commerce Questions',
-        questions: [
-          { id: 'products', label: 'How many products?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
-          { id: 'payment', label: 'Payment methods?', type: 'select', options: ['JazzCash', 'EasyPaisa', 'Both', 'Other'] }
-        ]
-      },
-      chat: {
-        title: '💬 Chat App Questions',
-        questions: [
-          { id: 'users', label: 'How many users?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
-          { id: 'features', label: 'Features needed?', type: 'select', options: ['Group chat', 'File sharing', 'Video call', 'All'] }
-        ]
-      },
-      landing: {
-        title: '🎯 Landing Page Questions',
-        questions: [
-          { id: 'goal', label: 'Main goal?', type: 'select', options: ['Lead capture', 'Product launch', 'Event registration', 'Sales'] },
-          { id: 'design', label: 'Design style?', type: 'select', options: ['Minimalist', 'Bold', 'Professional', 'Creative'] }
-        ]
-      },
-      other: {
-        title: '💡 New Idea Questions',
-        questions: [
-          { id: 'idea', label: 'Tell me about your idea', type: 'textarea', placeholder: 'Describe your website idea...' }
-        ]
-      }
-    };
-
-    function renderQuestions(type) {
-      const container = document.getElementById('questionContainer');
-      const data = questionsData[type];
-      if (!data) { container.innerHTML = ''; return; }
-
-      let html = `<h4 style="margin-bottom:0.8rem;color:#0f2b4b;">${data.title}</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">`;
-
-      data.questions.forEach(q => {
-        html += `<div style="${q.type === 'textarea' ? 'grid-column:1/-1;' : ''}">`;
-        html += `<label style="font-weight:600;font-size:0.85rem;display:block;margin-bottom:0.2rem;color:#1e293b;">${q.label}</label>`;
-
-        if (q.type === 'select') {
-          html += `<select id="q_${q.id}" style="width:100%;padding:0.6rem 1rem;border-radius:40px;border:1px solid #e2e8f0;font-size:0.9rem;background:#f8fafc;">`;
-          html += `<option value="">Select...</option>`;
-          q.options.forEach(opt => {
-            html += `<option value="${opt}">${opt}</option>`;
-          });
-          html += `</select>`;
-        } else if (q.type === 'textarea') {
-          html += `<textarea id="q_${q.id}" placeholder="${q.placeholder || ''}" style="width:100%;padding:0.6rem 1rem;border-radius:1rem;border:1px solid #e2e8f0;font-size:0.9rem;background:#f8fafc;min-height:60px;"></textarea>`;
-        }
-
-        html += `</div>`;
-      });
-
-      html += `</div>`;
-      container.innerHTML = html;
-    }
-
-    document.getElementById('customType').addEventListener('change', function() {
-      renderQuestions(this.value);
-    });
-
+    // ─── CUSTOM ORDER ───
     document.getElementById('customOrderForm').addEventListener('submit', async function(e) {
       e.preventDefault();
 
-      const user = await PX.getCurrentUser();
+      const user = await getCurrentUser();
       if (!user) {
         showToast('🔐 Please login first');
         setTimeout(() => window.location.href = 'login.html', 800);
@@ -1053,6 +1144,7 @@
       document.getElementById('questionContainer').innerHTML = '';
     });
 
+    // ─── NAV ───
     document.getElementById('navAbout').addEventListener('click', function(e) {
       e.preventDefault();
       document.getElementById('homeSection').classList.add('hidden');
@@ -1065,18 +1157,15 @@
     async function init() {
       console.log('🚀 Initializing Pixlnex...');
 
-      if (PX && PX.initSupabase) {
-        PX.initSupabase();
-      }
-
       const connected = await waitForSupabase();
       if (!connected) {
-        console.error('❌ Supabase connection timeout');
+        console.error('❌ Supabase connection failed');
         showToast('⚠️ Database not connected. Please refresh.');
         return;
       }
 
-      await updateAuthUI();
+      currentUser = await getCurrentUser();
+      updateAuthUI();
       await renderProducts();
       updateCartUI();
       await loadOfferStatus();
