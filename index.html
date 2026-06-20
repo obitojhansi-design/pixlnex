@@ -8,8 +8,10 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
     body { background: #f8fafc; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
+
     .app { max-width: 1300px; margin: 0 auto; padding: 1.5rem 2rem; flex: 1; width: 100%; }
 
+    /* ─── WHATSAPP FLOATING BUTTON ─── */
     .whatsapp-float {
       position: fixed; bottom: 24px; right: 24px; z-index: 9999;
       display: flex; align-items: center; gap: 12px;
@@ -21,6 +23,7 @@
     .whatsapp-float i { font-size: 1.8rem; }
     @media (max-width:600px) { .whatsapp-float .wa-text { display: none; } }
 
+    /* ─── OFFER BANNER ─── */
     .offer-banner {
       background: linear-gradient(135deg, #f59e0b, #d97706, #f59e0b);
       background-size: 200% 200%;
@@ -56,6 +59,7 @@
     .offer-banner .offer-price-tag { background: rgba(255,255,255,0.2); padding: 0.2rem 0.8rem; border-radius: 30px; font-size: 0.8rem; font-weight: 700; }
     .offer-banner.purple .offer-btn { color: #6d28d9; }
 
+    /* ─── NAVBAR ─── */
     .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; padding: 0.75rem 0 1.5rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem; }
     .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; text-decoration: none; }
     .logo i { color: #2563eb; font-size: 2rem; }
@@ -82,10 +86,13 @@
     .section-title { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin: 2.8rem 0 1.8rem 0; }
     .section-title h2 { font-size: 1.9rem; font-weight: 650; }
     .section-title a { color: #2563eb; text-decoration: none; font-weight: 500; cursor: pointer; }
+
+    /* ─── PRODUCT GRID ─── */
     .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
     .product-card { background: white; border-radius: 1.8rem; padding: 1.8rem 1.8rem 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02); transition: all 0.25s ease; border: 1px solid #edf2f7; display: flex; flex-direction: column; }
     .product-card:hover { transform: translateY(-6px); box-shadow: 0 18px 30px -8px rgba(0,20,40,0.08); border-color: #d9e2ef; }
 
+    /* ─── PRODUCT IMAGE CAROUSEL ─── */
     .product-img { position: relative; background: #f1f6fc; border-radius: 1.5rem; aspect-ratio: 1/1; overflow: hidden; margin-bottom: 1.2rem; cursor: pointer; }
     .product-img .carousel-container { width: 100%; height: 100%; position: relative; overflow: hidden; }
     .product-img .carousel-track { display: flex; transition: transform 0.5s ease; height: 100%; }
@@ -186,6 +193,7 @@
 
     .footer { margin-top: 4rem; border-top: 1px solid #e2e8f0; padding: 2rem 0 1rem 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: #475569; font-size: 0.9rem; }
     .footer i { color: #2563eb; margin: 0 0.2rem; }
+
     .toast { position: fixed; bottom: 90px; right: 24px; background: #0f2b4b; color: white; padding: 1rem 1.8rem; border-radius: 60px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); font-weight: 600; display: flex; align-items: center; gap: 0.7rem; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 10000; max-width: 90%; }
     .toast.show { transform: translateY(0); opacity: 1; }
     .toast i { color: #22c55e; font-size: 1.2rem; }
@@ -216,621 +224,873 @@
 </head>
 <body>
 
-  <div class="app">
-    <header class="navbar">
-      <a href="index.html" class="logo"><i class="fas fa-cube"></i><span>Pixlnex</span></a>
-      <nav class="nav-links">
-        <a href="index.html" class="active">Home</a>
-        <a href="shop.html">Webs</a>
-        <a href="#" id="navAbout">About</a>
-        <a href="profile.html" class="auth-btn" id="authBtn"><i class="fas fa-user"></i> Login</a>
-        <a href="shop.html" class="cart-icon">
-          <i class="fas fa-shopping-bag"></i>
-          <span class="cart-count" id="cartCounter">0</span>
-        </a>
-      </nav>
-    </header>
+<div class="app">
+  <!-- ─── HEADER ─── -->
+  <header class="navbar">
+    <a href="index.html" class="logo"><i class="fas fa-cube"></i><span>Pixlnex</span></a>
+    <nav class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="shop.html">Webs</a>
+      <a href="#" id="navAbout">About</a>
+      <a href="profile.html" class="auth-btn" id="authBtn"><i class="fas fa-user"></i> Login</a>
+      <a href="shop.html" class="cart-icon">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="cart-count" id="cartCounter">0</span>
+      </a>
+    </nav>
+  </header>
 
-    <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Added!</span></div>
+  <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Added!</span></div>
 
-    <!-- OFFER 1 -->
-    <div class="offer-banner" id="offerBanner1">
-      <div class="offer-text">
-        <i class="fas fa-gift"></i>
-        <div>
-          <h3>🎉 Special Portfolio Offer!</h3>
-          <p>First <strong>10 customers</strong> get Portfolio Website in <strong>only ₨ 300</strong> <span id="offerCountDisplay1">(0/10 claimed)</span></p>
-        </div>
-      </div>
-      <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
-        <span class="offer-price-tag">✨ ₨ 300 Only</span>
-        <span class="offer-tag">🎯 Portfolio</span>
-        <span class="offer-count" id="offerCount1">0/10</span>
-        <button class="offer-btn" id="claimOfferBtn1">Claim Offer</button>
+  <!-- ─── OFFER 1 ─── -->
+  <div class="offer-banner" id="offerBanner1">
+    <div class="offer-text">
+      <i class="fas fa-gift"></i>
+      <div>
+        <h3>🎉 Special Portfolio Offer!</h3>
+        <p>First <strong>10 customers</strong> get Portfolio Website in <strong>only ₨ 300</strong> <span id="offerCountDisplay1">(0/10 claimed)</span></p>
       </div>
     </div>
-
-    <!-- OFFER 2 -->
-    <div class="offer-banner purple" id="offerBanner2">
-      <div class="offer-text">
-        <i class="fas fa-star"></i>
-        <div>
-          <h3>⭐ First Order Completely FREE!</h3>
-          <p><strong>Only 1 customer</strong> gets a completely FREE website! <span id="offerCountDisplay2">(0/1 claimed)</span></p>
-        </div>
-      </div>
-      <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
-        <span class="offer-price-tag">🎁 FREE</span>
-        <span class="offer-tag">🌟 Any Website</span>
-        <span class="offer-count" id="offerCount2">0/1</span>
-        <button class="offer-btn" id="claimOfferBtn2">Claim Offer</button>
-      </div>
-    </div>
-
-    <section id="homeSection" class="page-section">
-      <div class="hero">
-        <div class="hero-text">
-          <div class="tagline"><i class="fas fa-globe"></i> Custom websites — built for you</div>
-          <h1>Find your <span>perfect web</span></h1>
-          <p>I build custom websites tailored to your needs. Browse my packages or tell me exactly what you want.</p>
-          <a href="#customOrder" class="btn-primary"><i class="fas fa-pencil-ruler"></i> Order Custom Web</a>
-        </div>
-        <div class="hero-badge"><i class="fas fa-rocket"></i> 1‑on‑1 service · you get a unique site</div>
-      </div>
-    </section>
-
-    <section id="productSection" class="page-section">
-      <div class="section-title">
-        <h2>⚡ Web Packages</h2>
-        <a href="shop.html">View all <i class="fas fa-arrow-right"></i></a>
-      </div>
-      <div class="product-grid" id="productGrid"></div>
-    </section>
-
-    <section class="custom-section" id="customOrder">
-      <h2>✏️ Tell me what you need</h2>
-      <p class="sub">Describe your ideal website and I'll build it for you. One person, one project at a time.</p>
-      <form id="customOrderForm">
-        <div class="custom-grid">
-          <div><label for="customName">Your Name</label><input type="text" id="customName" placeholder="John Doe" required /></div>
-          <div><label for="customEmail">Your Email</label><input type="email" id="customEmail" placeholder="john@example.com" required /></div>
-          <div><label for="customType">Website Type</label>
-            <select id="customType" required>
-              <option value="">Select Type</option>
-              <option value="portfolio">Portfolio / Personal</option>
-              <option value="business">Business / Corporate</option>
-              <option value="ecommerce">E‑commerce Store</option>
-              <option value="blog">Blog / Magazine</option>
-              <option value="chat">Encrypted Chat App</option>
-              <option value="landing">Landing Page</option>
-              <option value="other">Other / New Idea</option>
-            </select>
-          </div>
-          <div><label for="customBudget">Budget Range (PKR)</label>
-            <select id="customBudget" required>
-              <option value="5000-10000">₨ 5,000 – ₨ 10,000</option>
-              <option value="10000-15000">₨ 10,000 – ₨ 15,000</option>
-              <option value="15000-20000">₨ 15,000 – ₨ 20,000</option>
-              <option value="20000+">₨ 20,000+</option>
-            </select>
-          </div>
-          <div class="full" id="dynamicQuestions">
-            <div id="questionContainer"></div>
-          </div>
-          <div class="full"><label for="customDetails">Additional Details</label><textarea id="customDetails" placeholder="Any other details you want to share..." style="min-height:60px;"></textarea></div>
-          <div class="full"><button type="submit" class="submit-order-btn"><i class="fas fa-paper-plane"></i> Send Custom Order</button></div>
-        </div>
-      </form>
-    </section>
-
-    <section class="cart-panel">
-      <div class="cart-header"><h3><i class="fas fa-bag-shopping" style="color:#2563eb;"></i> Your cart</h3><button class="checkout-btn" id="checkoutBtn"><i class="fas fa-lock"></i> Checkout</button></div>
-      <div id="cartItemsContainer" class="cart-items"><div class="empty-cart-msg">🛒 Your cart is empty — add a web package!</div></div>
-      <div class="cart-total"><span>Total</span><span id="cartTotalPrice">₨ 0</span></div>
-    </section>
-
-    <footer class="footer">
-      <span>© 2026 Pixlnex — <i class="fas fa-spider"></i> one person · one website at a time</span>
-      <span><i class="fab fa-twitter"></i> <i class="fab fa-github"></i> <i class="fab fa-linkedin"></i></span>
-    </footer>
-  </div>
-
-  <a href="https://wa.me/92327 7649422?text=Hi!%20I'm%20interested%20in%20a%20custom%20website" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
-    <i class="fab fa-whatsapp"></i>
-    <span class="wa-text">Chat on WhatsApp</span>
-  </a>
-
-  <div class="payment-modal" id="paymentModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>💳 Complete Payment</h2>
-        <button class="close-modal" id="closePaymentModal">&times;</button>
-      </div>
-      <div class="order-summary"><div class="label">Product</div><div class="value" id="paymentProductName">Loading...</div></div>
-      <div class="payment-details">
-        <div class="detail-row"><span class="label">Amount</span><span class="value" id="paymentAmount">₨ 0</span></div>
-        <div class="detail-row"><span class="label">Type</span><span class="value" id="paymentType">Pre-made Web</span></div>
-      </div>
-      <p style="font-size:0.9rem;color:#64748b;margin-bottom:0.5rem;">Select payment method:</p>
-      <div class="payment-methods">
-        <div class="method selected" data-method="jazzcash" onclick="selectPayment('jazzcash')">
-          <div class="icon">💳</div><div class="info"><div class="name">JazzCash</div><div class="desc">Pay via JazzCash mobile account</div></div><div class="radio"></div>
-        </div>
-        <div class="method" data-method="easypaisa" onclick="selectPayment('easypaisa')">
-          <div class="icon">📱</div><div class="info"><div class="name">EasyPaisa</div><div class="desc">Pay via EasyPaisa mobile account</div></div><div class="radio"></div>
-        </div>
-      </div>
-      <div class="bank-details">
-        <p style="font-weight:600;margin-bottom:0.5rem;color:#0f2b4b;">📌 Send payment to:</p>
-        <div class="bank-row"><span class="label">JazzCash</span><span class="value">03006948246</span></div>
-        <div class="bank-row"><span class="label">EasyPaisa</span><span class="value">03008748246</span></div>
-        <div class="bank-row"><span class="label">Account Holder</span><span class="value">Muhammad Mazhar Javed</span></div>
-      </div>
-      <div class="payment-note"><i class="fas fa-info-circle"></i> After payment, send screenshot on WhatsApp. Then click "Confirm Payment" below.</div>
-      <div class="payment-actions">
-        <button class="btn-pay pay" id="confirmPaymentBtn"><i class="fas fa-check"></i> Confirm Payment</button>
-        <button class="btn-pay cancel" id="cancelPaymentBtn">Cancel</button>
-      </div>
+    <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
+      <span class="offer-price-tag">✨ ₨ 300 Only</span>
+      <span class="offer-tag">🎯 Portfolio</span>
+      <span class="offer-count" id="offerCount1">0/10</span>
+      <button class="offer-btn" id="claimOfferBtn1">Claim Offer</button>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase.js?v=15"></script>
-  <script>
-    (function() {
-      // ─── DIRECT SUPABASE FALLBACK ───
-      // If Pixlnex is not loaded, use direct connection
-      let PX = window.Pixlnex;
-      let supabaseClient = null;
-      let supabaseConnected = false;
+  <!-- ─── OFFER 2 ─── -->
+  <div class="offer-banner purple" id="offerBanner2">
+    <div class="offer-text">
+      <i class="fas fa-star"></i>
+      <div>
+        <h3>⭐ First Order Completely FREE!</h3>
+        <p><strong>Only 1 customer</strong> gets a completely FREE website! <span id="offerCountDisplay2">(0/1 claimed)</span></p>
+      </div>
+    </div>
+    <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
+      <span class="offer-price-tag">🎁 FREE</span>
+      <span class="offer-tag">🌟 Any Website</span>
+      <span class="offer-count" id="offerCount2">0/1</span>
+      <button class="offer-btn" id="claimOfferBtn2">Claim Offer</button>
+    </div>
+  </div>
 
-      // ─── DIRECT SUPABASE CONFIG ───
-      const DIRECT_SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
-      const DIRECT_SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
+  <!-- ─── HOME ─── -->
+  <section id="homeSection" class="page-section">
+    <div class="hero">
+      <div class="hero-text">
+        <div class="tagline"><i class="fas fa-globe"></i> Custom websites — built for you</div>
+        <h1>Find your <span>perfect web</span></h1>
+        <p>I build custom websites tailored to your needs. Browse my packages or tell me exactly what you want.</p>
+        <a href="#customOrder" class="btn-primary"><i class="fas fa-pencil-ruler"></i> Order Custom Web</a>
+      </div>
+      <div class="hero-badge"><i class="fas fa-rocket"></i> 1‑on‑1 service · you get a unique site</div>
+    </div>
+  </section>
 
-      function initDirectSupabase() {
-        try {
-          if (typeof supabase !== 'undefined') {
-            supabaseClient = supabase.createClient(DIRECT_SUPABASE_URL, DIRECT_SUPABASE_ANON_KEY);
-            supabaseConnected = true;
-            console.log('✅ Direct Supabase connected');
-            return true;
-          }
-          return false;
-        } catch (e) {
-          console.error('Direct Supabase error:', e);
-          return false;
-        }
-      }
+  <!-- ─── PRODUCTS ─── -->
+  <section id="productSection" class="page-section">
+    <div class="section-title">
+      <h2>⚡ Web Packages</h2>
+      <a href="shop.html">View all <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="product-grid" id="productGrid"></div>
+  </section>
 
-      // Try Pixlnex first, then direct
-      if (!PX || !PX.supabaseConnected) {
-        console.log('⚠️ Pixlnex not ready, trying direct connection...');
-        initDirectSupabase();
-      }
+  <!-- ─── CUSTOM ORDER ─── -->
+  <section class="custom-section" id="customOrder">
+    <h2>✏️ Tell me what you need</h2>
+    <p class="sub">Describe your ideal website and I'll build it for you. One person, one project at a time.</p>
+    <form id="customOrderForm">
+      <div class="custom-grid">
+        <div><label for="customName">Your Name</label><input type="text" id="customName" placeholder="John Doe" required /></div>
+        <div><label for="customEmail">Your Email</label><input type="email" id="customEmail" placeholder="john@example.com" required /></div>
+        <div><label for="customType">Website Type</label>
+          <select id="customType" required>
+            <option value="">Select Type</option>
+            <option value="portfolio">Portfolio / Personal</option>
+            <option value="business">Business / Corporate</option>
+            <option value="ecommerce">E‑commerce Store</option>
+            <option value="blog">Blog / Magazine</option>
+            <option value="chat">Encrypted Chat App</option>
+            <option value="landing">Landing Page</option>
+            <option value="other">Other / New Idea</option>
+          </select>
+        </div>
+        <div><label for="customBudget">Budget Range (PKR)</label>
+          <select id="customBudget" required>
+            <option value="5000-10000">₨ 5,000 – ₨ 10,000</option>
+            <option value="10000-15000">₨ 10,000 – ₨ 15,000</option>
+            <option value="15000-20000">₨ 15,000 – ₨ 20,000</option>
+            <option value="20000+">₨ 20,000+</option>
+          </select>
+        </div>
+        <div class="full" id="dynamicQuestions">
+          <div id="questionContainer"></div>
+        </div>
+        <div class="full"><label for="customDetails">Additional Details</label><textarea id="customDetails" placeholder="Any other details you want to share..." style="min-height:60px;"></textarea></div>
+        <div class="full"><button type="submit" class="submit-order-btn"><i class="fas fa-paper-plane"></i> Send Custom Order</button></div>
+      </div>
+    </form>
+  </section>
 
-      // Use whichever connection works
-      function getSupabaseClient() {
-        if (PX && PX.supabaseConnected && PX.supabaseClient) {
-          return PX.supabaseClient;
-        }
-        if (supabaseConnected && supabaseClient) {
-          return supabaseClient;
-        }
-        return null;
-      }
+  <!-- ─── CART ─── -->
+  <section class="cart-panel">
+    <div class="cart-header"><h3><i class="fas fa-bag-shopping" style="color:#2563eb;"></i> Your cart</h3><button class="checkout-btn" id="checkoutBtn"><i class="fas fa-lock"></i> Checkout</button></div>
+    <div id="cartItemsContainer" class="cart-items"><div class="empty-cart-msg">🛒 Your cart is empty — add a web package!</div></div>
+    <div class="cart-total"><span>Total</span><span id="cartTotalPrice">₨ 0</span></div>
+  </section>
 
-      function isConnected() {
-        return (PX && PX.supabaseConnected) || supabaseConnected;
-      }
+  <footer class="footer">
+    <span>© 2026 Pixlnex — <i class="fas fa-spider"></i> one person · one website at a time</span>
+    <span><i class="fab fa-twitter"></i> <i class="fab fa-github"></i> <i class="fab fa-linkedin"></i></span>
+  </footer>
+</div>
 
-      // ─── PRODUCTS ───
-      async function getProducts() {
-        const client = getSupabaseClient();
-        if (!client) {
-          console.warn('⚠️ No Supabase connection');
-          return [];
-        }
-        try {
-          const { data, error } = await client
-            .from('products')
-            .select('*')
-            .order('created_at', { ascending: true });
-          if (error) throw error;
-          return data || [];
-        } catch (e) {
-          console.error('Products error:', e);
-          return [];
-        }
-      }
+<!-- ─── WHATSAPP FLOATING BUTTON ─── -->
+<a href="https://wa.me/923277649422?text=Hi!%20I'm%20interested%20in%20a%20custom%20website" 
+   class="whatsapp-float" 
+   target="_blank" 
+   rel="noopener noreferrer"
+   aria-label="Chat on WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+  <span class="wa-text">Chat on WhatsApp</span>
+</a>
 
-      // ─── GET PRODUCT IMAGES ───
-      function getProductImages(product) {
-        if (product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0) {
-          return product.image_urls;
-        }
-        if (product.image_url) {
-          return [product.image_url];
-        }
-        return [];
-      }
+<!-- ─── PAYMENT MODAL ─── -->
+<div class="payment-modal" id="paymentModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>💳 Complete Payment</h2>
+      <button class="close-modal" id="closePaymentModal">&times;</button>
+    </div>
+    <div class="order-summary"><div class="label">Product</div><div class="value" id="paymentProductName">Loading...</div></div>
+    <div class="payment-details">
+      <div class="detail-row"><span class="label">Amount</span><span class="value" id="paymentAmount">₨ 0</span></div>
+      <div class="detail-row"><span class="label">Type</span><span class="value" id="paymentType">Pre-made Web</span></div>
+    </div>
+    <p style="font-size:0.9rem;color:#64748b;margin-bottom:0.5rem;">Select payment method:</p>
+    <div class="payment-methods">
+      <div class="method selected" data-method="jazzcash" onclick="selectPayment('jazzcash')">
+        <div class="icon">💳</div>
+        <div class="info"><div class="name">JazzCash</div><div class="desc">Pay via JazzCash mobile account</div></div>
+        <div class="radio"></div>
+      </div>
+      <div class="method" data-method="easypaisa" onclick="selectPayment('easypaisa')">
+        <div class="icon">📱</div>
+        <div class="info"><div class="name">EasyPaisa</div><div class="desc">Pay via EasyPaisa mobile account</div></div>
+        <div class="radio"></div>
+      </div>
+    </div>
+    <div class="bank-details">
+      <p style="font-weight:600;margin-bottom:0.5rem;color:#0f2b4b;">📌 Send payment to:</p>
+      <div class="bank-row"><span class="label">JazzCash</span><span class="value">0300 8748246</span></div>
+      <div class="bank-row"><span class="label">EasyPaisa</span><span class="value">0300 6948246</span></div>
+      <div class="bank-row"><span class="label">Account Holder</span><span class="value">Faisal Yousaf</span></div>
+    </div>
+    <div class="payment-note"><i class="fas fa-info-circle"></i> After payment, send screenshot on WhatsApp. Then click "Confirm Payment" below.</div>
+    <div class="payment-actions">
+      <button class="btn-pay pay" id="confirmPaymentBtn"><i class="fas fa-check"></i> Confirm Payment</button>
+      <button class="btn-pay cancel" id="cancelPaymentBtn">Cancel</button>
+    </div>
+  </div>
+</div>
 
-      // ─── CREATE CAROUSEL ───
-      function createCarousel(images, productName, productId) {
-        if (!images || images.length === 0) {
-          return `<div class="fallback-icon"><i class="fas fa-cube"></i></div>`;
-        }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js?v=16"></script>
 
-        const hasMultiple = images.length > 1;
-        const containerId = `carousel-${productId}`;
+<script>
+  (function() {
+    const PX = window.Pixlnex;
+    let products = [];
+    let cart = JSON.parse(localStorage.getItem('pixlnex_cart')) || [];
+    let currentUser = null;
+    let pendingOrder = null;
+    let selectedPayment = 'jazzcash';
+    let supabaseReady = false;
 
-        let html = `<div class="carousel-container" id="${containerId}" data-images='${JSON.stringify(images)}'>
-          <div class="carousel-track" id="${containerId}-track">`;
+    // ─── DOM REFS ───
+    const productGrid = document.getElementById('productGrid');
+    const cartItemsContainer = document.getElementById('cartItemsContainer');
+    const cartTotalPrice = document.getElementById('cartTotalPrice');
+    const cartCounter = document.getElementById('cartCounter');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    const authBtn = document.getElementById('authBtn');
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMsg');
+    const paymentModal = document.getElementById('paymentModal');
+    const paymentProductName = document.getElementById('paymentProductName');
+    const paymentAmount = document.getElementById('paymentAmount');
+    const paymentType = document.getElementById('paymentType');
 
-        images.forEach((img, idx) => {
-          html += `<img src="${img}" alt="${productName} - ${idx + 1}" loading="lazy" data-index="${idx}" onerror="this.parentElement.innerHTML='<div class=\\'fallback-icon\\'><i class=\\'fas fa-cube\\'></i></div>';">`;
-        });
+    const claimOfferBtn1 = document.getElementById('claimOfferBtn1');
+    const offerCount1 = document.getElementById('offerCount1');
+    const offerCountDisplay1 = document.getElementById('offerCountDisplay1');
+    const claimOfferBtn2 = document.getElementById('claimOfferBtn2');
+    const offerCount2 = document.getElementById('offerCount2');
+    const offerCountDisplay2 = document.getElementById('offerCountDisplay2');
 
-        html += `</div>`;
+    let toastTimer;
 
-        if (hasMultiple) {
-          html += `
-            <button class="carousel-btn prev" onclick="window.changeSlide('${containerId}', -1)"><i class="fas fa-chevron-left"></i></button>
-            <button class="carousel-btn next" onclick="window.changeSlide('${containerId}', 1)"><i class="fas fa-chevron-right"></i></button>
-            <div class="carousel-dots" id="${containerId}-dots"></div>
-            <div class="image-count-badge">${images.length} 📸</div>
-          `;
-        }
+    function showToast(msg) {
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 4000);
+    }
 
-        html += `</div>`;
-        return html;
-      }
-
-      window.changeSlide = function(containerId, direction) {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-        const track = document.getElementById(`${containerId}-track`);
-        const dots = document.getElementById(`${containerId}-dots`);
-        if (!track) return;
-        const images = track.querySelectorAll('img');
-        if (images.length <= 1) return;
-        const currentIndex = parseInt(container.dataset.currentIndex || '0');
-        let newIndex = currentIndex + direction;
-        if (newIndex < 0) newIndex = images.length - 1;
-        if (newIndex >= images.length) newIndex = 0;
-        container.dataset.currentIndex = newIndex;
-        track.style.transform = `translateX(-${newIndex * 100}%)`;
-        if (dots) {
-          const dotElements = dots.querySelectorAll('.dot');
-          dotElements.forEach((dot, idx) => {
-            dot.classList.toggle('active', idx === newIndex);
-          });
-        }
-      };
-
-      function initCarousel(containerId, imageCount, images) {
-        const container = document.getElementById(containerId);
-        if (!container || imageCount <= 1) return;
-        container.dataset.currentIndex = '0';
-        const dotsContainer = document.getElementById(`${containerId}-dots`);
-        if (dotsContainer) {
-          dotsContainer.innerHTML = '';
-          for (let i = 0; i < imageCount; i++) {
-            const dot = document.createElement('button');
-            dot.className = `dot ${i === 0 ? 'active' : ''}`;
-            dot.addEventListener('click', () => {
-              window.changeSlide(containerId, i - parseInt(container.dataset.currentIndex || '0'));
-            });
-            dotsContainer.appendChild(dot);
-          }
-        }
-        let autoSlideInterval = setInterval(() => {
-          window.changeSlide(containerId, 1);
-        }, 4000);
-        container.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
-        container.addEventListener('mouseleave', () => {
-          autoSlideInterval = setInterval(() => {
-            window.changeSlide(containerId, 1);
-          }, 4000);
-        });
-        container._autoSlideInterval = autoSlideInterval;
-      }
-
-      // ─── FORMAT PKR ───
-      function formatPKR(amount) {
-        return '₨ ' + (amount || 0).toLocaleString('en-PK');
-      }
-
-      // ─── MAIN APP ───
-      let products = [];
-      let cart = JSON.parse(localStorage.getItem('pixlnex_cart')) || [];
-      let currentUser = null;
-
-      const productGrid = document.getElementById('productGrid');
-      const cartItemsContainer = document.getElementById('cartItemsContainer');
-      const cartTotalPrice = document.getElementById('cartTotalPrice');
-      const cartCounter = document.getElementById('cartCounter');
-      const checkoutBtn = document.getElementById('checkoutBtn');
-      const authBtn = document.getElementById('authBtn');
-      const toast = document.getElementById('toast');
-      const toastMsg = document.getElementById('toastMsg');
-
-      const claimOfferBtn1 = document.getElementById('claimOfferBtn1');
-      const offerCount1 = document.getElementById('offerCount1');
-      const offerCountDisplay1 = document.getElementById('offerCountDisplay1');
-      const claimOfferBtn2 = document.getElementById('claimOfferBtn2');
-      const offerCount2 = document.getElementById('offerCount2');
-      const offerCountDisplay2 = document.getElementById('offerCountDisplay2');
-
-      let toastTimer;
-
-      function showToast(msg) {
-        toastMsg.textContent = msg;
-        toast.classList.add('show');
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => toast.classList.remove('show'), 4000);
-      }
-
-      // ─── RENDER PRODUCTS ───
-      async function renderProducts() {
-        try {
-          products = await getProducts();
-          console.log('✅ Products loaded:', products.length);
-          if (products.length > 0) {
-            console.log('📸 First product images:', products[0].image_urls);
-          }
-        } catch (e) {
-          showToast('⚠️ Error loading products');
-          return;
-        }
-
-        productGrid.innerHTML = '';
-        if (!products || products.length === 0) {
-          productGrid.innerHTML = '<div style="text-align:center;padding:2rem;color:#94a3b8;">No products available.</div>';
-          return;
-        }
-
-        products.forEach((p, index) => {
-          const card = document.createElement('div');
-          card.className = 'product-card';
-
-          const images = getProductImages(p);
-          const carouselHtml = createCarousel(images, p.name, p.id || index);
-          const featuresHtml = (p.features || []).map(f => `<li><i class="fas fa-circle-check"></i> ${f}</li>`).join('');
-          const categoryLabel = p.category_label || p.category || '';
-
-          card.innerHTML = `
-            <div class="product-img">
-              ${carouselHtml}
-            </div>
-            <h3>${p.name}</h3>
-            ${categoryLabel ? `<span class="category-badge">${categoryLabel}</span>` : ''}
-            <div class="product-desc">${p.description || p.desc || ''}</div>
-            <ul class="product-features">${featuresHtml}</ul>
-            <div class="product-bottom">
-              <span class="price">${formatPKR(p.price)}</span>
-              <div class="btn-group">
-                <button class="btn-add" data-id="${p.id || index}"><i class="fas fa-plus"></i> Add</button>
-                <button class="btn-order" data-id="${p.id || index}"><i class="fas fa-bolt"></i> Order Now</button>
-              </div>
-            </div>
-          `;
-
-          productGrid.appendChild(card);
-
-          const containerId = `carousel-${p.id || index}`;
-          if (images.length > 1) {
-            setTimeout(() => {
-              initCarousel(containerId, images.length, images);
-            }, 200);
-          }
-        });
-
-        document.querySelectorAll('.btn-add').forEach(btn => btn.addEventListener('click', function() {
-          const productId = this.dataset.id;
-          const product = products.find(p => (p.id || p.id) == productId);
-          if (product) { addToCart(product); showToast(`${product.name} added to cart!`); }
-        }));
-
-        document.querySelectorAll('.btn-order').forEach(btn => btn.addEventListener('click', function() {
-          const productId = this.dataset.id;
-          const product = products.find(p => (p.id || p.id) == productId);
-          if (product) {
-            if (!currentUser) {
-              showToast('🔐 Please login first');
-              setTimeout(() => window.location.href = 'login.html', 800);
-              return;
-            }
-            showToast(`Order for ${product.name} placed!`);
-          }
-        }));
-      }
-
-      // ─── CART ───
-      function addToCart(product) {
-        const existing = cart.find(item => item.id === product.id);
-        if (existing) { existing.quantity += 1; } else { cart.push({ ...product, quantity: 1 }); }
-        localStorage.setItem('pixlnex_cart', JSON.stringify(cart));
-        updateCartUI();
-      }
-
-      function removeFromCart(id) {
-        const index = cart.findIndex(item => item.id === id);
-        if (index !== -1) {
-          const item = cart[index];
-          if (item.quantity > 1) { item.quantity -= 1; } else { cart.splice(index, 1); }
-        }
-        localStorage.setItem('pixlnex_cart', JSON.stringify(cart));
-        updateCartUI();
-      }
-
-      function updateCartUI() {
-        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-        cartCounter.textContent = totalItems;
-        cartItemsContainer.innerHTML = '';
-        if (cart.length === 0) {
-          cartItemsContainer.innerHTML = '<div class="empty-cart-msg">🛒 Your cart is empty — add a web package!</div>';
-        } else {
-          cart.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'cart-item';
-            div.innerHTML = `
-              <span>${item.name} <span style="opacity:0.7;font-weight:400;">×${item.quantity}</span></span>
-              <span class="item-price">${formatPKR(item.price * item.quantity)}</span>
-              <button class="remove-item" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
-            `;
-            cartItemsContainer.appendChild(div);
-          });
-          document.querySelectorAll('.remove-item').forEach(btn => btn.addEventListener('click', function() {
-            removeFromCart(parseInt(this.dataset.id));
-          }));
-        }
-        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        cartTotalPrice.textContent = formatPKR(total);
-        checkoutBtn.disabled = cart.length === 0;
-      }
-
-      checkoutBtn.addEventListener('click', async function() {
-        if (cart.length === 0) return;
-        if (!currentUser) { showToast('🔐 Please login first to checkout'); setTimeout(() => window.location.href = 'login.html', 800); return; }
-        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        alert(`✅ Thank you!\n\nYour order total: ${formatPKR(total)}\n\nI'll start building your website right away!`);
-        cart = [];
-        localStorage.setItem('pixlnex_cart', JSON.stringify(cart));
-        updateCartUI();
-      });
-
-      // ─── DYNAMIC QUESTIONS ───
-      const questionsData = {
-        portfolio: {
-          title: '📸 Portfolio Questions',
-          questions: [
-            { id: 'goal', label: 'What is the main goal?', type: 'select', options: ['Showcase work', 'Get freelance clients', 'Apply for jobs', 'Personal brand'] },
-            { id: 'projects', label: 'How many projects to display?', type: 'select', options: ['1-5', '6-10', '11-20', '20+'] },
-            { id: 'design', label: 'What design style?', type: 'select', options: ['Minimalist', 'Creative', 'Professional', 'Modern'] }
-          ]
-        },
-        business: {
-          title: '🏢 Business Questions',
-          questions: [
-            { id: 'goal', label: 'Business goal?', type: 'select', options: ['Lead generation', 'Brand awareness', 'Online sales', 'Customer support'] },
-            { id: 'pages', label: 'How many pages?', type: 'select', options: ['1-3', '4-6', '7-10', '10+'] },
-            { id: 'design', label: 'Design style?', type: 'select', options: ['Professional', 'Modern', 'Corporate', 'Creative'] }
-          ]
-        },
-        ecommerce: {
-          title: '🛒 E-commerce Questions',
-          questions: [
-            { id: 'products', label: 'How many products?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
-            { id: 'payment', label: 'Payment methods?', type: 'select', options: ['JazzCash', 'EasyPaisa', 'Both', 'Other'] }
-          ]
-        },
-        chat: {
-          title: '💬 Chat App Questions',
-          questions: [
-            { id: 'users', label: 'How many users?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
-            { id: 'features', label: 'Features needed?', type: 'select', options: ['Group chat', 'File sharing', 'Video call', 'All'] }
-          ]
-        },
-        landing: {
-          title: '🎯 Landing Page Questions',
-          questions: [
-            { id: 'goal', label: 'Main goal?', type: 'select', options: ['Lead capture', 'Product launch', 'Event registration', 'Sales'] },
-            { id: 'design', label: 'Design style?', type: 'select', options: ['Minimalist', 'Bold', 'Professional', 'Creative'] }
-          ]
-        },
-        other: {
-          title: '💡 New Idea Questions',
-          questions: [
-            { id: 'idea', label: 'Tell me about your idea', type: 'textarea', placeholder: 'Describe your website idea...' }
-          ]
-        }
-      };
-
-      function renderQuestions(type) {
-        const container = document.getElementById('questionContainer');
-        const data = questionsData[type];
-        if (!data) { container.innerHTML = ''; return; }
-
-        let html = `<h4 style="margin-bottom:0.8rem;color:#0f2b4b;">${data.title}</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">`;
-
-        data.questions.forEach(q => {
-          html += `<div style="${q.type === 'textarea' ? 'grid-column:1/-1;' : ''}">`;
-          html += `<label style="font-weight:600;font-size:0.85rem;display:block;margin-bottom:0.2rem;color:#1e293b;">${q.label}</label>`;
-
-          if (q.type === 'select') {
-            html += `<select id="q_${q.id}" style="width:100%;padding:0.6rem 1rem;border-radius:40px;border:1px solid #e2e8f0;font-size:0.9rem;background:#f8fafc;">`;
-            html += `<option value="">Select...</option>`;
-            q.options.forEach(opt => {
-              html += `<option value="${opt}">${opt}</option>`;
-            });
-            html += `</select>`;
-          } else if (q.type === 'textarea') {
-            html += `<textarea id="q_${q.id}" placeholder="${q.placeholder || ''}" style="width:100%;padding:0.6rem 1rem;border-radius:1rem;border:1px solid #e2e8f0;font-size:0.9rem;background:#f8fafc;min-height:60px;"></textarea>`;
-          }
-
-          html += `</div>`;
-        });
-
-        html += `</div>`;
-        container.innerHTML = html;
-      }
-
-      document.getElementById('customType').addEventListener('change', function() {
-        renderQuestions(this.value);
-      });
-
-      document.getElementById('customOrderForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        showToast('📨 Custom order sent! I\'ll review your details.');
-        this.reset();
-        document.getElementById('questionContainer').innerHTML = '';
-      });
-
-      document.getElementById('navAbout').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('homeSection').classList.add('hidden');
-        document.getElementById('productSection').classList.add('hidden');
-        document.getElementById('customOrder').classList.add('hidden');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-
-      // ─── INIT ───
-      async function init() {
-        console.log('🚀 Initializing Pixlnex...');
-
-        // Try to connect
-        if (PX && PX.initSupabase) {
-          PX.initSupabase();
-        } else {
-          initDirectSupabase();
-        }
-
-        // Wait for connection
+    // ─── WAIT FOR SUPABASE ───
+    function waitForSupabase() {
+      return new Promise((resolve) => {
         let attempts = 0;
-        while (!isConnected()) {
-          if (attempts > 20) {
-            console.error('❌ Connection timeout');
-            showToast('⚠️ Database not connected. Please refresh.');
+        const checkConnection = () => {
+          if (PX && PX.supabaseConnected) {
+            resolve(true);
             return;
           }
-          await new Promise(resolve => setTimeout(resolve, 500));
           attempts++;
+          if (attempts > 30) {
+            resolve(false);
+            return;
+          }
+          setTimeout(checkConnection, 500);
+        };
+        checkConnection();
+      });
+    }
+
+    // ─── GET PRODUCT IMAGES ───
+    function getProductImages(product) {
+      if (product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0) {
+        return product.image_urls;
+      }
+      if (product.image_url) {
+        return [product.image_url];
+      }
+      return [];
+    }
+
+    // ─── CAROUSEL ───
+    function createCarousel(images, productName, productId) {
+      if (!images || images.length === 0) {
+        return `<div class="fallback-icon"><i class="fas fa-cube"></i></div>`;
+      }
+
+      const hasMultiple = images.length > 1;
+      const containerId = `carousel-${productId}`;
+
+      let html = `<div class="carousel-container" id="${containerId}" data-images='${JSON.stringify(images)}'>
+        <div class="carousel-track" id="${containerId}-track">`;
+
+      images.forEach((img, idx) => {
+        html += `<img src="${img}" alt="${productName} - ${idx + 1}" loading="lazy" data-index="${idx}" onerror="this.parentElement.innerHTML='<div class=\\'fallback-icon\\'><i class=\\'fas fa-cube\\'></i></div>';">`;
+      });
+
+      html += `</div>`;
+
+      if (hasMultiple) {
+        html += `
+          <button class="carousel-btn prev" onclick="window.changeSlide('${containerId}', -1)"><i class="fas fa-chevron-left"></i></button>
+          <button class="carousel-btn next" onclick="window.changeSlide('${containerId}', 1)"><i class="fas fa-chevron-right"></i></button>
+          <div class="carousel-dots" id="${containerId}-dots"></div>
+          <div class="image-count-badge">${images.length} 📸</div>
+        `;
+      }
+
+      html += `</div>`;
+      return html;
+    }
+
+    window.changeSlide = function(containerId, direction) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      const track = document.getElementById(`${containerId}-track`);
+      const dots = document.getElementById(`${containerId}-dots`);
+      if (!track) return;
+      const images = track.querySelectorAll('img');
+      if (images.length <= 1) return;
+      const currentIndex = parseInt(container.dataset.currentIndex || '0');
+      let newIndex = currentIndex + direction;
+      if (newIndex < 0) newIndex = images.length - 1;
+      if (newIndex >= images.length) newIndex = 0;
+      container.dataset.currentIndex = newIndex;
+      track.style.transform = `translateX(-${newIndex * 100}%)`;
+      if (dots) {
+        const dotElements = dots.querySelectorAll('.dot');
+        dotElements.forEach((dot, idx) => {
+          dot.classList.toggle('active', idx === newIndex);
+        });
+      }
+    };
+
+    function initCarousel(containerId, imageCount, images) {
+      const container = document.getElementById(containerId);
+      if (!container || imageCount <= 1) return;
+      container.dataset.currentIndex = '0';
+      const dotsContainer = document.getElementById(`${containerId}-dots`);
+      if (dotsContainer) {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < imageCount; i++) {
+          const dot = document.createElement('button');
+          dot.className = `dot ${i === 0 ? 'active' : ''}`;
+          dot.addEventListener('click', () => {
+            window.changeSlide(containerId, i - parseInt(container.dataset.currentIndex || '0'));
+          });
+          dotsContainer.appendChild(dot);
+        }
+      }
+      let autoSlideInterval = setInterval(() => {
+        window.changeSlide(containerId, 1);
+      }, 4000);
+      container.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+      container.addEventListener('mouseleave', () => {
+        autoSlideInterval = setInterval(() => {
+          window.changeSlide(containerId, 1);
+        }, 4000);
+      });
+      container._autoSlideInterval = autoSlideInterval;
+    }
+
+    // ─── UPDATE AUTH ───
+    async function updateAuthUI() {
+      try {
+        if (PX && PX.getCurrentUser) {
+          currentUser = await PX.getCurrentUser();
+        }
+      } catch (e) {
+        currentUser = null;
+      }
+      if (currentUser) {
+        const name = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
+        authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
+        authBtn.className = 'auth-btn logout';
+        authBtn.href = 'profile.html';
+        authBtn.onclick = function(e) {
+          e.preventDefault();
+          if (PX && PX.signOutUser) {
+            PX.signOutUser();
+          }
+        };
+        setTimeout(loadOfferStatus, 500);
+      } else {
+        authBtn.innerHTML = '<i class="fas fa-user"></i> Login';
+        authBtn.className = 'auth-btn';
+        authBtn.href = 'login.html';
+        authBtn.onclick = null;
+      }
+    }
+
+    // ─── LOAD OFFER STATUS ───
+    async function loadOfferStatus() {
+      try {
+        if (!PX || !PX.supabaseConnected || !PX.getOfferStatus) {
+          console.warn('Supabase not ready for offers');
+          return;
         }
 
-        await renderProducts();
-        updateCartUI();
-        renderQuestions('portfolio');
-        console.log('✅ Pixlnex initialized successfully!');
+        // Offer 1: Portfolio in Rs 300
+        const data1 = await PX.getOfferStatus('free_portfolio');
+        if (data1) {
+          const claimedArray = data1.claimed_by ? data1.claimed_by.split(',').filter(Boolean) : [];
+          const count = claimedArray.length;
+          const limit = data1.total_limit || 10;
+          offerCount1.textContent = `${count}/${limit}`;
+          offerCountDisplay1.textContent = `(${count}/${limit} claimed)`;
+
+          if (currentUser && claimedArray.includes(currentUser.email)) {
+            claimOfferBtn1.disabled = true;
+            claimOfferBtn1.textContent = '✅ Claimed';
+          } else if (count >= limit) {
+            claimOfferBtn1.disabled = true;
+            claimOfferBtn1.textContent = '🎉 All Claimed!';
+          } else {
+            claimOfferBtn1.disabled = false;
+            claimOfferBtn1.textContent = 'Claim ₨ 300';
+          }
+        }
+
+        // Offer 2: Completely Free
+        const data2 = await PX.getOfferStatus('first_order_free');
+        if (data2) {
+          const claimedArray = data2.claimed_by ? data2.claimed_by.split(',').filter(Boolean) : [];
+          const count = claimedArray.length;
+          const limit = data2.total_limit || 1;
+          offerCount2.textContent = `${count}/${limit}`;
+          offerCountDisplay2.textContent = `(${count}/${limit} claimed)`;
+
+          if (currentUser && claimedArray.includes(currentUser.email)) {
+            claimOfferBtn2.disabled = true;
+            claimOfferBtn2.textContent = '✅ Claimed';
+          } else if (count >= limit) {
+            claimOfferBtn2.disabled = true;
+            claimOfferBtn2.textContent = '🎉 Claimed!';
+          } else {
+            claimOfferBtn2.disabled = false;
+            claimOfferBtn2.textContent = 'Claim FREE';
+          }
+        }
+
+      } catch (e) {
+        console.error('Offer error:', e);
+      }
+    }
+
+    // ─── CLAIM OFFER 1 ───
+    claimOfferBtn1.addEventListener('click', async function() {
+      if (!PX || !PX.claimOffer) {
+        showToast('⚠️ System not ready');
+        return;
+      }
+      const user = await PX.getCurrentUser();
+      if (!user) {
+        showToast('🔐 Please login first');
+        setTimeout(() => window.location.href = 'login.html', 800);
+        return;
       }
 
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-      } else {
-        init();
+      const email = user.email;
+      const blockedEmails = ['faisalyousafyousaf3@gmail.com', 'noor@gmail.com'];
+      if (blockedEmails.includes(email.toLowerCase())) {
+        showToast('⚠️ Not available for admin');
+        return;
       }
-    })();
-  </script>
+
+      try {
+        await PX.claimOffer('free_portfolio', email);
+        showToast('🎉 Portfolio in ₨ 300 claimed!');
+        claimOfferBtn1.disabled = true;
+        claimOfferBtn1.textContent = '✅ Claimed';
+        loadOfferStatus();
+      } catch (e) {
+        showToast('⚠️ ' + e.message);
+      }
+    });
+
+    // ─── CLAIM OFFER 2 ───
+    claimOfferBtn2.addEventListener('click', async function() {
+      if (!PX || !PX.claimOffer) {
+        showToast('⚠️ System not ready');
+        return;
+      }
+      const user = await PX.getCurrentUser();
+      if (!user) {
+        showToast('🔐 Please login first');
+        setTimeout(() => window.location.href = 'login.html', 800);
+        return;
+      }
+
+      const email = user.email;
+      const blockedEmails = ['faisalyousafyousaf3@gmail.com', 'noor@gmail.com'];
+      if (blockedEmails.includes(email.toLowerCase())) {
+        showToast('⚠️ Not available for admin');
+        return;
+      }
+
+      try {
+        await PX.claimOffer('first_order_free', email);
+        showToast('⭐ Completely Free Website claimed!');
+        claimOfferBtn2.disabled = true;
+        claimOfferBtn2.textContent = '✅ Claimed';
+        loadOfferStatus();
+      } catch (e) {
+        showToast('⚠️ ' + e.message);
+      }
+    });
+
+    // ─── PAYMENT ───
+    window.selectPayment = function(method) {
+      selectedPayment = method;
+      document.querySelectorAll('.payment-methods .method').forEach(el => {
+        el.classList.toggle('selected', el.dataset.method === method);
+      });
+    };
+
+    function openPaymentModal(orderData, isCustom) {
+      pendingOrder = orderData;
+      paymentProductName.textContent = orderData.name || 'Web Package';
+      const price = PX && PX.formatPKR ? PX.formatPKR(orderData.price) : formatPKR(orderData.price);
+      paymentAmount.textContent = price;
+      paymentType.textContent = isCustom ? 'Custom Web' : 'Pre-made Web';
+      paymentModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePaymentModalFn() {
+      paymentModal.classList.remove('active');
+      document.body.style.overflow = '';
+      pendingOrder = null;
+    }
+
+    document.getElementById('closePaymentModal').addEventListener('click', closePaymentModalFn);
+    document.getElementById('cancelPaymentBtn').addEventListener('click', closePaymentModalFn);
+    paymentModal.addEventListener('click', function(e) {
+      if (e.target === this) closePaymentModalFn();
+    });
+
+    document.getElementById('confirmPaymentBtn').addEventListener('click', async function() {
+      if (!pendingOrder) return;
+      const user = await PX.getCurrentUser();
+      if (!user) {
+        showToast('🔐 Please login first');
+        setTimeout(() => window.location.href = 'login.html', 800);
+        return;
+      }
+
+      this.disabled = true;
+      this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+      try {
+        const orderData = {
+          name: pendingOrder.name,
+          price: pendingOrder.price,
+          customer_email: pendingOrder.customer_email || user.email,
+          customer_name: pendingOrder.customer_name || user.user_metadata?.full_name || user.email,
+          payment_method: selectedPayment,
+          payment_status: 'paid',
+          status: pendingOrder.isCustom ? 'demo_ready' : 'confirmed',
+          custom_details: pendingOrder.custom_details || '',
+          custom_type: pendingOrder.custom_type || '',
+          custom_budget: pendingOrder.custom_budget || '',
+          is_custom: pendingOrder.isCustom || false
+        };
+
+        const result = await PX.createOrder(orderData);
+        console.log('✅ Order created:', result);
+
+        const price = PX && PX.formatPKR ? PX.formatPKR(pendingOrder.price) : formatPKR(pendingOrder.price);
+        let msg = `✅ Order Confirmed!\n\nOrder: ${pendingOrder.name}\nAmount: ${price}\nMethod: ${selectedPayment === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}\n\n📌 Send payment screenshot on WhatsApp: 0332-7649422`;
+        alert(msg);
+
+        if (!pendingOrder.isCustom) {
+          cart = [];
+          localStorage.setItem('pixlnex_cart', JSON.stringify(cart));
+          updateCartUI();
+        }
+
+        closePaymentModalFn();
+        showToast('🎉 Order confirmed!');
+
+      } catch (e) {
+        console.error('Order error:', e);
+        alert('⚠️ Error processing order. Please try again.');
+      }
+
+      this.disabled = false;
+      this.innerHTML = '<i class="fas fa-check"></i> Confirm Payment';
+    });
+
+    // ─── RENDER PRODUCTS ───
+    async function renderProducts() {
+      try {
+        if (!PX || !PX.getProducts) {
+          showToast('⚠️ System not ready');
+          return;
+        }
+        products = await PX.getProducts();
+        console.log('✅ Products loaded:', products.length);
+        if (products.length > 0) {
+          console.log('📸 First product images:', products[0].image_urls);
+        }
+      } catch (e) {
+        showToast('⚠️ Error loading products');
+        return;
+      }
+
+      productGrid.innerHTML = '';
+      if (!products || products.length === 0) {
+        productGrid.innerHTML = '<div style="text-align:center;padding:2rem;color:#94a3b8;">No products available.</div>';
+        return;
+      }
+
+      products.forEach((p, index) => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+
+        const images = getProductImages(p);
+        const carouselHtml = createCarousel(images, p.name, p.id || index);
+        const featuresHtml = (p.features || []).map(f => `<li><i class="fas fa-circle-check"></i> ${f}</li>`).join('');
+        const categoryLabel = p.category_label || p.category || '';
+
+        card.innerHTML = `
+          <div class="product-img">
+            ${carouselHtml}
+          </div>
+          <h3>${p.name}</h3>
+          ${categoryLabel ? `<span class="category-badge">${categoryLabel}</span>` : ''}
+          <div class="product-desc">${p.description || p.desc || ''}</div>
+          <ul class="product-features">${featuresHtml}</ul>
+          <div class="product-bottom">
+            <span class="price">${PX && PX.formatPKR ? PX.formatPKR(p.price) : formatPKR(p.price)}</span>
+            <div class="btn-group">
+              <button class="btn-add" data-id="${p.id || index}"><i class="fas fa-plus"></i> Add</button>
+              <button class="btn-order" data-id="${p.id || index}"><i class="fas fa-bolt"></i> Order Now</button>
+            </div>
+          </div>
+        `;
+
+        productGrid.appendChild(card);
+
+        const containerId = `carousel-${p.id || index}`;
+        if (images.length > 1) {
+          setTimeout(() => {
+            initCarousel(containerId, images.length, images);
+          }, 200);
+        }
+      });
+
+      document.querySelectorAll('.btn-add').forEach(btn => btn.addEventListener('click', function() {
+        const productId = this.dataset.id;
+        const product = products.find(p => (p.id || p.id) == productId);
+        if (product) { addToCart(product); showToast(`${product.name} added to cart!`); }
+      }));
+
+      document.querySelectorAll('.btn-order').forEach(btn => btn.addEventListener('click', function() {
+        const productId = this.dataset.id;
+        const product = products.find(p => (p.id || p.id) == productId);
+        if (product) {
+          if (!currentUser) {
+            showToast('🔐 Please login first');
+            setTimeout(() => window.location.href = 'login.html', 800);
+            return;
+          }
+          const orderData = {
+            name: product.name,
+            price: product.price,
+            customer_email: currentUser.email,
+            customer_name: currentUser.user_metadata?.full_name || currentUser.email,
+            isCustom: false
+          };
+          openPaymentModal(orderData, false);
+        }
+      }));
+    }
+
+    // ─── CART ───
+    function addToCart(product) {
+      const existing = cart.find(item => item.id === product.id);
+      if (existing) { existing.quantity += 1; } else { cart.push({ ...product, quantity: 1 }); }
+      localStorage.setItem('pixlnex_cart', JSON.stringify(cart));
+      updateCartUI();
+    }
+
+    function removeFromCart(id) {
+      const index = cart.findIndex(item => item.id === id);
+      if (index !== -1) {
+        const item = cart[index];
+        if (item.quantity > 1) { item.quantity -= 1; } else { cart.splice(index, 1); }
+      }
+      localStorage.setItem('pixlnex_cart', JSON.stringify(cart));
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      cartCounter.textContent = totalItems;
+      cartItemsContainer.innerHTML = '';
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<div class="empty-cart-msg">🛒 Your cart is empty — add a web package!</div>';
+      } else {
+        cart.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'cart-item';
+          div.innerHTML = `
+            <span>${item.name} <span style="opacity:0.7;font-weight:400;">×${item.quantity}</span></span>
+            <span class="item-price">${PX && PX.formatPKR ? PX.formatPKR(item.price * item.quantity) : formatPKR(item.price * item.quantity)}</span>
+            <button class="remove-item" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
+          `;
+          cartItemsContainer.appendChild(div);
+        });
+        document.querySelectorAll('.remove-item').forEach(btn => btn.addEventListener('click', function() {
+          removeFromCart(parseInt(this.dataset.id));
+        }));
+      }
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      cartTotalPrice.textContent = PX && PX.formatPKR ? PX.formatPKR(total) : formatPKR(total);
+      checkoutBtn.disabled = cart.length === 0;
+    }
+
+    checkoutBtn.addEventListener('click', async function() {
+      if (cart.length === 0) return;
+      const user = await PX.getCurrentUser();
+      if (!user) { showToast('🔐 Please login first to checkout'); setTimeout(() => window.location.href = 'login.html', 800); return; }
+
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const items = cart.map(item => item.name).join(', ');
+      const orderData = {
+        name: `Cart: ${items}`,
+        price: total,
+        customer_email: user.email,
+        customer_name: user.user_metadata?.full_name || user.email,
+        isCustom: false
+      };
+      openPaymentModal(orderData, false);
+    });
+
+    // ─── DYNAMIC QUESTIONS ───
+    const questionsData = {
+      portfolio: {
+        title: '📸 Portfolio Questions',
+        questions: [
+          { id: 'goal', label: 'What is the main goal?', type: 'select', options: ['Showcase work', 'Get freelance clients', 'Apply for jobs', 'Personal brand'] },
+          { id: 'projects', label: 'How many projects to display?', type: 'select', options: ['1-5', '6-10', '11-20', '20+'] },
+          { id: 'design', label: 'What design style?', type: 'select', options: ['Minimalist', 'Creative', 'Professional', 'Modern'] }
+        ]
+      },
+      business: {
+        title: '🏢 Business Questions',
+        questions: [
+          { id: 'goal', label: 'Business goal?', type: 'select', options: ['Lead generation', 'Brand awareness', 'Online sales', 'Customer support'] },
+          { id: 'pages', label: 'How many pages?', type: 'select', options: ['1-3', '4-6', '7-10', '10+'] },
+          { id: 'design', label: 'Design style?', type: 'select', options: ['Professional', 'Modern', 'Corporate', 'Creative'] }
+        ]
+      },
+      ecommerce: {
+        title: '🛒 E-commerce Questions',
+        questions: [
+          { id: 'products', label: 'How many products?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
+          { id: 'payment', label: 'Payment methods?', type: 'select', options: ['JazzCash', 'EasyPaisa', 'Both', 'Other'] }
+        ]
+      },
+      chat: {
+        title: '💬 Chat App Questions',
+        questions: [
+          { id: 'users', label: 'How many users?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
+          { id: 'features', label: 'Features needed?', type: 'select', options: ['Group chat', 'File sharing', 'Video call', 'All'] }
+        ]
+      },
+      landing: {
+        title: '🎯 Landing Page Questions',
+        questions: [
+          { id: 'goal', label: 'Main goal?', type: 'select', options: ['Lead capture', 'Product launch', 'Event registration', 'Sales'] },
+          { id: 'design', label: 'Design style?', type: 'select', options: ['Minimalist', 'Bold', 'Professional', 'Creative'] }
+        ]
+      },
+      other: {
+        title: '💡 New Idea Questions',
+        questions: [
+          { id: 'idea', label: 'Tell me about your idea', type: 'textarea', placeholder: 'Describe your website idea...' }
+        ]
+      }
+    };
+
+    function renderQuestions(type) {
+      const container = document.getElementById('questionContainer');
+      const data = questionsData[type];
+      if (!data) { container.innerHTML = ''; return; }
+
+      let html = `<h4 style="margin-bottom:0.8rem;color:#0f2b4b;">${data.title}</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">`;
+
+      data.questions.forEach(q => {
+        html += `<div style="${q.type === 'textarea' ? 'grid-column:1/-1;' : ''}">`;
+        html += `<label style="font-weight:600;font-size:0.85rem;display:block;margin-bottom:0.2rem;color:#1e293b;">${q.label}</label>`;
+
+        if (q.type === 'select') {
+          html += `<select id="q_${q.id}" style="width:100%;padding:0.6rem 1rem;border-radius:40px;border:1px solid #e2e8f0;font-size:0.9rem;background:#f8fafc;">`;
+          html += `<option value="">Select...</option>`;
+          q.options.forEach(opt => {
+            html += `<option value="${opt}">${opt}</option>`;
+          });
+          html += `</select>`;
+        } else if (q.type === 'textarea') {
+          html += `<textarea id="q_${q.id}" placeholder="${q.placeholder || ''}" style="width:100%;padding:0.6rem 1rem;border-radius:1rem;border:1px solid #e2e8f0;font-size:0.9rem;background:#f8fafc;min-height:60px;"></textarea>`;
+        }
+
+        html += `</div>`;
+      });
+
+      html += `</div>`;
+      container.innerHTML = html;
+    }
+
+    document.getElementById('customType').addEventListener('change', function() {
+      renderQuestions(this.value);
+    });
+
+    document.getElementById('customOrderForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const user = await PX.getCurrentUser();
+      if (!user) {
+        showToast('🔐 Please login first');
+        setTimeout(() => window.location.href = 'login.html', 800);
+        return;
+      }
+
+      const name = document.getElementById('customName').value.trim();
+      const email = document.getElementById('customEmail').value.trim();
+      const type = document.getElementById('customType').value;
+      const budget = document.getElementById('customBudget').value;
+      const details = document.getElementById('customDetails').value.trim();
+
+      if (!name || !email || !type) {
+        showToast('⚠️ Please fill in all required fields');
+        return;
+      }
+
+      const typeLabels = {
+        'portfolio': 'Portfolio', 'business': 'Business',
+        'ecommerce': 'E‑commerce', 'blog': 'Blog',
+        'chat': 'Chat App', 'landing': 'Landing Page',
+        'other': 'Other'
+      };
+
+      const budgetAmount = parseInt(budget.split('-')[0]) || 5000;
+
+      const orderData = {
+        name: `Custom: ${typeLabels[type] || type}`,
+        price: budgetAmount,
+        customer_email: email,
+        customer_name: name,
+        custom_details: details || '',
+        custom_type: typeLabels[type] || type,
+        custom_budget: budget,
+        isCustom: true
+      };
+
+      openPaymentModal(orderData, true);
+      this.reset();
+      document.getElementById('questionContainer').innerHTML = '';
+    });
+
+    document.getElementById('navAbout').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('homeSection').classList.add('hidden');
+      document.getElementById('productSection').classList.add('hidden');
+      document.getElementById('customOrder').classList.add('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ─── INIT ───
+    async function init() {
+      console.log('🚀 Initializing Pixlnex...');
+
+      if (PX && PX.initSupabase) {
+        PX.initSupabase();
+      }
+
+      const connected = await waitForSupabase();
+      if (!connected) {
+        console.error('❌ Supabase connection timeout');
+        showToast('⚠️ Database not connected. Please refresh.');
+        return;
+      }
+
+      await updateAuthUI();
+      await renderProducts();
+      updateCartUI();
+      await loadOfferStatus();
+      renderQuestions('portfolio');
+      console.log('✅ Pixlnex initialized successfully!');
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>
 
 </body>
 </html>

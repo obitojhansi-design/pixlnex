@@ -136,16 +136,10 @@
 <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Added!</span></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js?v=14"></script>
+<script src="supabase.js?v=16"></script>
 <script>
   (function() {
     const PX = window.Pixlnex;
-
-    if (!PX) {
-      console.error('❌ Pixlnex not loaded!');
-      return;
-    }
-
     let products = [];
     let cart = JSON.parse(localStorage.getItem('pixlnex_cart')) || [];
     let currentUser = null;
@@ -165,6 +159,10 @@
 
     let toastTimer;
 
+    function formatPKR(amount) {
+      return '₨ ' + (amount || 0).toLocaleString('en-PK');
+    }
+
     function showToast(msg) {
       toastMsg.textContent = msg;
       toast.classList.add('show');
@@ -172,7 +170,6 @@
       toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // ─── GET PRODUCT IMAGES ───
     function getProductImages(product) {
       if (product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0) {
         return product.image_urls;
@@ -183,7 +180,6 @@
       return [];
     }
 
-    // ─── CREATE CAROUSEL ───
     function createCarousel(images, productName, productId) {
       if (!images || images.length === 0) {
         return `<div class="fallback-icon"><i class="fas fa-cube"></i></div>`;
@@ -264,10 +260,11 @@
       container._autoSlideInterval = autoSlideInterval;
     }
 
-    // ─── UPDATE AUTH ───
     async function updateAuthUI() {
       try {
-        currentUser = await PX.getCurrentUser();
+        if (PX && PX.getCurrentUser) {
+          currentUser = await PX.getCurrentUser();
+        }
       } catch (e) {
         currentUser = null;
       }
@@ -278,7 +275,9 @@
         authBtn.href = 'profile.html';
         authBtn.onclick = function(e) {
           e.preventDefault();
-          PX.signOutUser();
+          if (PX && PX.signOutUser) {
+            PX.signOutUser();
+          }
         };
       } else {
         authBtn.innerHTML = '<i class="fas fa-user"></i> Login';
@@ -288,7 +287,6 @@
       }
     }
 
-    // ─── RENDER PRODUCTS ───
     async function renderProducts() {
       productGrid.innerHTML = '';
       if (!filteredProducts || filteredProducts.length === 0) {
@@ -317,7 +315,7 @@
           <div class="product-desc">${p.description || p.desc || ''}</div>
           <ul class="product-features">${featuresHtml}</ul>
           <div class="product-bottom">
-            <span class="price">${PX.formatPKR(p.price)}</span>
+            <span class="price">${formatPKR(p.price)}</span>
             <div class="btn-group">
               <button class="btn-add" data-id="${p.id || index}"><i class="fas fa-plus"></i> Add</button>
               <button class="btn-order" data-id="${p.id || index}"><i class="fas fa-bolt"></i> Order Now</button>
@@ -345,22 +343,12 @@
         const productId = this.dataset.id;
         const product = products.find(p => (p.id || p.id) == productId);
         if (product) {
-          PX.getCurrentUser().then(user => {
-            if (!user) {
-              showToast('🔐 Please login first');
-              setTimeout(() => window.location.href = 'login.html', 800);
-              return;
-            }
-            const orderData = {
-              name: product.name,
-              price: product.price,
-              customer_email: user.email,
-              customer_name: user.user_metadata?.full_name || user.email,
-              isCustom: false
-            };
-            // Use the payment modal from index.html or handle order
-            showToast(`Order for ${product.name} placed!`);
-          });
+          if (!currentUser) {
+            showToast('🔐 Please login first');
+            setTimeout(() => window.location.href = 'login.html', 800);
+            return;
+          }
+          showToast(`Order for ${product.name} placed!`);
         }
       }));
     }
@@ -404,7 +392,7 @@
           div.className = 'cart-item';
           div.innerHTML = `
             <span>${item.name} <span style="opacity:0.7;font-weight:400;">×${item.quantity}</span></span>
-            <span class="item-price">${PX.formatPKR(item.price * item.quantity)}</span>
+            <span class="item-price">${formatPKR(item.price * item.quantity)}</span>
             <button class="remove-item" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
           `;
           cartItemsContainer.appendChild(div);
@@ -414,7 +402,7 @@
         }));
       }
       const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      cartTotalPrice.textContent = PX.formatPKR(total);
+      cartTotalPrice.textContent = formatPKR(total);
       checkoutBtn.disabled = cart.length === 0;
     }
 
@@ -423,7 +411,7 @@
       const user = await PX.getCurrentUser();
       if (!user) { showToast('🔐 Please login first to checkout'); setTimeout(() => window.location.href = 'login.html', 800); return; }
       const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      alert(`✅ Thank you ${user.user_metadata?.full_name || user.email}!\n\nYour order total: ${PX.formatPKR(total)}\n\nI'll start building your website right away!`);
+      alert(`✅ Thank you ${user.user_metadata?.full_name || user.email}!\n\nYour order total: ${formatPKR(total)}\n\nI'll start building your website right away!`);
       cart = [];
       localStorage.setItem('pixlnex_cart', JSON.stringify(cart));
       updateCartUI();
@@ -451,11 +439,10 @@
       }
 
       await updateAuthUI();
-      
+
       try {
         products = await PX.getProducts();
         console.log('✅ Products loaded:', products.length);
-        console.log('📸 Product images:', products.map(p => ({ name: p.name, images: p.image_urls })));
       } catch (e) {
         showToast('⚠️ Error loading products');
         return;
