@@ -50,7 +50,7 @@
     .admin-card h3 i { color: #2563eb; }
     .admin-card h3 .badge-count { background: #eef2f6; padding: 0.1rem 0.7rem; border-radius: 40px; font-size: 0.75rem; color: #64748b; font-weight: 500; }
 
-    /* ─── ORDER ITEM WITH CUSTOM DETAILS ─── */
+    /* ─── ORDER ITEM ─── */
     .admin-order-item { display: flex; flex-direction: column; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
     .admin-order-item:last-child { border-bottom: none; }
     .admin-order-item .order-row { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; }
@@ -69,8 +69,10 @@
     .admin-order-item .order-status-select.status-completed { background: #dcfce7; color: #166534; border-color: #86efac; }
     .admin-order-item .order-status-select.status-delivered { background: #e0e7ff; color: #3730a3; border-color: #a5b4fc; }
     .admin-order-item .order-price { font-weight: 700; color: #0f2b4b; font-size: 0.95rem; }
-    .payment-badge { font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 30px; background: #22c55e20; color: #166534; border: 1px solid #22c55e30; display: inline-block; }
-    .payment-badge.free { background: #fef9c3; color: #854d0e; border-color: #fcd34d; }
+    .payment-badge { font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 30px; display: inline-block; }
+    .payment-badge.paid { background: #22c55e20; color: #166534; border: 1px solid #22c55e30; }
+    .payment-badge.pending { background: #fef9c3; color: #854d0e; border: 1px solid #fcd34d; }
+    .payment-badge.free { background: #e0e7ff; color: #3730a3; border: 1px solid #a5b4fc; }
     .custom-badge { font-size: 0.65rem; background: #7c3aed10; color: #7c3aed; padding: 0.15rem 0.5rem; border-radius: 30px; border: 1px solid #7c3aed20; display: inline-block; }
 
     .admin-product-item { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
@@ -144,7 +146,7 @@
 
     <div id="adminContent">
       <div class="admin-header">
-        <div><h1><i class="fas fa-user-shield"></i> Admin Panel</h1><p>Manage paid orders, products, and customers.</p></div>
+        <div><h1><i class="fas fa-user-shield"></i> Admin Panel</h1><p>Manage all orders, products, and customers.</p></div>
         <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
           <span class="supabase-status" id="supabaseStatus">⏳ Connecting...</span>
           <div class="admin-badge" id="adminBadge" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</div>
@@ -152,7 +154,7 @@
       </div>
 
       <div class="stats-grid" id="statsGrid">
-        <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-shopping-bag"></i></div><div class="stat-number" id="totalOrders">0</div><div class="stat-label">Total Paid Orders</div></div>
+        <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-shopping-bag"></i></div><div class="stat-number" id="totalOrders">0</div><div class="stat-label">Total Orders</div></div>
         <div class="stat-card"><div class="stat-icon green"><i class="fas fa-check-circle"></i></div><div class="stat-number" id="totalRevenue">₨ 0</div><div class="stat-label">Total Revenue</div></div>
         <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-users"></i></div><div class="stat-number" id="totalCustomers">0</div><div class="stat-label">Customers</div></div>
         <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-hourglass-half"></i></div><div class="stat-number" id="pendingOrders">0</div><div class="stat-label">Pending Orders</div></div>
@@ -161,8 +163,8 @@
       <div class="admin-grid">
         <!-- Orders -->
         <div class="admin-card">
-          <h3><i class="fas fa-list"></i> Paid Orders <span class="badge-count" id="orderCountBadge">0</span></h3>
-          <div id="orderList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">Loading paid orders...</div></div>
+          <h3><i class="fas fa-list"></i> All Orders <span class="badge-count" id="orderCountBadge">0</span></h3>
+          <div id="orderList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">Loading orders...</div></div>
         </div>
 
         <!-- Products -->
@@ -352,16 +354,15 @@
       try {
         console.log('📦 Loading admin data...');
 
-        // ─── LOAD PAID ORDERS ONLY ───
+        // ─── LOAD ALL ORDERS (PAID OR NOT) ───
         const { data: ordersData, error: ordersError } = await supabaseClient
           .from('orders')
           .select('*')
-          .eq('payment_status', 'paid')
           .order('created_at', { ascending: false });
 
         if (ordersError) throw ordersError;
         const orders = ordersData || [];
-        console.log('✅ Paid orders loaded:', orders.length);
+        console.log('✅ All orders loaded:', orders.length);
 
         // ─── LOAD PRODUCTS ───
         const { data: productsData, error: productsError } = await supabaseClient
@@ -388,7 +389,7 @@
         const orderCountBadge = document.getElementById('orderCountBadge');
 
         if (!orders || orders.length === 0) {
-          orderList.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1rem 0;">No paid orders yet.</div>';
+          orderList.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1rem 0;">No orders yet.</div>';
           orderCountBadge.textContent = '0';
         } else {
           orderCountBadge.textContent = orders.length;
@@ -401,6 +402,17 @@
             const isCustom = order.is_custom || false;
             const paymentMethod = order.payment_method || 'jazzcash';
             const isFree = order.price === 0;
+            const paymentStatus = order.payment_status || 'pending';
+
+            // Payment badge
+            let paymentBadgeHtml = '';
+            if (isFree) {
+              paymentBadgeHtml = '<span class="payment-badge free">🎁 Free Offer</span>';
+            } else if (paymentStatus === 'paid') {
+              paymentBadgeHtml = `<span class="payment-badge paid">✅ Paid via ${paymentMethod === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}</span>`;
+            } else {
+              paymentBadgeHtml = '<span class="payment-badge pending">⏳ Pending Payment</span>';
+            }
 
             // Build custom details HTML with all fields
             let customDetailsHtml = '';
@@ -442,8 +454,7 @@
                   <span class="order-name">
                     ${order.name}
                     ${isCustom ? '<span class="custom-badge">🎨 Custom</span>' : ''}
-                    ${isFree ? '<span class="payment-badge free">🎁 Free Offer</span>' : 
-                      `<span class="payment-badge">✅ Paid via ${paymentMethod === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}</span>`}
+                    ${paymentBadgeHtml}
                   </span>
                   <span class="order-meta">
                     ${order.order_id || '#ORD-' + (orders.length - index)} · 
