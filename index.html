@@ -10,6 +10,7 @@
     body { background: #f8fafc; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
     .app { max-width: 1300px; margin: 0 auto; padding: 1.5rem 2rem; flex: 1; width: 100%; }
 
+    /* ─── WHATSAPP BUTTON ─── */
     .whatsapp-float {
       position: fixed; bottom: 24px; right: 24px; z-index: 9999;
       display: flex; align-items: center; gap: 12px;
@@ -21,6 +22,7 @@
     .whatsapp-float i { font-size: 1.8rem; }
     @media (max-width:600px) { .whatsapp-float .wa-text { display: none; } }
 
+    /* ─── OFFER BANNER ─── */
     .offer-banner {
       background: linear-gradient(135deg, #f59e0b, #d97706, #f59e0b);
       background-size: 200% 200%;
@@ -53,8 +55,10 @@
     .offer-banner .offer-btn:hover { transform: scale(1.05); }
     .offer-banner .offer-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
     .offer-banner .offer-tag { background: rgba(255,255,255,0.15); padding: 0.2rem 0.8rem; border-radius: 30px; font-size: 0.7rem; border: 1px solid rgba(255,255,255,0.2); }
+    .offer-banner .offer-price-tag { background: rgba(255,255,255,0.2); padding: 0.2rem 0.8rem; border-radius: 30px; font-size: 0.8rem; font-weight: 700; }
     .offer-banner.purple .offer-btn { color: #6d28d9; }
 
+    /* ─── NAVBAR ─── */
     .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; padding: 0.75rem 0 1.5rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem; }
     .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; text-decoration: none; }
     .logo i { color: #2563eb; font-size: 2rem; }
@@ -191,9 +195,6 @@
     .page-section { display: block; }
     .page-section.hidden { display: none; }
 
-    .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid #e2e8f0; border-radius: 50%; border-top-color: #2563eb; animation: spin 0.8s linear infinite; margin-right: 0.5rem; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
     @media (max-width:700px) {
       .app { padding: 1rem; }
       .hero { padding: 1.8rem; flex-direction: column; align-items: flex-start; }
@@ -234,32 +235,34 @@
 
     <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Added!</span></div>
 
-    <!-- OFFER 1 -->
+    <!-- ─── OFFER 1: Portfolio in Rs 300 (First 10 Users) ─── -->
     <div class="offer-banner" id="offerBanner1">
       <div class="offer-text">
         <i class="fas fa-gift"></i>
         <div>
-          <h3>🎉 Free Portfolio Website!</h3>
-          <p>First 10 customers get a <strong>FREE Portfolio Website</strong> <span id="offerCountDisplay1">(0/10 claimed)</span></p>
+          <h3>🎉 Special Portfolio Offer!</h3>
+          <p>First <strong>10 customers</strong> get Portfolio Website in <strong>only ₨ 300</strong> <span id="offerCountDisplay1">(0/10 claimed)</span></p>
         </div>
       </div>
       <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
-        <span class="offer-tag">🎯 Portfolio Only</span>
+        <span class="offer-price-tag">✨ ₨ 300 Only</span>
+        <span class="offer-tag">🎯 Portfolio</span>
         <span class="offer-count" id="offerCount1">0/10</span>
         <button class="offer-btn" id="claimOfferBtn1">Claim Offer</button>
       </div>
     </div>
 
-    <!-- OFFER 2 -->
+    <!-- ─── OFFER 2: Completely Free (Only 1 User) ─── -->
     <div class="offer-banner purple" id="offerBanner2">
       <div class="offer-text">
         <i class="fas fa-star"></i>
         <div>
-          <h3>⭐ First Order Free!</h3>
-          <p>Your <strong>first order</strong> of ANY website is completely FREE! <span id="offerCountDisplay2">(0/1 claimed)</span></p>
+          <h3>⭐ First Order Completely FREE!</h3>
+          <p><strong>Only 1 customer</strong> gets a completely FREE website! <span id="offerCountDisplay2">(0/1 claimed)</span></p>
         </div>
       </div>
       <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
+        <span class="offer-price-tag">🎁 FREE</span>
         <span class="offer-tag">🌟 Any Website</span>
         <span class="offer-count" id="offerCount2">0/1</span>
         <button class="offer-btn" id="claimOfferBtn2">Claim Offer</button>
@@ -374,186 +377,19 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js?v=13"></script>
   <script>
-    // ─── DIRECT SUPABASE CONFIG ───
-    const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
-
-    let supabaseClient = null;
-    let supabaseConnected = false;
-
-    function initSupabase() {
-      try {
-        if (typeof supabase !== 'undefined') {
-          supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-          supabaseConnected = true;
-          console.log('✅ Supabase connected successfully');
-          return supabaseClient;
-        } else {
-          console.error('❌ Supabase SDK not loaded');
-          supabaseConnected = false;
-          return null;
-        }
-      } catch (e) {
-        console.error('❌ Supabase connection error:', e);
-        supabaseConnected = false;
-        return null;
-      }
-    }
-
-    function formatPKR(amount) {
-      return '₨ ' + (amount || 0).toLocaleString('en-PK');
-    }
-
-    // ─── AUTH ───
-    async function getCurrentUser() {
-      if (!supabaseConnected || !supabaseClient) {
-        return null;
-      }
-      try {
-        const { data, error } = await supabaseClient.auth.getUser();
-        if (error) throw error;
-        return data.user;
-      } catch (e) {
-        console.error('User error:', e);
-        return null;
-      }
-    }
-
-    async function signOutUser() {
-      if (supabaseConnected && supabaseClient) {
-        try {
-          await supabaseClient.auth.signOut();
-        } catch (e) { console.error(e); }
-      }
-      localStorage.removeItem('pixlnex_user');
-      window.location.href = 'index.html';
-    }
-
-    // ─── PRODUCTS ───
-    async function getProducts() {
-      if (!supabaseConnected || !supabaseClient) {
-        return [];
-      }
-      try {
-        const { data, error } = await supabaseClient
-          .from('products')
-          .select('*')
-          .order('created_at', { ascending: true });
-        if (error) throw error;
-        return data || [];
-      } catch (e) {
-        console.error('Products error:', e);
-        return [];
-      }
-    }
-
-    // ─── ORDERS ───
-    async function createOrder(orderData) {
-      if (!supabaseConnected || !supabaseClient) {
-        throw new Error('Supabase not connected');
-      }
-      try {
-        const { data, error } = await supabaseClient
-          .from('orders')
-          .insert([{
-            order_id: '#ORD-' + Date.now().toString().slice(-6),
-            name: orderData.name,
-            price: orderData.price,
-            customer_email: orderData.customer_email,
-            customer_name: orderData.customer_name,
-            payment_method: orderData.payment_method || 'jazzcash',
-            payment_status: orderData.payment_status || 'pending',
-            status: orderData.status || 'processing',
-            is_custom: orderData.is_custom || false,
-            custom_details: orderData.custom_details || '',
-            custom_type: orderData.custom_type || '',
-            custom_budget: orderData.custom_budget || '',
-            website_goal: orderData.website_goal || '',
-            target_audience: orderData.target_audience || '',
-            design_preference: orderData.design_preference || '',
-            pages_needed: orderData.pages_needed || '',
-            features_needed: orderData.features_needed || '',
-            color_scheme: orderData.color_scheme || '',
-            content_ready: orderData.content_ready || '',
-            deadline: orderData.deadline || '',
-            additional_notes: orderData.additional_notes || '',
-            created_at: new Date().toISOString()
-          }])
-          .select();
-        if (error) throw error;
-        return data ? data[0] : null;
-      } catch (e) {
-        console.error('Order error:', e);
-        throw e;
-      }
-    }
-
-    // ─── OFFERS ───
-    async function getOfferStatus(offerType) {
-      if (!supabaseConnected || !supabaseClient) {
-        return null;
-      }
-      try {
-        const { data, error } = await supabaseClient
-          .from('offers')
-          .select('*')
-          .eq('offer_type', offerType)
-          .single();
-        if (error) throw error;
-        return data;
-      } catch (e) {
-        console.error('Offer error:', e);
-        return null;
-      }
-    }
-
-    async function claimOffer(offerType, email) {
-      if (!supabaseConnected || !supabaseClient) {
-        throw new Error('Supabase not connected');
-      }
-      try {
-        const { data, error } = await supabaseClient
-          .from('offers')
-          .select('*')
-          .eq('offer_type', offerType)
-          .single();
-        if (error) throw error;
-
-        if (!data || data.is_active === false) {
-          throw new Error('Offer not active');
-        }
-
-        const claimedArray = data.claimed_by ? data.claimed_by.split(',').filter(Boolean) : [];
-
-        if (claimedArray.includes(email)) {
-          throw new Error('Already claimed');
-        }
-
-        if (claimedArray.length >= data.total_limit) {
-          throw new Error('Fully claimed');
-        }
-
-        claimedArray.push(email);
-        const { error: updateError } = await supabaseClient
-          .from('offers')
-          .update({
-            claimed_by: claimedArray.join(','),
-            claimed_at: new Date().toISOString()
-          })
-          .eq('offer_type', offerType);
-
-        if (updateError) throw updateError;
-        return { success: true };
-
-      } catch (e) {
-        console.error('Claim error:', e);
-        throw e;
-      }
-    }
-
-    // ─── MAIN APP ───
     (function() {
+      const PX = window.Pixlnex;
+
+      // ─── CHECK IF PIXLNEX IS LOADED ───
+      if (!PX) {
+        console.error('❌ Pixlnex not loaded! Check supabase.js');
+        document.getElementById('toastMsg').textContent = '⚠️ System error. Please refresh.';
+        document.getElementById('toast').classList.add('show');
+        return;
+      }
+
       let products = [];
       let cart = JSON.parse(localStorage.getItem('pixlnex_cart')) || [];
       let currentUser = null;
@@ -589,9 +425,10 @@
         toastTimer = setTimeout(() => toast.classList.remove('show'), 4000);
       }
 
+      // ─── UPDATE AUTH UI ───
       async function updateAuthUI() {
         try {
-          currentUser = await getCurrentUser();
+          currentUser = await PX.getCurrentUser();
         } catch (e) {
           currentUser = null;
         }
@@ -602,7 +439,7 @@
           authBtn.href = 'profile.html';
           authBtn.onclick = function(e) {
             e.preventDefault();
-            signOutUser();
+            PX.signOutUser();
           };
           setTimeout(loadOfferStatus, 500);
         } else {
@@ -616,17 +453,18 @@
       // ─── LOAD OFFER STATUS ───
       async function loadOfferStatus() {
         try {
-          if (!supabaseConnected || !supabaseClient) {
+          if (!PX || !PX.supabaseConnected || !PX.supabaseClient) {
             console.warn('Supabase not ready');
             return;
           }
 
-          // Offer 1
-          const data1 = await getOfferStatus('free_portfolio');
+          // Offer 1: Portfolio in Rs 300 (First 10 Users)
+          const data1 = await PX.getOfferStatus('free_portfolio');
           if (data1) {
             const claimedArray = data1.claimed_by ? data1.claimed_by.split(',').filter(Boolean) : [];
             const count = claimedArray.length;
             const limit = data1.total_limit || 10;
+            const price = data1.offer_price || 300;
             offerCount1.textContent = `${count}/${limit}`;
             offerCountDisplay1.textContent = `(${count}/${limit} claimed)`;
 
@@ -635,15 +473,15 @@
               claimOfferBtn1.textContent = '✅ Claimed';
             } else if (count >= limit) {
               claimOfferBtn1.disabled = true;
-              claimOfferBtn1.textContent = '🎉 Fully Claimed!';
+              claimOfferBtn1.textContent = '🎉 All Claimed!';
             } else {
               claimOfferBtn1.disabled = false;
-              claimOfferBtn1.textContent = 'Claim Offer';
+              claimOfferBtn1.textContent = `Claim (₨ ${price})`;
             }
           }
 
-          // Offer 2
-          const data2 = await getOfferStatus('first_order_free');
+          // Offer 2: Completely Free (Only 1 User)
+          const data2 = await PX.getOfferStatus('first_order_free');
           if (data2) {
             const claimedArray = data2.claimed_by ? data2.claimed_by.split(',').filter(Boolean) : [];
             const count = claimedArray.length;
@@ -659,7 +497,7 @@
               claimOfferBtn2.textContent = '🎉 Claimed!';
             } else {
               claimOfferBtn2.disabled = false;
-              claimOfferBtn2.textContent = 'Claim Offer';
+              claimOfferBtn2.textContent = 'Claim FREE';
             }
           }
 
@@ -668,9 +506,9 @@
         }
       }
 
-      // ─── CLAIM OFFER 1 ───
+      // ─── CLAIM OFFER 1 (Portfolio in Rs 300) ───
       claimOfferBtn1.addEventListener('click', async function() {
-        const user = await getCurrentUser();
+        const user = await PX.getCurrentUser();
         if (!user) {
           showToast('🔐 Please login first');
           setTimeout(() => window.location.href = 'login.html', 800);
@@ -685,8 +523,8 @@
         }
 
         try {
-          await claimOffer('free_portfolio', email);
-          showToast('🎉 Free Portfolio Website claimed!');
+          await PX.claimOffer('free_portfolio', email);
+          showToast('🎉 Portfolio in ₨ 300 claimed!');
           claimOfferBtn1.disabled = true;
           claimOfferBtn1.textContent = '✅ Claimed';
           loadOfferStatus();
@@ -695,9 +533,9 @@
         }
       });
 
-      // ─── CLAIM OFFER 2 ───
+      // ─── CLAIM OFFER 2 (Completely Free) ───
       claimOfferBtn2.addEventListener('click', async function() {
-        const user = await getCurrentUser();
+        const user = await PX.getCurrentUser();
         if (!user) {
           showToast('🔐 Please login first');
           setTimeout(() => window.location.href = 'login.html', 800);
@@ -712,8 +550,8 @@
         }
 
         try {
-          await claimOffer('first_order_free', email);
-          showToast('⭐ First Order Free claimed!');
+          await PX.claimOffer('first_order_free', email);
+          showToast('⭐ Completely Free Website claimed!');
           claimOfferBtn2.disabled = true;
           claimOfferBtn2.textContent = '✅ Claimed';
           loadOfferStatus();
@@ -733,7 +571,7 @@
       function openPaymentModal(orderData, isCustom) {
         pendingOrder = orderData;
         paymentProductName.textContent = orderData.name || 'Web Package';
-        paymentAmount.textContent = formatPKR(orderData.price);
+        paymentAmount.textContent = PX.formatPKR(orderData.price);
         paymentType.textContent = isCustom ? 'Custom Web' : 'Pre-made Web';
         paymentModal.classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -753,7 +591,7 @@
 
       document.getElementById('confirmPaymentBtn').addEventListener('click', async function() {
         if (!pendingOrder) return;
-        const user = await getCurrentUser();
+        const user = await PX.getCurrentUser();
         if (!user) {
           showToast('🔐 Please login first');
           setTimeout(() => window.location.href = 'login.html', 800);
@@ -778,10 +616,10 @@
             is_custom: pendingOrder.isCustom || false
           };
 
-          const result = await createOrder(orderData);
+          const result = await PX.createOrder(orderData);
           console.log('✅ Order created:', result);
 
-          let msg = `✅ Order Confirmed!\n\nOrder: ${pendingOrder.name}\nAmount: ${formatPKR(pendingOrder.price)}\nMethod: ${selectedPayment === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}\n\n📌 Send payment screenshot on WhatsApp: 0332-7240800`;
+          let msg = `✅ Order Confirmed!\n\nOrder: ${pendingOrder.name}\nAmount: ${PX.formatPKR(pendingOrder.price)}\nMethod: ${selectedPayment === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}\n\n📌 Send payment screenshot on WhatsApp: 0332-7240800`;
           alert(msg);
 
           if (!pendingOrder.isCustom) {
@@ -890,7 +728,7 @@
       // ─── RENDER PRODUCTS ───
       async function renderProducts() {
         try {
-          products = await getProducts();
+          products = await PX.getProducts();
           console.log('✅ Products loaded:', products.length);
         } catch (e) {
           showToast('⚠️ Error loading products');
@@ -918,7 +756,7 @@
             <div class="product-desc">${p.description || p.desc || ''}</div>
             <ul class="product-features">${featuresHtml}</ul>
             <div class="product-bottom">
-              <span class="price">${formatPKR(p.price)}</span>
+              <span class="price">${PX.formatPKR(p.price)}</span>
               <div class="btn-group">
                 <button class="btn-add" data-id="${p.id || index}"><i class="fas fa-plus"></i> Add</button>
                 <button class="btn-order" data-id="${p.id || index}"><i class="fas fa-bolt"></i> Order Now</button>
@@ -945,7 +783,7 @@
           const productId = this.dataset.id;
           const product = products.find(p => (p.id || p.id) == productId);
           if (product) {
-            getCurrentUser().then(user => {
+            PX.getCurrentUser().then(user => {
               if (!user) {
                 showToast('🔐 Please login first');
                 setTimeout(() => window.location.href = 'login.html', 800);
@@ -994,7 +832,7 @@
             div.className = 'cart-item';
             div.innerHTML = `
               <span>${item.name} <span style="opacity:0.7;font-weight:400;">×${item.quantity}</span></span>
-              <span class="item-price">${formatPKR(item.price * item.quantity)}</span>
+              <span class="item-price">${PX.formatPKR(item.price * item.quantity)}</span>
               <button class="remove-item" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
             `;
             cartItemsContainer.appendChild(div);
@@ -1004,13 +842,13 @@
           }));
         }
         const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        cartTotalPrice.textContent = formatPKR(total);
+        cartTotalPrice.textContent = PX.formatPKR(total);
         checkoutBtn.disabled = cart.length === 0;
       }
 
       checkoutBtn.addEventListener('click', async function() {
         if (cart.length === 0) return;
-        const user = await getCurrentUser();
+        const user = await PX.getCurrentUser();
         if (!user) { showToast('🔐 Please login first'); setTimeout(() => window.location.href = 'login.html', 800); return; }
 
         const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -1030,38 +868,38 @@
         portfolio: {
           title: '📸 Portfolio Questions',
           questions: [
-            { id: 'goal', label: 'What is the main goal of your portfolio?', type: 'select', options: ['Showcase work', 'Get freelance clients', 'Apply for jobs', 'Personal brand'] },
+            { id: 'goal', label: 'What is the main goal?', type: 'select', options: ['Showcase work', 'Get freelance clients', 'Apply for jobs', 'Personal brand'] },
             { id: 'projects', label: 'How many projects to display?', type: 'select', options: ['1-5', '6-10', '11-20', '20+'] },
-            { id: 'design', label: 'What design style?', type: 'select', options: ['Minimalist', 'Creative', 'Professional', 'Modern', 'Classic'] }
+            { id: 'design', label: 'What design style?', type: 'select', options: ['Minimalist', 'Creative', 'Professional', 'Modern'] }
           ]
         },
         business: {
           title: '🏢 Business Questions',
           questions: [
-            { id: 'goal', label: 'What is your business goal?', type: 'select', options: ['Lead generation', 'Brand awareness', 'Online sales', 'Customer support'] },
+            { id: 'goal', label: 'Business goal?', type: 'select', options: ['Lead generation', 'Brand awareness', 'Online sales', 'Customer support'] },
             { id: 'pages', label: 'How many pages?', type: 'select', options: ['1-3', '4-6', '7-10', '10+'] },
-            { id: 'design', label: 'What design style?', type: 'select', options: ['Professional', 'Modern', 'Corporate', 'Creative'] }
+            { id: 'design', label: 'Design style?', type: 'select', options: ['Professional', 'Modern', 'Corporate', 'Creative'] }
           ]
         },
         ecommerce: {
           title: '🛒 E-commerce Questions',
           questions: [
             { id: 'products', label: 'How many products?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
-            { id: 'payment', label: 'What payment methods?', type: 'select', options: ['JazzCash', 'EasyPaisa', 'Both', 'Other'] }
+            { id: 'payment', label: 'Payment methods?', type: 'select', options: ['JazzCash', 'EasyPaisa', 'Both', 'Other'] }
           ]
         },
         chat: {
           title: '💬 Chat App Questions',
           questions: [
             { id: 'users', label: 'How many users?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
-            { id: 'features', label: 'What features?', type: 'select', options: ['Group chat', 'File sharing', 'Video call', 'Voice notes', 'All'] }
+            { id: 'features', label: 'Features needed?', type: 'select', options: ['Group chat', 'File sharing', 'Video call', 'All'] }
           ]
         },
         landing: {
           title: '🎯 Landing Page Questions',
           questions: [
-            { id: 'goal', label: 'What is the main goal?', type: 'select', options: ['Lead capture', 'Product launch', 'Event registration', 'Sales'] },
-            { id: 'design', label: 'What design style?', type: 'select', options: ['Minimalist', 'Bold', 'Professional', 'Creative'] }
+            { id: 'goal', label: 'Main goal?', type: 'select', options: ['Lead capture', 'Product launch', 'Event registration', 'Sales'] },
+            { id: 'design', label: 'Design style?', type: 'select', options: ['Minimalist', 'Bold', 'Professional', 'Creative'] }
           ]
         },
         other: {
@@ -1108,7 +946,7 @@
       document.getElementById('customOrderForm').addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        const user = await getCurrentUser();
+        const user = await PX.getCurrentUser();
         if (!user) {
           showToast('🔐 Please login first');
           setTimeout(() => window.location.href = 'login.html', 800);
@@ -1165,12 +1003,14 @@
         console.log('🚀 Initializing Pixlnex...');
 
         // Initialize Supabase
-        initSupabase();
+        if (PX && PX.initSupabase) {
+          PX.initSupabase();
+        }
 
         // Wait for connection
         let attempts = 0;
-        while (!supabaseConnected) {
-          if (attempts > 20) {
+        while (!PX || !PX.supabaseConnected) {
+          if (attempts > 30) {
             console.error('❌ Supabase connection timeout');
             showToast('⚠️ Database not connected. Please refresh.');
             return;
