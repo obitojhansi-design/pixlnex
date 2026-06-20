@@ -84,7 +84,6 @@
     .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
     .product-card { background: white; border-radius: 1.8rem; padding: 1.8rem 1.8rem 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02); transition: all 0.25s ease; border: 1px solid #edf2f7; display: flex; flex-direction: column; }
     .product-card:hover { transform: translateY(-6px); box-shadow: 0 18px 30px -8px rgba(0,20,40,0.08); border-color: #d9e2ef; }
-
     .product-img { position: relative; background: #f1f6fc; border-radius: 1.5rem; aspect-ratio: 1/1; overflow: hidden; margin-bottom: 1.2rem; cursor: pointer; }
     .product-img .carousel-container { width: 100%; height: 100%; position: relative; overflow: hidden; }
     .product-img .carousel-track { display: flex; transition: transform 0.5s ease; height: 100%; }
@@ -97,7 +96,6 @@
     .product-img .carousel-dots .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; transition: 0.2s; border: none; }
     .product-img .carousel-dots .dot.active { background: white; transform: scale(1.2); }
     .product-img .image-count-badge { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); color: white; font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 30px; z-index: 10; }
-
     .product-card h3 { font-weight: 600; font-size: 1.25rem; margin-bottom: 0.2rem; }
     .product-desc { color: #475569; font-size: 0.9rem; margin: 0.25rem 0 0.7rem 0; flex: 1; }
     .product-features { font-size: 0.85rem; color: #475569; margin: 0.5rem 0 0.8rem 0; padding-left: 1.2rem; }
@@ -280,10 +278,7 @@
         <div class="custom-grid">
           <div><label for="customName">Your Name</label><input type="text" id="customName" placeholder="John Doe" required /></div>
           <div><label for="customEmail">Your Email</label><input type="email" id="customEmail" placeholder="john@example.com" required /></div>
-          
-          <!-- ─── WEBSITE TYPE ─── -->
-          <div>
-            <label for="customType">Website Type</label>
+          <div><label for="customType">Website Type</label>
             <select id="customType" required>
               <option value="">Select Type</option>
               <option value="portfolio">Portfolio / Personal</option>
@@ -295,9 +290,7 @@
               <option value="other">Other / New Idea</option>
             </select>
           </div>
-          
-          <div>
-            <label for="customBudget">Budget Range (PKR)</label>
+          <div><label for="customBudget">Budget Range (PKR)</label>
             <select id="customBudget" required>
               <option value="5000-10000">₨ 5,000 – ₨ 10,000</option>
               <option value="10000-15000">₨ 10,000 – ₨ 15,000</option>
@@ -305,22 +298,11 @@
               <option value="20000+">₨ 20,000+</option>
             </select>
           </div>
-
-          <!-- ─── DYNAMIC QUESTIONS ─── -->
           <div class="full" id="dynamicQuestions">
-            <div id="questionContainer">
-              <!-- Questions will be injected here based on type -->
-            </div>
+            <div id="questionContainer"></div>
           </div>
-
-          <div class="full">
-            <label for="customDetails">Additional Details</label>
-            <textarea id="customDetails" placeholder="Any other details you want to share..." style="min-height:60px;"></textarea>
-          </div>
-          
-          <div class="full">
-            <button type="submit" class="submit-order-btn"><i class="fas fa-paper-plane"></i> Send Custom Order</button>
-          </div>
+          <div class="full"><label for="customDetails">Additional Details</label><textarea id="customDetails" placeholder="Any other details you want to share..." style="min-height:60px;"></textarea></div>
+          <div class="full"><button type="submit" class="submit-order-btn"><i class="fas fa-paper-plane"></i> Send Custom Order</button></div>
         </div>
       </form>
     </section>
@@ -359,14 +341,10 @@
       <p style="font-size:0.9rem;color:#64748b;margin-bottom:0.5rem;">Select payment method:</p>
       <div class="payment-methods">
         <div class="method selected" data-method="jazzcash" onclick="selectPayment('jazzcash')">
-          <div class="icon">💳</div>
-          <div class="info"><div class="name">JazzCash</div><div class="desc">Pay via JazzCash mobile account</div></div>
-          <div class="radio"></div>
+          <div class="icon">💳</div><div class="info"><div class="name">JazzCash</div><div class="desc">Pay via JazzCash mobile account</div></div><div class="radio"></div>
         </div>
         <div class="method" data-method="easypaisa" onclick="selectPayment('easypaisa')">
-          <div class="icon">📱</div>
-          <div class="info"><div class="name">EasyPaisa</div><div class="desc">Pay via EasyPaisa mobile account</div></div>
-          <div class="radio"></div>
+          <div class="icon">📱</div><div class="info"><div class="name">EasyPaisa</div><div class="desc">Pay via EasyPaisa mobile account</div></div><div class="radio"></div>
         </div>
       </div>
       <div class="bank-details">
@@ -384,7 +362,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase.js?v=9"></script>
+  <script src="supabase.js?v=10"></script>
   <script>
     (function() {
       const PX = window.Pixlnex;
@@ -395,6 +373,7 @@
       let selectedPayment = 'jazzcash';
       let offerCount = 0;
       let isOfferClaimed = false;
+      let supabaseClient = null;
 
       // ─── DOM REFS ───
       const productGrid = document.getElementById('productGrid');
@@ -422,123 +401,59 @@
         toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
       }
 
-      // ─── DYNAMIC QUESTIONS ───
-      const questionsData = {
-        portfolio: {
-          title: '📸 Portfolio Website Questions',
-          questions: [
-            { id: 'goal', label: 'What is the main goal of your portfolio?', type: 'select', options: ['Showcase work', 'Get freelance clients', 'Apply for jobs', 'Personal brand'] },
-            { id: 'projects', label: 'How many projects do you want to display?', type: 'select', options: ['1-5', '6-10', '11-20', '20+'] },
-            { id: 'design', label: 'What design style do you prefer?', type: 'select', options: ['Minimalist', 'Creative', 'Professional', 'Modern', 'Classic'] },
-            { id: 'features', label: 'What features do you need?', type: 'checkbox', options: ['Contact form', 'Gallery', 'Blog', 'Testimonials', 'Resume download', 'Social links'] }
-          ]
-        },
-        business: {
-          title: '🏢 Business Website Questions',
-          questions: [
-            { id: 'goal', label: 'What is your business goal?', type: 'select', options: ['Lead generation', 'Brand awareness', 'Online sales', 'Customer support'] },
-            { id: 'pages', label: 'How many pages do you need?', type: 'select', options: ['1-3', '4-6', '7-10', '10+'] },
-            { id: 'design', label: 'What design style do you prefer?', type: 'select', options: ['Professional', 'Modern', 'Corporate', 'Creative'] },
-            { id: 'features', label: 'What features do you need?', type: 'checkbox', options: ['Contact form', 'Google Maps', 'Newsletter', 'Testimonials', 'Team section', 'Services section', 'Blog'] }
-          ]
-        },
-        ecommerce: {
-          title: '🛒 E-commerce Website Questions',
-          questions: [
-            { id: 'products', label: 'How many products will you sell?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
-            { id: 'payment', label: 'What payment methods do you want?', type: 'checkbox', options: ['JazzCash', 'EasyPaisa', 'Credit Card', 'Bank Transfer'] },
-            { id: 'features', label: 'What features do you need?', type: 'checkbox', options: ['Shopping cart', 'Wishlist', 'Product reviews', 'Discount codes', 'Order tracking', 'Admin panel'] }
-          ]
-        },
-        chat: {
-          title: '💬 Chat App Questions',
-          questions: [
-            { id: 'users', label: 'How many users will use it?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
-            { id: 'features', label: 'What features do you need?', type: 'checkbox', options: ['Group chat', 'File sharing', 'Video call', 'Voice notes', 'Screen sharing', 'Encryption'] }
-          ]
-        },
-        landing: {
-          title: '🎯 Landing Page Questions',
-          questions: [
-            { id: 'goal', label: 'What is the main goal?', type: 'select', options: ['Lead capture', 'Product launch', 'Event registration', 'Sales'] },
-            { id: 'design', label: 'What design style?', type: 'select', options: ['Minimalist', 'Bold', 'Professional', 'Creative'] }
-          ]
-        },
-        other: {
-          title: '💡 New Idea Questions',
-          questions: [
-            { id: 'idea', label: 'Tell me about your idea', type: 'textarea', placeholder: 'Describe your website idea in detail...' },
-            { id: 'goal', label: 'What is the main goal?', type: 'select', options: ['Personal project', 'Business', 'Community', 'Other'] },
-            { id: 'features', label: 'What features do you need?', type: 'textarea', placeholder: 'List all features you want...' }
-          ]
+      // ─── GET SUPABASE CLIENT ───
+      function getSupabaseClient() {
+        if (!supabaseClient) {
+          supabaseClient = PX.supabaseClient;
         }
-      };
-
-      function renderQuestions(type) {
-        const container = document.getElementById('questionContainer');
-        const data = questionsData[type];
-        if (!data) { container.innerHTML = ''; return; }
-
-        let html = `<h4 style="margin-bottom:0.8rem;color:#0f2b4b;">${data.title}</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">`;
-
-        data.questions.forEach(q => {
-          html += `<div style="${q.type === 'textarea' ? 'grid-column:1/-1;' : ''}">`;
-          html += `<label style="font-weight:600;font-size:0.85rem;display:block;margin-bottom:0.2rem;color:#1e293b;">${q.label}</label>`;
-
-          if (q.type === 'select') {
-            html += `<select id="q_${q.id}" style="width:100%;padding:0.6rem 1rem;border-radius:40px;border:1px solid #e2e8f0;font-size:0.9rem;background:#f8fafc;">`;
-            html += `<option value="">Select...</option>`;
-            q.options.forEach(opt => {
-              html += `<option value="${opt}">${opt}</option>`;
-            });
-            html += `</select>`;
-          } else if (q.type === 'checkbox') {
-            html += `<div style="display:flex;flex-wrap:wrap;gap:0.5rem;padding-top:0.3rem;">`;
-            q.options.forEach(opt => {
-              html += `<label style="font-weight:400;font-size:0.85rem;display:flex;align-items:center;gap:0.3rem;">
-                <input type="checkbox" value="${opt}" style="width:16px;height:16px;"> ${opt}
-              </label>`;
-            });
-            html += `</div>`;
-          } else if (q.type === 'textarea') {
-            html += `<textarea id="q_${q.id}" placeholder="${q.placeholder || ''}" style="width:100%;padding:0.6rem 1rem;border-radius:1rem;border:1px solid #e2e8f0;font-size:0.9rem;background:#f8fafc;min-height:60px;"></textarea>`;
-          }
-
-          html += `</div>`;
-        });
-
-        html += `</div>`;
-        container.innerHTML = html;
+        return supabaseClient;
       }
-
-      document.getElementById('customType').addEventListener('change', function() {
-        renderQuestions(this.value);
-      });
 
       // ─── OFFER SYSTEM ───
       async function loadOfferStatus() {
         try {
-          const { data, error } = await PX.supabaseClient
+          const client = getSupabaseClient();
+          if (!client) {
+            console.warn('Supabase client not ready');
+            return;
+          }
+
+          const { data, error } = await client
             .from('offers')
             .select('*')
             .eq('offer_type', 'free_website')
             .single();
 
-          if (error) throw error;
+          if (error) {
+            console.error('Offer load error:', error);
+            return;
+          }
 
           if (data) {
-            const claimedCount = data.claimed_by ? data.claimed_by.split(',').filter(Boolean).length : 0;
+            const claimedArray = data.claimed_by ? data.claimed_by.split(',').filter(Boolean) : [];
+            const claimedCount = claimedArray.length;
             offerCount = claimedCount;
             offerCountEl.textContent = `${claimedCount}/10`;
             offerCountDisplay.textContent = `(${claimedCount}/10 claimed)`;
 
+            // Check if current user already claimed
+            if (currentUser) {
+              isOfferClaimed = claimedArray.includes(currentUser.email);
+            }
+
             if (claimedCount >= 10) {
               claimOfferBtn.disabled = true;
-              claimOfferBtn.textContent = '🎉 Offer Fully Claimed!';
+              claimOfferBtn.textContent = '🎉 Fully Claimed!';
+            } else if (isOfferClaimed) {
+              claimOfferBtn.disabled = true;
+              claimOfferBtn.textContent = '✅ Already Claimed';
+            } else {
+              claimOfferBtn.disabled = false;
+              claimOfferBtn.textContent = 'Claim Offer';
             }
           }
         } catch (e) {
-          console.log('Offer status check:', e);
+          console.error('Offer status error:', e);
         }
       }
 
@@ -564,7 +479,13 @@
         }
 
         try {
-          const { data, error } = await PX.supabaseClient
+          const client = getSupabaseClient();
+          if (!client) {
+            showToast('⚠️ Database not connected');
+            return;
+          }
+
+          const { data, error } = await client
             .from('offers')
             .select('*')
             .eq('offer_type', 'free_website')
@@ -587,14 +508,14 @@
           if (claimedArray.length >= 10) {
             showToast('🎉 Offer fully claimed! All 10 free websites are taken.');
             claimOfferBtn.disabled = true;
-            claimOfferBtn.textContent = '🎉 Offer Fully Claimed!';
+            claimOfferBtn.textContent = '🎉 Fully Claimed!';
             return;
           }
 
           claimedArray.push(email);
           const newClaimedBy = claimedArray.join(',');
 
-          const { error: updateError } = await PX.supabaseClient
+          const { error: updateError } = await client
             .from('offers')
             .update({ 
               claimed_by: newClaimedBy,
@@ -605,6 +526,9 @@
           if (updateError) throw updateError;
 
           showToast('🎉 Congratulations! You claimed a FREE website!');
+          isOfferClaimed = true;
+          claimOfferBtn.disabled = true;
+          claimOfferBtn.textContent = '✅ Already Claimed';
           loadOfferStatus();
 
           // Create a free order
@@ -625,11 +549,91 @@
 
         } catch (e) {
           console.error('Offer claim error:', e);
-          showToast('⚠️ Error claiming offer');
+          showToast('⚠️ Error claiming offer: ' + e.message);
         }
       }
 
       claimOfferBtn.addEventListener('click', claimOffer);
+
+      // ─── DYNAMIC QUESTIONS ───
+      const questionsData = {
+        portfolio: {
+          title: '📸 Portfolio Website Questions',
+          questions: [
+            { id: 'goal', label: 'What is the main goal of your portfolio?', type: 'select', options: ['Showcase work', 'Get freelance clients', 'Apply for jobs', 'Personal brand'] },
+            { id: 'projects', label: 'How many projects do you want to display?', type: 'select', options: ['1-5', '6-10', '11-20', '20+'] },
+            { id: 'design', label: 'What design style do you prefer?', type: 'select', options: ['Minimalist', 'Creative', 'Professional', 'Modern', 'Classic'] }
+          ]
+        },
+        business: {
+          title: '🏢 Business Website Questions',
+          questions: [
+            { id: 'goal', label: 'What is your business goal?', type: 'select', options: ['Lead generation', 'Brand awareness', 'Online sales', 'Customer support'] },
+            { id: 'pages', label: 'How many pages do you need?', type: 'select', options: ['1-3', '4-6', '7-10', '10+'] },
+            { id: 'design', label: 'What design style do you prefer?', type: 'select', options: ['Professional', 'Modern', 'Corporate', 'Creative'] }
+          ]
+        },
+        ecommerce: {
+          title: '🛒 E-commerce Website Questions',
+          questions: [
+            { id: 'products', label: 'How many products will you sell?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
+            { id: 'payment', label: 'What payment methods do you want?', type: 'select', options: ['JazzCash', 'EasyPaisa', 'Both', 'Other'] }
+          ]
+        },
+        chat: {
+          title: '💬 Chat App Questions',
+          questions: [
+            { id: 'users', label: 'How many users will use it?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
+            { id: 'features', label: 'What features do you need?', type: 'select', options: ['Group chat', 'File sharing', 'Video call', 'Voice notes', 'All'] }
+          ]
+        },
+        landing: {
+          title: '🎯 Landing Page Questions',
+          questions: [
+            { id: 'goal', label: 'What is the main goal?', type: 'select', options: ['Lead capture', 'Product launch', 'Event registration', 'Sales'] },
+            { id: 'design', label: 'What design style?', type: 'select', options: ['Minimalist', 'Bold', 'Professional', 'Creative'] }
+          ]
+        },
+        other: {
+          title: '💡 New Idea Questions',
+          questions: [
+            { id: 'idea', label: 'Tell me about your idea', type: 'textarea', placeholder: 'Describe your website idea in detail...' }
+          ]
+        }
+      };
+
+      function renderQuestions(type) {
+        const container = document.getElementById('questionContainer');
+        const data = questionsData[type];
+        if (!data) { container.innerHTML = ''; return; }
+
+        let html = `<h4 style="margin-bottom:0.8rem;color:#0f2b4b;">${data.title}</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">`;
+
+        data.questions.forEach(q => {
+          html += `<div style="${q.type === 'textarea' ? 'grid-column:1/-1;' : ''}">`;
+          html += `<label style="font-weight:600;font-size:0.85rem;display:block;margin-bottom:0.2rem;color:#1e293b;">${q.label}</label>`;
+
+          if (q.type === 'select') {
+            html += `<select id="q_${q.id}" style="width:100%;padding:0.6rem 1rem;border-radius:40px;border:1px solid #e2e8f0;font-size:0.9rem;background:#f8fafc;">`;
+            html += `<option value="">Select...</option>`;
+            q.options.forEach(opt => {
+              html += `<option value="${opt}">${opt}</option>`;
+            });
+            html += `</select>`;
+          } else if (q.type === 'textarea') {
+            html += `<textarea id="q_${q.id}" placeholder="${q.placeholder || ''}" style="width:100%;padding:0.6rem 1rem;border-radius:1rem;border:1px solid #e2e8f0;font-size:0.9rem;background:#f8fafc;min-height:60px;"></textarea>`;
+          }
+
+          html += `</div>`;
+        });
+
+        html += `</div>`;
+        container.innerHTML = html;
+      }
+
+      document.getElementById('customType').addEventListener('change', function() {
+        renderQuestions(this.value);
+      });
 
       // ─── PAYMENT ───
       window.selectPayment = function(method) {
@@ -683,17 +687,7 @@
             custom_details: pendingOrder.custom_details || '',
             custom_type: pendingOrder.custom_type || '',
             custom_budget: pendingOrder.custom_budget || '',
-            is_custom: pendingOrder.isCustom || false,
-            order_type: pendingOrder.isCustom ? 'custom' : 'premade',
-            website_goal: pendingOrder.website_goal || '',
-            target_audience: pendingOrder.target_audience || '',
-            design_preference: pendingOrder.design_preference || '',
-            pages_needed: pendingOrder.pages_needed || '',
-            features_needed: pendingOrder.features_needed || '',
-            color_scheme: pendingOrder.color_scheme || '',
-            content_ready: pendingOrder.content_ready || '',
-            deadline: pendingOrder.deadline || '',
-            additional_notes: pendingOrder.additional_notes || ''
+            is_custom: pendingOrder.isCustom || false
           };
 
           const result = await PX.createOrder(orderData);
@@ -738,6 +732,8 @@
           authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
           authBtn.className = 'auth-btn logout';
           authBtn.href = 'profile.html';
+          // Refresh offer status after login
+          setTimeout(loadOfferStatus, 500);
         } else {
           authBtn.innerHTML = '<i class="fas fa-user"></i> Login';
           authBtn.className = 'auth-btn';
@@ -989,22 +985,6 @@
           return;
         }
 
-        // Collect dynamic question answers
-        const questionData = {};
-        const container = document.getElementById('questionContainer');
-        const inputs = container.querySelectorAll('input, select, textarea');
-        inputs.forEach(input => {
-          if (input.type === 'checkbox') {
-            if (input.checked) {
-              const key = input.name || input.id;
-              if (!questionData[key]) questionData[key] = [];
-              questionData[key].push(input.value);
-            }
-          } else if (input.value) {
-            questionData[input.id] = input.value;
-          }
-        });
-
         const typeLabels = {
           'portfolio': 'Portfolio',
           'business': 'Business',
@@ -1025,16 +1005,7 @@
           custom_details: details || '',
           custom_type: typeLabels[type] || type,
           custom_budget: budget,
-          isCustom: true,
-          website_goal: questionData.q_goal || '',
-          target_audience: questionData.q_audience || '',
-          design_preference: questionData.q_design || '',
-          pages_needed: questionData.q_pages || '',
-          features_needed: questionData.q_features || '',
-          color_scheme: questionData.q_color || '',
-          content_ready: questionData.q_content || '',
-          deadline: questionData.q_deadline || '',
-          additional_notes: questionData.q_notes || ''
+          isCustom: true
         };
 
         openPaymentModal(orderData, true);
@@ -1055,6 +1026,7 @@
       async function init() {
         console.log('🚀 Initializing Pixlnex...');
         await PX.initSupabase();
+        supabaseClient = PX.supabaseClient;
         await updateAuthUI();
         await renderProducts();
         updateCartUI();
