@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Pixlnex · Admin Panel</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
@@ -18,6 +21,7 @@
     .auth-btn { background: #0f2b4b; color: white !important; padding: 0.5rem 1.2rem; border-radius: 40px; font-weight: 600; transition: 0.2s; }
     .auth-btn:hover { background: #1a3a5e; }
     .auth-btn.logout { background: #eef2f6; color: #1e293b !important; }
+    .auth-btn.logout:hover { background: #fee2e2; color: #b91c1c !important; }
     .cart-icon { font-size: 1.4rem; background: #eef2f6; padding: 0.5rem 0.9rem; border-radius: 40px; display: flex; align-items: center; gap: 0.4rem; text-decoration: none; color: #0b1a2e; }
     .cart-count { background: #2563eb; color: white; font-size: 0.75rem; font-weight: 600; padding: 0.15rem 0.55rem; border-radius: 30px; margin-left: 0.2rem; }
 
@@ -46,22 +50,28 @@
     .admin-card h3 i { color: #2563eb; }
     .admin-card h3 .badge-count { background: #eef2f6; padding: 0.1rem 0.7rem; border-radius: 40px; font-size: 0.75rem; color: #64748b; font-weight: 500; }
 
+    /* ─── ORDER ITEM WITH CUSTOM DETAILS ─── */
     .admin-order-item { display: flex; flex-direction: column; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
     .admin-order-item:last-child { border-bottom: none; }
     .admin-order-item .order-row { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; }
-    .admin-order-item .order-info { flex: 1; }
+    .admin-order-item .order-info { flex: 1; min-width: 200px; }
     .admin-order-item .order-info .order-name { font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-    .admin-order-item .order-info .order-meta { font-size: 0.75rem; color: #94a3b8; }
-    .admin-order-item .order-info .order-custom-details { font-size: 0.85rem; color: #1e293b; background: #f1f6fe; padding: 0.8rem 1rem; border-radius: 0.5rem; margin-top: 0.3rem; border-left: 3px solid #2563eb; width: 100%; }
+    .admin-order-item .order-info .order-meta { font-size: 0.75rem; color: #94a3b8; display: block; margin-top: 0.1rem; }
+    .admin-order-item .order-custom-details { font-size: 0.85rem; color: #1e293b; background: #f1f6fe; padding: 0.8rem 1rem; border-radius: 0.5rem; margin-top: 0.5rem; border-left: 3px solid #2563eb; width: 100%; }
+    .admin-order-item .order-custom-details .detail-row { display: flex; padding: 0.15rem 0; font-size: 0.85rem; }
+    .admin-order-item .order-custom-details .detail-row .label { font-weight: 600; color: #2563eb; min-width: 120px; }
+    .admin-order-item .order-custom-details .detail-row .value { color: #1e293b; }
     .admin-order-item .order-status-select { padding: 0.2rem 0.8rem; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.75rem; font-weight: 600; background: white; cursor: pointer; transition: 0.2s; }
     .admin-order-item .order-status-select:focus { outline: none; border-color: #2563eb; }
     .admin-order-item .order-status-select.status-processing { background: #e0f2fe; color: #0369a1; border-color: #b8d4f0; }
-    .admin-order-item .order-status-select.status-shipped { background: #fef9c3; color: #854d0e; border-color: #f5e28a; }
-    .admin-order-item .order-status-select.status-delivered { background: #dcfce7; color: #166534; border-color: #a8d5b5; }
+    .admin-order-item .order-status-select.status-working { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+    .admin-order-item .order-status-select.status-demo_ready { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
+    .admin-order-item .order-status-select.status-completed { background: #dcfce7; color: #166534; border-color: #86efac; }
+    .admin-order-item .order-status-select.status-delivered { background: #e0e7ff; color: #3730a3; border-color: #a5b4fc; }
     .admin-order-item .order-price { font-weight: 700; color: #0f2b4b; font-size: 0.95rem; }
-    .payment-badge { font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 30px; background: #22c55e20; color: #166534; border: 1px solid #22c55e30; }
-    .payment-badge.pending { background: #f59e0b20; color: #92400e; border-color: #f59e0b30; }
-    .custom-badge { font-size: 0.65rem; background: #7c3aed10; color: #7c3aed; padding: 0.15rem 0.5rem; border-radius: 30px; border: 1px solid #7c3aed20; }
+    .payment-badge { font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 30px; background: #22c55e20; color: #166534; border: 1px solid #22c55e30; display: inline-block; }
+    .payment-badge.free { background: #fef9c3; color: #854d0e; border-color: #fcd34d; }
+    .custom-badge { font-size: 0.65rem; background: #7c3aed10; color: #7c3aed; padding: 0.15rem 0.5rem; border-radius: 30px; border: 1px solid #7c3aed20; display: inline-block; }
 
     .admin-product-item { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
     .admin-product-item:last-child { border-bottom: none; }
@@ -115,7 +125,7 @@
     .toast i { color: #22c55e; font-size: 1.2rem; }
 
     @media (max-width:900px) { .admin-grid { grid-template-columns: 1fr; } .admin-header { flex-direction: column; align-items: flex-start; gap: 1rem; } .stats-grid { grid-template-columns: 1fr 1fr; } .add-product-form { grid-template-columns: 1fr; } .add-product-form .full { grid-column: 1; } .login-box { padding: 2rem 1.5rem; margin: 1rem; } }
-    @media (max-width:700px) { .app { padding: 1rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .admin-header { padding: 1.5rem; } .admin-header h1 { font-size: 1.6rem; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; } .stat-card { padding: 1rem; } .stat-card .stat-number { font-size: 1.5rem; } .admin-card { padding: 1.2rem 1.5rem; } }
+    @media (max-width:700px) { .app { padding: 1rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .admin-header { padding: 1.5rem; } .admin-header h1 { font-size: 1.6rem; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; } .stat-card { padding: 1rem; } .stat-card .stat-number { font-size: 1.5rem; } .admin-card { padding: 1.2rem 1.5rem; } .admin-order-item .order-row { flex-direction: column; align-items: stretch; } .admin-order-item .order-custom-details .detail-row { flex-direction: column; } .admin-order-item .order-custom-details .detail-row .label { min-width: auto; } }
   </style>
 </head>
 <body>
@@ -149,11 +159,13 @@
       </div>
 
       <div class="admin-grid">
+        <!-- Orders -->
         <div class="admin-card">
           <h3><i class="fas fa-list"></i> Paid Orders <span class="badge-count" id="orderCountBadge">0</span></h3>
           <div id="orderList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">Loading paid orders...</div></div>
         </div>
 
+        <!-- Products -->
         <div class="admin-card">
           <h3><i class="fas fa-cube"></i> Products <span class="badge-count" id="productCountBadge">0</span></h3>
           <div id="productList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">Loading products...</div></div>
@@ -210,7 +222,7 @@
     // ─── ADMIN USERS ───
     const ADMIN_USERS = [
       { email: 'faisalyousafyousaf3@gmail.com', name: 'Faisal' },
-      { email: 'noor@gmail.com', name: 'Noor' }  // Add your friend's email here
+      { email: 'noor@gmail.com', name: 'Noor' }
     ];
 
     function initSupabase() {
@@ -258,15 +270,12 @@
       const trimmedEmail = email.trim();
       const trimmedPassword = password.trim();
 
-      // Check if user is in admin list
       const adminUser = ADMIN_USERS.find(u => u.email.toLowerCase() === trimmedEmail.toLowerCase());
 
       if (!adminUser) {
         return false;
       }
 
-      // For demo, any password works if email is in list
-      // In production, use Supabase auth
       if (trimmedPassword.length > 0) {
         const name = adminUser.name;
         localStorage.setItem('pixlnex_admin_session', 'true');
@@ -347,7 +356,7 @@
         const { data: ordersData, error: ordersError } = await supabaseClient
           .from('orders')
           .select('*')
-          .eq('payment_status', 'paid')  // ✅ Only paid orders
+          .eq('payment_status', 'paid')
           .order('created_at', { ascending: false });
 
         if (ordersError) throw ordersError;
@@ -367,7 +376,7 @@
         const totalOrders = orders.length;
         const totalRevenue = orders.reduce((sum, o) => sum + (o.price || 0), 0);
         const customers = new Set(orders.map(o => o.customer_email || '')).size;
-        const pending = orders.filter(o => o.status === 'processing' || o.status === 'demo_ready').length;
+        const pending = orders.filter(o => o.status === 'processing' || o.status === 'demo_ready' || o.status === 'working').length;
 
         document.getElementById('totalOrders').textContent = totalOrders;
         document.getElementById('totalRevenue').textContent = formatPKR(totalRevenue);
@@ -391,6 +400,41 @@
             const statusClass = order.status || 'processing';
             const isCustom = order.is_custom || false;
             const paymentMethod = order.payment_method || 'jazzcash';
+            const isFree = order.price === 0;
+
+            // Build custom details HTML with all fields
+            let customDetailsHtml = '';
+            if (isCustom) {
+              const detailFields = [
+                { label: 'Custom Type', value: order.custom_type },
+                { label: 'Budget', value: order.custom_budget },
+                { label: 'Website Goal', value: order.website_goal },
+                { label: 'Target Audience', value: order.target_audience },
+                { label: 'Design Preference', value: order.design_preference },
+                { label: 'Pages Needed', value: order.pages_needed },
+                { label: 'Features Needed', value: order.features_needed },
+                { label: 'Color Scheme', value: order.color_scheme },
+                { label: 'Content Ready', value: order.content_ready },
+                { label: 'Deadline', value: order.deadline },
+                { label: 'Additional Notes', value: order.additional_notes },
+                { label: 'Description', value: order.custom_details }
+              ];
+
+              const filteredFields = detailFields.filter(f => f.value && f.value.trim() !== '');
+              
+              if (filteredFields.length > 0) {
+                customDetailsHtml = `<div class="order-custom-details">`;
+                filteredFields.forEach(f => {
+                  customDetailsHtml += `
+                    <div class="detail-row">
+                      <span class="label">${f.label}:</span>
+                      <span class="value">${f.value}</span>
+                    </div>
+                  `;
+                });
+                customDetailsHtml += `</div>`;
+              }
+            }
 
             div.innerHTML = `
               <div class="order-row">
@@ -398,7 +442,8 @@
                   <span class="order-name">
                     ${order.name}
                     ${isCustom ? '<span class="custom-badge">🎨 Custom</span>' : ''}
-                    <span class="payment-badge">✅ Paid via ${paymentMethod === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}</span>
+                    ${isFree ? '<span class="payment-badge free">🎁 Free Offer</span>' : 
+                      `<span class="payment-badge">✅ Paid via ${paymentMethod === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}</span>`}
                   </span>
                   <span class="order-meta">
                     ${order.order_id || '#ORD-' + (orders.length - index)} · 
@@ -406,20 +451,15 @@
                     ${order.customer_email || 'guest'}
                     ${order.customer_name ? ' (' + order.customer_name + ')' : ''}
                   </span>
-                  ${isCustom && order.custom_details ? `
-                    <div class="order-custom-details">
-                      <strong>📋 Project Details:</strong><br />
-                      ${order.custom_type ? '<strong>Type:</strong> ' + order.custom_type + ' | ' : ''}
-                      ${order.custom_budget ? '<strong>Budget:</strong> ' + order.custom_budget : ''}
-                      <br /><strong>Description:</strong> ${order.custom_details}
-                    </div>
-                  ` : ''}
+                  ${customDetailsHtml}
                 </div>
                 <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;">
                   <select class="order-status-select status-${statusClass}" data-order-id="${order.id || index}">
                     <option value="processing" ${statusClass === 'processing' ? 'selected' : ''}>⏳ Processing</option>
+                    <option value="working" ${statusClass === 'working' ? 'selected' : ''}>🔨 Working</option>
                     <option value="demo_ready" ${statusClass === 'demo_ready' ? 'selected' : ''}>🎯 Demo Ready</option>
                     <option value="completed" ${statusClass === 'completed' ? 'selected' : ''}>✅ Completed</option>
+                    <option value="delivered" ${statusClass === 'delivered' ? 'selected' : ''}>📦 Delivered</option>
                   </select>
                   <span class="order-price">${formatPKR(order.price)}</span>
                 </div>
@@ -504,7 +544,6 @@
         productList.appendChild(div);
       });
 
-      // Delete product
       document.querySelectorAll('.delete-product').forEach(btn => {
         btn.addEventListener('click', async function() {
           const idx = parseInt(this.dataset.index);
@@ -522,7 +561,6 @@
         });
       });
 
-      // Edit product price
       document.querySelectorAll('.edit-product').forEach(btn => {
         btn.addEventListener('click', function() {
           const idx = parseInt(this.dataset.index);

@@ -10,6 +10,36 @@
     body { background: #f8fafc; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
     .app { max-width: 1300px; margin: 0 auto; padding: 1.5rem 2rem; flex: 1; width: 100%; }
 
+    /* ─── OFFER BANNER ─── */
+    .offer-banner {
+      background: linear-gradient(135deg, #f59e0b, #d97706, #f59e0b);
+      background-size: 200% 200%;
+      animation: gradientMove 3s ease infinite;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+    }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .offer-banner .offer-text { display: flex; align-items: center; gap: 1rem; }
+    .offer-banner .offer-text i { font-size: 2rem; }
+    .offer-banner .offer-text h3 { font-size: 1.2rem; font-weight: 700; }
+    .offer-banner .offer-text p { opacity: 0.9; font-size: 0.9rem; }
+    .offer-banner .offer-count { background: rgba(255,255,255,0.2); padding: 0.3rem 1.2rem; border-radius: 40px; font-weight: 600; border: 1px solid rgba(255,255,255,0.2); }
+    .offer-banner .offer-btn { background: white; color: #d97706; border: none; padding: 0.5rem 1.5rem; border-radius: 40px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .offer-banner .offer-btn:hover { transform: scale(1.05); }
+    .offer-banner .offer-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
     /* ─── WHATSAPP ─── */
     .whatsapp-float {
       position: fixed; bottom: 24px; right: 24px; z-index: 999;
@@ -47,37 +77,7 @@
     .hero-badge { background: white; padding: 0.6rem 1.5rem; border-radius: 60px; display: inline-flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
     .hero-badge i { color: #2563eb; }
 
-    /* ─── WHY CHOOSE US ─── */
-    .why-section { background: white; border-radius: 2rem; padding: 3rem; margin: 2.5rem 0; border: 1px solid #e9eef3; }
-    .why-section .section-header { text-align: center; margin-bottom: 2.5rem; }
-    .why-section .section-header h2 { font-size: 2.2rem; font-weight: 700; }
-    .why-section .section-header p { color: #64748b; max-width: 600px; margin: 0.5rem auto 0; }
-    .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
-    .why-card { text-align: center; padding: 1.5rem; border-radius: 1.5rem; background: #f8fafc; border: 1px solid #edf2f7; transition: 0.3s; }
-    .why-card:hover { transform: translateY(-4px); border-color: #2563eb; }
-    .why-card .icon { width: 60px; height: 60px; border-radius: 50%; background: #2563eb10; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.8rem; color: #2563eb; }
-    .why-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.3rem; }
-    .why-card p { font-size: 0.9rem; color: #64748b; }
-
-    /* ─── WHAT WE BUILD ─── */
-    .build-section { background: white; border-radius: 2rem; padding: 3rem; margin: 2.5rem 0; border: 1px solid #e9eef3; }
-    .build-section .section-header { text-align: center; margin-bottom: 2.5rem; }
-    .build-section .section-header h2 { font-size: 2.2rem; font-weight: 700; }
-    .build-section .section-header p { color: #64748b; max-width: 600px; margin: 0.5rem auto 0; }
-    .build-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
-    .build-card { padding: 2rem; border-radius: 1.5rem; background: #f8fafc; border: 1px solid #edf2f7; transition: 0.3s; text-align: center; }
-    .build-card:hover { transform: translateY(-4px); border-color: #2563eb; }
-    .build-card .icon { font-size: 2.5rem; color: #2563eb; margin-bottom: 0.8rem; }
-    .build-card h3 { font-size: 1.1rem; font-weight: 600; }
-    .build-card p { font-size: 0.9rem; color: #64748b; margin-top: 0.3rem; }
-
-    /* ─── STATS ─── */
-    .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin: 2.5rem 0; text-align: center; }
-    .stats-bar .stat-item { background: white; padding: 1.5rem; border-radius: 1.5rem; border: 1px solid #e9eef3; }
-    .stats-bar .stat-item .number { font-size: 2.5rem; font-weight: 700; color: #2563eb; }
-    .stats-bar .stat-item .label { color: #64748b; font-size: 0.9rem; }
-
-    /* ─── PRODUCT GRID ─── */
+    /* ─── PRODUCTS ─── */
     .section-title { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin: 2.8rem 0 1.8rem 0; }
     .section-title h2 { font-size: 1.9rem; font-weight: 650; }
     .section-title a { color: #2563eb; text-decoration: none; font-weight: 500; cursor: pointer; }
@@ -85,14 +85,12 @@
     .product-card { background: white; border-radius: 1.8rem; padding: 1.8rem 1.8rem 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02); transition: all 0.25s ease; border: 1px solid #edf2f7; display: flex; flex-direction: column; }
     .product-card:hover { transform: translateY(-6px); box-shadow: 0 18px 30px -8px rgba(0,20,40,0.08); border-color: #d9e2ef; }
 
-    /* ─── CAROUSEL ─── */
     .product-img { position: relative; background: #f1f6fc; border-radius: 1.5rem; aspect-ratio: 1/1; overflow: hidden; margin-bottom: 1.2rem; cursor: pointer; }
     .product-img .carousel-container { width: 100%; height: 100%; position: relative; overflow: hidden; }
     .product-img .carousel-track { display: flex; transition: transform 0.5s ease; height: 100%; }
     .product-img .carousel-track img { width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; }
-    .product-img .carousel-track .fallback-icon { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 4rem; color: #1e3a5f; flex-shrink: 0; background: #f1f6fc; }
     .product-img .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 0.9rem; z-index: 10; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
-    .product-img .carousel-btn:hover { background: rgba(0,0,0,0.8); transform: translateY(-50%) scale(1.1); }
+    .product-img .carousel-btn:hover { background: rgba(0,0,0,0.8); }
     .product-img .carousel-btn.prev { left: 8px; }
     .product-img .carousel-btn.next { right: 8px; }
     .product-img .carousel-dots { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 10; }
@@ -113,6 +111,35 @@
     .btn-add:hover { background: #2563eb; color: white; }
     .btn-order { background: #0f2b4b; border: none; border-radius: 40px; padding: 0.5rem 1.2rem; font-weight: 600; color: white; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; transition: 0.15s; font-size: 0.85rem; }
     .btn-order:hover { background: #1a3a5e; transform: scale(1.02); }
+
+    /* ─── CUSTOM ORDER FORM ─── */
+    .custom-section { background: white; border-radius: 2rem; padding: 2.5rem 3rem; margin: 3rem 0; border: 1px solid #e9eef3; }
+    .custom-section h2 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .custom-section .sub { color: #64748b; margin-bottom: 1.5rem; }
+    .custom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .custom-grid .full { grid-column: 1 / -1; }
+    .custom-grid label { font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 0.3rem; color: #1e293b; }
+    .custom-grid input, .custom-grid select, .custom-grid textarea { width: 100%; padding: 0.7rem 1.2rem; border-radius: 60px; border: 1px solid #e2e8f0; font-size: 1rem; background: #f8fafc; transition: 0.2s; }
+    .custom-grid input:focus, .custom-grid select:focus, .custom-grid textarea:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: transparent; background: white; }
+    .custom-grid textarea { border-radius: 1.2rem; resize: vertical; min-height: 80px; }
+    .submit-order-btn { background: #0f2b4b; color: white; border: none; padding: 0.85rem 2.5rem; border-radius: 60px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.7rem; margin-top: 0.5rem; }
+    .submit-order-btn:hover { background: #1a3a5e; transform: scale(1.02); }
+
+    /* ─── CART ─── */
+    .cart-panel { margin-top: 3.5rem; background: white; border-radius: 2rem; padding: 1.8rem 2.2rem; border: 1px solid #e9eef3; }
+    .cart-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .cart-header h3 { font-size: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 0.6rem; }
+    .cart-items { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; max-height: 220px; overflow-y: auto; padding-right: 0.5rem; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 0.7rem 1.2rem; border-radius: 60px; border: 1px solid #eef2f6; }
+    .cart-item span:first-child { font-weight: 500; }
+    .cart-item .item-price { font-weight: 600; color: #0f2b4b; }
+    .cart-item .remove-item { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1.1rem; transition: 0.15s; padding: 0.25rem; min-width: 44px; min-height: 44px; }
+    .cart-item .remove-item:hover { color: #b91c1c; }
+    .cart-total { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.3rem; padding-top: 1rem; border-top: 2px dashed #dce3ec; }
+    .empty-cart-msg { color: #64748b; font-style: italic; padding: 0.3rem 0 0.8rem 0; }
+    .checkout-btn { background: #0f2b4b; color: white; border: none; padding: 0.7rem 2rem; border-radius: 60px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.6rem; }
+    .checkout-btn:hover { background: #1a3a5e; }
+    .checkout-btn:disabled { opacity: 0.4; pointer-events: none; }
 
     /* ─── PAYMENT MODAL ─── */
     .payment-modal {
@@ -141,15 +168,15 @@
     .payment-modal .payment-methods .method .radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #dce3ec; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; }
     .payment-modal .payment-methods .method.selected .radio { border-color: #2563eb; background: #2563eb; }
     .payment-modal .payment-methods .method.selected .radio::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: white; }
-    .payment-modal .payment-details { background: #f8fafc; border-radius: 1rem; padding: 1.2rem; margin: 1rem 0; }
-    .payment-modal .payment-details .detail-row { display: flex; justify-content: space-between; padding: 0.3rem 0; font-size: 0.95rem; }
-    .payment-modal .payment-details .detail-row .label { color: #64748b; }
-    .payment-modal .payment-details .detail-row .value { font-weight: 600; }
     .payment-modal .bank-details { background: #f1f6fe; border-radius: 1rem; padding: 1.2rem; margin: 1rem 0; border: 1px solid #2563eb20; }
     .payment-modal .bank-details .bank-row { display: flex; justify-content: space-between; padding: 0.3rem 0; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; }
     .payment-modal .bank-details .bank-row:last-child { border-bottom: none; }
     .payment-modal .bank-details .bank-row .label { color: #64748b; }
     .payment-modal .bank-details .bank-row .value { font-weight: 600; color: #0f2b4b; }
+    .payment-modal .order-summary { background: #f1f6fe; border-radius: 1rem; padding: 1rem 1.2rem; margin: 1rem 0; border-left: 3px solid #2563eb; }
+    .payment-modal .order-summary .label { font-size: 0.8rem; color: #64748b; }
+    .payment-modal .order-summary .value { font-weight: 600; font-size: 1.1rem; }
+    .payment-modal .payment-note { font-size: 0.85rem; color: #475569; background: #fef9c3; padding: 0.8rem 1rem; border-radius: 0.8rem; margin: 0.8rem 0; border: 1px solid #fcd34d; }
     .payment-modal .payment-actions { display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; }
     .payment-modal .payment-actions .btn-pay { flex: 1; padding: 0.8rem; border-radius: 60px; border: none; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; min-width: 120px; }
     .payment-modal .payment-actions .btn-pay.pay { background: #0f2b4b; color: white; }
@@ -157,45 +184,9 @@
     .payment-modal .payment-actions .btn-pay.pay:disabled { opacity: 0.5; cursor: not-allowed; }
     .payment-modal .payment-actions .btn-pay.cancel { background: #eef2f6; color: #1e293b; }
     .payment-modal .payment-actions .btn-pay.cancel:hover { background: #e2e8f0; }
-    .payment-modal .order-summary { background: #f1f6fe; border-radius: 1rem; padding: 1rem 1.2rem; margin: 1rem 0; border-left: 3px solid #2563eb; }
-    .payment-modal .order-summary .label { font-size: 0.8rem; color: #64748b; }
-    .payment-modal .order-summary .value { font-weight: 600; font-size: 1.1rem; }
-    .payment-modal .payment-note { font-size: 0.85rem; color: #475569; background: #fef9c3; padding: 0.8rem 1rem; border-radius: 0.8rem; margin: 0.8rem 0; border: 1px solid #fcd34d; }
 
-    /* ─── CART ─── */
-    .cart-panel { margin-top: 3.5rem; background: white; border-radius: 2rem; padding: 1.8rem 2.2rem; border: 1px solid #e9eef3; }
-    .cart-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
-    .cart-header h3 { font-size: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 0.6rem; }
-    .cart-items { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; max-height: 220px; overflow-y: auto; padding-right: 0.5rem; }
-    .cart-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 0.7rem 1.2rem; border-radius: 60px; border: 1px solid #eef2f6; }
-    .cart-item span:first-child { font-weight: 500; }
-    .cart-item .item-price { font-weight: 600; color: #0f2b4b; }
-    .cart-item .remove-item { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1.1rem; transition: 0.15s; padding: 0.25rem; min-width: 44px; min-height: 44px; }
-    .cart-item .remove-item:hover { color: #b91c1c; }
-    .cart-total { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.3rem; padding-top: 1rem; border-top: 2px dashed #dce3ec; }
-    .empty-cart-msg { color: #64748b; font-style: italic; padding: 0.3rem 0 0.8rem 0; }
-    .checkout-btn { background: #0f2b4b; color: white; border: none; padding: 0.7rem 2rem; border-radius: 60px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.6rem; }
-    .checkout-btn:hover { background: #1a3a5e; }
-    .checkout-btn:disabled { opacity: 0.4; pointer-events: none; }
-
-    /* ─── CUSTOM ORDER ─── */
-    .custom-section { background: white; border-radius: 2rem; padding: 2.5rem 3rem; margin: 3rem 0; border: 1px solid #e9eef3; }
-    .custom-section h2 { font-size: 1.8rem; margin-bottom: 0.5rem; }
-    .custom-section .sub { color: #64748b; margin-bottom: 1.5rem; }
-    .custom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-    .custom-grid .full { grid-column: 1 / -1; }
-    .custom-grid label { font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 0.3rem; color: #1e293b; }
-    .custom-grid input, .custom-grid select, .custom-grid textarea { width: 100%; padding: 0.7rem 1.2rem; border-radius: 60px; border: 1px solid #e2e8f0; font-size: 1rem; background: #f8fafc; transition: 0.2s; }
-    .custom-grid input:focus, .custom-grid select:focus, .custom-grid textarea:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: transparent; background: white; }
-    .custom-grid textarea { border-radius: 1.2rem; resize: vertical; min-height: 80px; }
-    .submit-order-btn { background: #0f2b4b; color: white; border: none; padding: 0.85rem 2.5rem; border-radius: 60px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.7rem; margin-top: 0.5rem; }
-    .submit-order-btn:hover { background: #1a3a5e; transform: scale(1.02); }
-
-    /* ─── FOOTER ─── */
     .footer { margin-top: 4rem; border-top: 1px solid #e2e8f0; padding: 2rem 0 1rem 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: #475569; font-size: 0.9rem; }
     .footer i { color: #2563eb; margin: 0 0.2rem; }
-
-    /* ─── TOAST ─── */
     .toast { position: fixed; bottom: 2rem; right: 2rem; background: #0f2b4b; color: white; padding: 1rem 1.8rem; border-radius: 60px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); font-weight: 600; display: flex; align-items: center; gap: 0.7rem; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 999; }
     .toast.show { transform: translateY(0); opacity: 1; }
     .toast i { color: #22c55e; font-size: 1.2rem; }
@@ -217,9 +208,6 @@
       .btn-group { justify-content: stretch; }
       .btn-add, .btn-order { flex: 1; justify-content: center; }
       .product-img .carousel-btn { width: 28px; height: 28px; font-size: 0.7rem; }
-      .why-section { padding: 1.5rem; }
-      .build-section { padding: 1.5rem; }
-      .stats-bar { grid-template-columns: 1fr 1fr; }
       .payment-modal .modal-content { padding: 1.5rem; }
       .payment-modal .payment-actions { flex-direction: column; }
       .payment-modal .payment-actions .btn-pay { width: 100%; }
@@ -247,6 +235,21 @@
     <!-- ─── TOAST ─── -->
     <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Added!</span></div>
 
+    <!-- ─── OFFER BANNER ─── -->
+    <div class="offer-banner" id="offerBanner">
+      <div class="offer-text">
+        <i class="fas fa-gift"></i>
+        <div>
+          <h3>🎉 Limited Time Offer!</h3>
+          <p id="offerDescription">First 10 customers get a free website! <span id="offerCountDisplay">(0/10 claimed)</span></p>
+        </div>
+      </div>
+      <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
+        <span class="offer-count" id="offerCount">0/10</span>
+        <button class="offer-btn" id="claimOfferBtn">Claim Offer</button>
+      </div>
+    </div>
+
     <!-- ─── HOME ─── -->
     <section id="homeSection" class="page-section">
       <div class="hero">
@@ -259,60 +262,6 @@
         <div class="hero-badge"><i class="fas fa-rocket"></i> 1‑on‑1 service · you get a unique site</div>
       </div>
     </section>
-
-    <!-- ─── WHY CHOOSE US ─── -->
-    <section class="why-section">
-      <div class="section-header">
-        <h2>✨ Why Choose Pixlnex?</h2>
-        <p>I build websites that help you grow your business. Here's why clients trust me.</p>
-      </div>
-      <div class="why-grid">
-        <div class="why-card">
-          <div class="icon"><i class="fas fa-code"></i></div>
-          <h3>100% Custom Code</h3>
-          <p>No templates, no page builders. Every site is built from scratch for your unique needs.</p>
-        </div>
-        <div class="why-card">
-          <div class="icon"><i class="fas fa-user-check"></i></div>
-          <h3>1-on-1 Collaboration</h3>
-          <p>You work directly with me. One person, one project at a time — you get my full attention.</p>
-        </div>
-        <div class="why-card">
-          <div class="icon"><i class="fas fa-rocket"></i></div>
-          <h3>Fast & Modern</h3>
-          <p>Lightning-fast load times, modern design, and SEO-optimized for better rankings.</p>
-        </div>
-        <div class="why-card">
-          <div class="icon"><i class="fas fa-shield-alt"></i></div>
-          <h3>Secure & Reliable</h3>
-          <p>Built with best security practices. Your website is safe, scalable, and future-proof.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── WHAT WE BUILD ─── -->
-    <section class="build-section">
-      <div class="section-header">
-        <h2>🛠️ What I Build</h2>
-        <p>From simple portfolios to complex web applications — I've got you covered.</p>
-      </div>
-      <div class="build-grid">
-        <div class="build-card"><div class="icon"><i class="fas fa-user-tie"></i></div><h3>Portfolio Websites</h3><p>Showcase your work with a stunning personal portfolio.</p></div>
-        <div class="build-card"><div class="icon"><i class="fas fa-building"></i></div><h3>Business Websites</h3><p>Professional websites for businesses and startups.</p></div>
-        <div class="build-card"><div class="icon"><i class="fas fa-store"></i></div><h3>E‑commerce Stores</h3><p>Full-featured online stores with payment integration.</p></div>
-        <div class="build-card"><div class="icon"><i class="fas fa-comment-dots"></i></div><h3>Encrypted Chat Apps</h3><p>End-to-end encrypted real-time chat applications.</p></div>
-        <div class="build-card"><div class="icon"><i class="fas fa-blog"></i></div><h3>Blogs & Magazines</h3><p>Content-focused websites with clean typography.</p></div>
-        <div class="build-card"><div class="icon"><i class="fas fa-pencil-ruler"></i></div><h3>Custom Web Apps</h3><p>Tailored web applications built for your specific needs.</p></div>
-      </div>
-    </section>
-
-    <!-- ─── STATS ─── -->
-    <div class="stats-bar">
-      <div class="stat-item"><div class="number">50+</div><div class="label">Websites Built</div></div>
-      <div class="stat-item"><div class="number">100%</div><div class="label">Client Satisfaction</div></div>
-      <div class="stat-item"><div class="number">24/7</div><div class="label">Support Available</div></div>
-      <div class="stat-item"><div class="number">⭐ 5.0</div><div class="label">Average Rating</div></div>
-    </div>
 
     <!-- ─── PRODUCTS ─── -->
     <section id="productSection" class="page-section">
@@ -331,27 +280,47 @@
         <div class="custom-grid">
           <div><label for="customName">Your Name</label><input type="text" id="customName" placeholder="John Doe" required /></div>
           <div><label for="customEmail">Your Email</label><input type="email" id="customEmail" placeholder="john@example.com" required /></div>
-          <div><label for="customType">Website Type</label>
-            <select id="customType">
+          
+          <!-- ─── WEBSITE TYPE ─── -->
+          <div>
+            <label for="customType">Website Type</label>
+            <select id="customType" required>
+              <option value="">Select Type</option>
               <option value="portfolio">Portfolio / Personal</option>
               <option value="business">Business / Corporate</option>
-              <option value="ecommerce">E‑commerce</option>
+              <option value="ecommerce">E‑commerce Store</option>
               <option value="blog">Blog / Magazine</option>
               <option value="chat">Encrypted Chat App</option>
               <option value="landing">Landing Page</option>
-              <option value="other">Other (tell me below)</option>
+              <option value="other">Other / New Idea</option>
             </select>
           </div>
-          <div><label for="customBudget">Budget Range (PKR)</label>
-            <select id="customBudget">
-              <option value="50000-80000">₨ 50,000 – ₨ 80,000</option>
-              <option value="80000-130000">₨ 80,000 – ₨ 130,000</option>
-              <option value="130000-200000">₨ 130,000 – ₨ 200,000</option>
-              <option value="200000+">₨ 200,000+</option>
+          
+          <div>
+            <label for="customBudget">Budget Range (PKR)</label>
+            <select id="customBudget" required>
+              <option value="5000-10000">₨ 5,000 – ₨ 10,000</option>
+              <option value="10000-15000">₨ 10,000 – ₨ 15,000</option>
+              <option value="15000-20000">₨ 15,000 – ₨ 20,000</option>
+              <option value="20000+">₨ 20,000+</option>
             </select>
           </div>
-          <div class="full"><label for="customDetails">Tell me about your project</label><textarea id="customDetails" placeholder="What kind of website do you need? What features, design style, pages, etc.?" required></textarea></div>
-          <div class="full"><button type="submit" class="submit-order-btn"><i class="fas fa-paper-plane"></i> Send Custom Order</button></div>
+
+          <!-- ─── DYNAMIC QUESTIONS ─── -->
+          <div class="full" id="dynamicQuestions">
+            <div id="questionContainer">
+              <!-- Questions will be injected here based on type -->
+            </div>
+          </div>
+
+          <div class="full">
+            <label for="customDetails">Additional Details</label>
+            <textarea id="customDetails" placeholder="Any other details you want to share..." style="min-height:60px;"></textarea>
+          </div>
+          
+          <div class="full">
+            <button type="submit" class="submit-order-btn"><i class="fas fa-paper-plane"></i> Send Custom Order</button>
+          </div>
         </div>
       </form>
     </section>
@@ -382,19 +351,12 @@
         <h2>💳 Complete Payment</h2>
         <button class="close-modal" id="closePaymentModal">&times;</button>
       </div>
-
-      <div class="order-summary">
-        <div class="label">Product</div>
-        <div class="value" id="paymentProductName">Loading...</div>
-      </div>
-
+      <div class="order-summary"><div class="label">Product</div><div class="value" id="paymentProductName">Loading...</div></div>
       <div class="payment-details">
         <div class="detail-row"><span class="label">Amount</span><span class="value" id="paymentAmount">₨ 0</span></div>
         <div class="detail-row"><span class="label">Type</span><span class="value" id="paymentType">Pre-made Web</span></div>
       </div>
-
       <p style="font-size:0.9rem;color:#64748b;margin-bottom:0.5rem;">Select payment method:</p>
-
       <div class="payment-methods">
         <div class="method selected" data-method="jazzcash" onclick="selectPayment('jazzcash')">
           <div class="icon">💳</div>
@@ -407,19 +369,13 @@
           <div class="radio"></div>
         </div>
       </div>
-
-      <!-- ─── BANK DETAILS ─── -->
       <div class="bank-details">
         <p style="font-weight:600;margin-bottom:0.5rem;color:#0f2b4b;">📌 Send payment to:</p>
-        <div class="bank-row"><span class="label">JazzCash</span><span class="value">03008748246</span></div>
-        <div class="bank-row"><span class="label">EasyPaisa</span><span class="value">03006948246</span></div>
+        <div class="bank-row"><span class="label">JazzCash</span><span class="value">03 327 240800</span></div>
+        <div class="bank-row"><span class="label">EasyPaisa</span><span class="value">03 327 240800</span></div>
         <div class="bank-row"><span class="label">Account Holder</span><span class="value">Faisal Yousaf</span></div>
       </div>
-<!-- ─── PAYMENT NOTE ─── -->
-      <div class="payment-note">
-        <i class="fas fa-info-circle"></i> After payment, click "Confirm Payment" below. Your order will be processed within 24 hours.
-      </div>
-
+      <div class="payment-note"><i class="fas fa-info-circle"></i> After payment, send screenshot on WhatsApp. Then click "Confirm Payment" below.</div>
       <div class="payment-actions">
         <button class="btn-pay pay" id="confirmPaymentBtn"><i class="fas fa-check"></i> Confirm Payment</button>
         <button class="btn-pay cancel" id="cancelPaymentBtn">Cancel</button>
@@ -428,7 +384,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase.js?v=8"></script>
+  <script src="supabase.js?v=9"></script>
   <script>
     (function() {
       const PX = window.Pixlnex;
@@ -437,6 +393,8 @@
       let currentUser = null;
       let pendingOrder = null;
       let selectedPayment = 'jazzcash';
+      let offerCount = 0;
+      let isOfferClaimed = false;
 
       // ─── DOM REFS ───
       const productGrid = document.getElementById('productGrid');
@@ -451,6 +409,9 @@
       const paymentProductName = document.getElementById('paymentProductName');
       const paymentAmount = document.getElementById('paymentAmount');
       const paymentType = document.getElementById('paymentType');
+      const claimOfferBtn = document.getElementById('claimOfferBtn');
+      const offerCountDisplay = document.getElementById('offerCountDisplay');
+      const offerCountEl = document.getElementById('offerCount');
 
       let toastTimer;
 
@@ -460,6 +421,215 @@
         clearTimeout(toastTimer);
         toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
       }
+
+      // ─── DYNAMIC QUESTIONS ───
+      const questionsData = {
+        portfolio: {
+          title: '📸 Portfolio Website Questions',
+          questions: [
+            { id: 'goal', label: 'What is the main goal of your portfolio?', type: 'select', options: ['Showcase work', 'Get freelance clients', 'Apply for jobs', 'Personal brand'] },
+            { id: 'projects', label: 'How many projects do you want to display?', type: 'select', options: ['1-5', '6-10', '11-20', '20+'] },
+            { id: 'design', label: 'What design style do you prefer?', type: 'select', options: ['Minimalist', 'Creative', 'Professional', 'Modern', 'Classic'] },
+            { id: 'features', label: 'What features do you need?', type: 'checkbox', options: ['Contact form', 'Gallery', 'Blog', 'Testimonials', 'Resume download', 'Social links'] }
+          ]
+        },
+        business: {
+          title: '🏢 Business Website Questions',
+          questions: [
+            { id: 'goal', label: 'What is your business goal?', type: 'select', options: ['Lead generation', 'Brand awareness', 'Online sales', 'Customer support'] },
+            { id: 'pages', label: 'How many pages do you need?', type: 'select', options: ['1-3', '4-6', '7-10', '10+'] },
+            { id: 'design', label: 'What design style do you prefer?', type: 'select', options: ['Professional', 'Modern', 'Corporate', 'Creative'] },
+            { id: 'features', label: 'What features do you need?', type: 'checkbox', options: ['Contact form', 'Google Maps', 'Newsletter', 'Testimonials', 'Team section', 'Services section', 'Blog'] }
+          ]
+        },
+        ecommerce: {
+          title: '🛒 E-commerce Website Questions',
+          questions: [
+            { id: 'products', label: 'How many products will you sell?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
+            { id: 'payment', label: 'What payment methods do you want?', type: 'checkbox', options: ['JazzCash', 'EasyPaisa', 'Credit Card', 'Bank Transfer'] },
+            { id: 'features', label: 'What features do you need?', type: 'checkbox', options: ['Shopping cart', 'Wishlist', 'Product reviews', 'Discount codes', 'Order tracking', 'Admin panel'] }
+          ]
+        },
+        chat: {
+          title: '💬 Chat App Questions',
+          questions: [
+            { id: 'users', label: 'How many users will use it?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
+            { id: 'features', label: 'What features do you need?', type: 'checkbox', options: ['Group chat', 'File sharing', 'Video call', 'Voice notes', 'Screen sharing', 'Encryption'] }
+          ]
+        },
+        landing: {
+          title: '🎯 Landing Page Questions',
+          questions: [
+            { id: 'goal', label: 'What is the main goal?', type: 'select', options: ['Lead capture', 'Product launch', 'Event registration', 'Sales'] },
+            { id: 'design', label: 'What design style?', type: 'select', options: ['Minimalist', 'Bold', 'Professional', 'Creative'] }
+          ]
+        },
+        other: {
+          title: '💡 New Idea Questions',
+          questions: [
+            { id: 'idea', label: 'Tell me about your idea', type: 'textarea', placeholder: 'Describe your website idea in detail...' },
+            { id: 'goal', label: 'What is the main goal?', type: 'select', options: ['Personal project', 'Business', 'Community', 'Other'] },
+            { id: 'features', label: 'What features do you need?', type: 'textarea', placeholder: 'List all features you want...' }
+          ]
+        }
+      };
+
+      function renderQuestions(type) {
+        const container = document.getElementById('questionContainer');
+        const data = questionsData[type];
+        if (!data) { container.innerHTML = ''; return; }
+
+        let html = `<h4 style="margin-bottom:0.8rem;color:#0f2b4b;">${data.title}</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">`;
+
+        data.questions.forEach(q => {
+          html += `<div style="${q.type === 'textarea' ? 'grid-column:1/-1;' : ''}">`;
+          html += `<label style="font-weight:600;font-size:0.85rem;display:block;margin-bottom:0.2rem;color:#1e293b;">${q.label}</label>`;
+
+          if (q.type === 'select') {
+            html += `<select id="q_${q.id}" style="width:100%;padding:0.6rem 1rem;border-radius:40px;border:1px solid #e2e8f0;font-size:0.9rem;background:#f8fafc;">`;
+            html += `<option value="">Select...</option>`;
+            q.options.forEach(opt => {
+              html += `<option value="${opt}">${opt}</option>`;
+            });
+            html += `</select>`;
+          } else if (q.type === 'checkbox') {
+            html += `<div style="display:flex;flex-wrap:wrap;gap:0.5rem;padding-top:0.3rem;">`;
+            q.options.forEach(opt => {
+              html += `<label style="font-weight:400;font-size:0.85rem;display:flex;align-items:center;gap:0.3rem;">
+                <input type="checkbox" value="${opt}" style="width:16px;height:16px;"> ${opt}
+              </label>`;
+            });
+            html += `</div>`;
+          } else if (q.type === 'textarea') {
+            html += `<textarea id="q_${q.id}" placeholder="${q.placeholder || ''}" style="width:100%;padding:0.6rem 1rem;border-radius:1rem;border:1px solid #e2e8f0;font-size:0.9rem;background:#f8fafc;min-height:60px;"></textarea>`;
+          }
+
+          html += `</div>`;
+        });
+
+        html += `</div>`;
+        container.innerHTML = html;
+      }
+
+      document.getElementById('customType').addEventListener('change', function() {
+        renderQuestions(this.value);
+      });
+
+      // ─── OFFER SYSTEM ───
+      async function loadOfferStatus() {
+        try {
+          const { data, error } = await PX.supabaseClient
+            .from('offers')
+            .select('*')
+            .eq('offer_type', 'free_website')
+            .single();
+
+          if (error) throw error;
+
+          if (data) {
+            const claimedCount = data.claimed_by ? data.claimed_by.split(',').filter(Boolean).length : 0;
+            offerCount = claimedCount;
+            offerCountEl.textContent = `${claimedCount}/10`;
+            offerCountDisplay.textContent = `(${claimedCount}/10 claimed)`;
+
+            if (claimedCount >= 10) {
+              claimOfferBtn.disabled = true;
+              claimOfferBtn.textContent = '🎉 Offer Fully Claimed!';
+            }
+          }
+        } catch (e) {
+          console.log('Offer status check:', e);
+        }
+      }
+
+      async function claimOffer() {
+        const user = await PX.getCurrentUser();
+        if (!user) {
+          showToast('🔐 Please login first to claim offer');
+          setTimeout(() => window.location.href = 'login.html', 800);
+          return;
+        }
+
+        const email = user.email;
+
+        // Block specific emails
+        const blockedEmails = [
+          'faisalyousafyousaf3@gmail.com',
+          'noor@gmail.com'
+        ];
+
+        if (blockedEmails.includes(email.toLowerCase())) {
+          showToast('⚠️ This offer is not available for admin accounts');
+          return;
+        }
+
+        try {
+          const { data, error } = await PX.supabaseClient
+            .from('offers')
+            .select('*')
+            .eq('offer_type', 'free_website')
+            .single();
+
+          if (error) throw error;
+
+          if (!data || data.is_active === false) {
+            showToast('⚠️ This offer is no longer active');
+            return;
+          }
+
+          const claimedArray = data.claimed_by ? data.claimed_by.split(',').filter(Boolean) : [];
+          
+          if (claimedArray.includes(email)) {
+            showToast('⚠️ You have already claimed this offer!');
+            return;
+          }
+
+          if (claimedArray.length >= 10) {
+            showToast('🎉 Offer fully claimed! All 10 free websites are taken.');
+            claimOfferBtn.disabled = true;
+            claimOfferBtn.textContent = '🎉 Offer Fully Claimed!';
+            return;
+          }
+
+          claimedArray.push(email);
+          const newClaimedBy = claimedArray.join(',');
+
+          const { error: updateError } = await PX.supabaseClient
+            .from('offers')
+            .update({ 
+              claimed_by: newClaimedBy,
+              claimed_at: new Date().toISOString()
+            })
+            .eq('offer_type', 'free_website');
+
+          if (updateError) throw updateError;
+
+          showToast('🎉 Congratulations! You claimed a FREE website!');
+          loadOfferStatus();
+
+          // Create a free order
+          const orderData = {
+            name: '🎁 FREE WEBSITE (Offer)',
+            price: 0,
+            customer_email: email,
+            customer_name: user.user_metadata?.full_name || user.email,
+            payment_method: 'free',
+            payment_status: 'paid',
+            status: 'processing',
+            is_custom: false,
+            offer_claimed: true
+          };
+
+          await PX.createOrder(orderData);
+          showToast('✅ Free website order created! Check your email.');
+
+        } catch (e) {
+          console.error('Offer claim error:', e);
+          showToast('⚠️ Error claiming offer');
+        }
+      }
+
+      claimOfferBtn.addEventListener('click', claimOffer);
 
       // ─── PAYMENT ───
       window.selectPayment = function(method) {
@@ -473,7 +643,7 @@
         pendingOrder = orderData;
         paymentProductName.textContent = orderData.name || 'Web Package';
         paymentAmount.textContent = PX.formatPKR(orderData.price);
-        paymentType.textContent = isCustom ? 'Custom Web (Demo First)' : 'Pre-made Web';
+        paymentType.textContent = isCustom ? 'Custom Web' : 'Pre-made Web';
         paymentModal.classList.add('active');
         document.body.style.overflow = 'hidden';
       }
@@ -490,7 +660,6 @@
         if (e.target === this) closePaymentModalFn();
       });
 
-      // ─── CONFIRM PAYMENT ───
       document.getElementById('confirmPaymentBtn').addEventListener('click', async function() {
         if (!pendingOrder) return;
         if (!currentUser) {
@@ -503,33 +672,42 @@
         this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
 
         try {
-          // Create order in Supabase with PAID status
           const orderData = {
             name: pendingOrder.name,
             price: pendingOrder.price,
             customer_email: pendingOrder.customer_email || currentUser.email,
             customer_name: pendingOrder.customer_name || currentUser.user_metadata?.full_name || currentUser.email,
             payment_method: selectedPayment,
-            payment_status: 'paid',  // ✅ PAID
+            payment_status: 'paid',
             status: pendingOrder.isCustom ? 'demo_ready' : 'confirmed',
             custom_details: pendingOrder.custom_details || '',
             custom_type: pendingOrder.custom_type || '',
             custom_budget: pendingOrder.custom_budget || '',
-            is_custom: pendingOrder.isCustom || false
+            is_custom: pendingOrder.isCustom || false,
+            order_type: pendingOrder.isCustom ? 'custom' : 'premade',
+            website_goal: pendingOrder.website_goal || '',
+            target_audience: pendingOrder.target_audience || '',
+            design_preference: pendingOrder.design_preference || '',
+            pages_needed: pendingOrder.pages_needed || '',
+            features_needed: pendingOrder.features_needed || '',
+            color_scheme: pendingOrder.color_scheme || '',
+            content_ready: pendingOrder.content_ready || '',
+            deadline: pendingOrder.deadline || '',
+            additional_notes: pendingOrder.additional_notes || ''
           };
 
           const result = await PX.createOrder(orderData);
-          console.log('✅ Order created with payment:', result);
+          console.log('✅ Order created:', result);
 
-          let successMsg = `✅ Payment Successful!\n\nOrder: ${pendingOrder.name}\nAmount: ${PX.formatPKR(pendingOrder.price)}\nMethod: ${selectedPayment === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}\n\n`;
+          let successMsg = `✅ Order Confirmed!\n\nOrder: ${pendingOrder.name}\nAmount: ${PX.formatPKR(pendingOrder.price)}\nMethod: ${selectedPayment === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}\n\n`;
+          successMsg += `📌 Send payment screenshot on WhatsApp: 0332-7240800\n`;
           if (pendingOrder.isCustom) {
-            successMsg += `📌 You'll receive a demo within 48 hours. After approval, you'll get full ownership.`;
+            successMsg += `I'll start working on your custom website after payment confirmation.`;
           } else {
-            successMsg += `📌 You'll get access to your website immediately. Check your email.`;
+            successMsg += `You'll get access to your website after payment confirmation.`;
           }
           alert(successMsg);
 
-          // Clear cart if pre-made
           if (!pendingOrder.isCustom) {
             cart = [];
             localStorage.setItem('pixlnex_cart', JSON.stringify(cart));
@@ -772,7 +950,6 @@
         checkoutBtn.disabled = cart.length === 0;
       }
 
-      // ─── CHECKOUT ───
       checkoutBtn.addEventListener('click', async function() {
         if (cart.length === 0) return;
         currentUser = await PX.getCurrentUser();
@@ -807,36 +984,62 @@
         const budget = document.getElementById('customBudget').value;
         const details = document.getElementById('customDetails').value.trim();
 
-        if (!name || !email || !details) {
+        if (!name || !email || !type) {
           showToast('⚠️ Please fill in all required fields');
           return;
         }
+
+        // Collect dynamic question answers
+        const questionData = {};
+        const container = document.getElementById('questionContainer');
+        const inputs = container.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+          if (input.type === 'checkbox') {
+            if (input.checked) {
+              const key = input.name || input.id;
+              if (!questionData[key]) questionData[key] = [];
+              questionData[key].push(input.value);
+            }
+          } else if (input.value) {
+            questionData[input.id] = input.value;
+          }
+        });
 
         const typeLabels = {
           'portfolio': 'Portfolio',
           'business': 'Business',
           'ecommerce': 'E‑commerce',
           'blog': 'Blog',
-          'chat': 'Encrypted Chat App',
+          'chat': 'Chat App',
           'landing': 'Landing Page',
           'other': 'Other'
         };
 
-        const budgetAmount = budget === '200000+' ? 200000 : parseInt(budget.split('-')[0]) || 50000;
+        const budgetAmount = parseInt(budget.split('-')[0]) || 5000;
 
         const orderData = {
           name: `Custom: ${typeLabels[type] || type}`,
           price: budgetAmount,
           customer_email: email,
           customer_name: name,
-          custom_details: details,
+          custom_details: details || '',
           custom_type: typeLabels[type] || type,
           custom_budget: budget,
-          isCustom: true
+          isCustom: true,
+          website_goal: questionData.q_goal || '',
+          target_audience: questionData.q_audience || '',
+          design_preference: questionData.q_design || '',
+          pages_needed: questionData.q_pages || '',
+          features_needed: questionData.q_features || '',
+          color_scheme: questionData.q_color || '',
+          content_ready: questionData.q_content || '',
+          deadline: questionData.q_deadline || '',
+          additional_notes: questionData.q_notes || ''
         };
 
         openPaymentModal(orderData, true);
         this.reset();
+        document.getElementById('questionContainer').innerHTML = '';
       });
 
       // ─── NAV ───
@@ -845,7 +1048,6 @@
         document.getElementById('homeSection').classList.add('hidden');
         document.getElementById('productSection').classList.add('hidden');
         document.getElementById('customOrder').classList.add('hidden');
-        // Create about section if needed
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
 
@@ -856,6 +1058,8 @@
         await updateAuthUI();
         await renderProducts();
         updateCartUI();
+        await loadOfferStatus();
+        renderQuestions('portfolio');
         console.log('✅ Pixlnex initialized successfully!');
       }
 
