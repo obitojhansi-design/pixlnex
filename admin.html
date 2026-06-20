@@ -25,6 +25,7 @@
     .auth-btn:hover { background: #1a3a5e; transform: scale(1.02); }
     .auth-btn.logout { background: #eef2f6; color: #1e293b !important; }
     .auth-btn.logout:hover { background: #fee2e2; color: #b91c1c !important; }
+
     .admin-header { background: linear-gradient(145deg, #0f2b4b, #1a3a5e); padding: 2.5rem 2.8rem; border-radius: 2.5rem; margin-bottom: 2.8rem; color: white; box-shadow: 0 8px 25px rgba(15,43,75,0.3); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; }
     .admin-header h1 { font-size: 2.2rem; font-weight: 700; }
     .admin-header p { opacity: 0.8; margin-top: 0.3rem; }
@@ -33,6 +34,7 @@
     .supabase-status { display: inline-block; padding: 0.2rem 0.8rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600; }
     .supabase-status.connected { background: #dcfce7; color: #166534; }
     .supabase-status.disconnected { background: #fee2e2; color: #b91c1c; }
+
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
     .stat-card { background: white; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #e9eef3; box-shadow: 0 4px 12px rgba(0,0,0,0.02); transition: 0.2s; }
     .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.04); }
@@ -43,22 +45,30 @@
     .stat-card .stat-icon.orange { background: #f59e0b10; color: #f59e0b; }
     .stat-card .stat-number { font-size: 2rem; font-weight: 700; color: #0b1a2e; }
     .stat-card .stat-label { color: #64748b; font-size: 0.9rem; }
+
     .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
     .admin-card { background: white; border-radius: 2rem; padding: 1.8rem 2.2rem; border: 1px solid #e9eef3; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
     .admin-card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
     .admin-card h3 i { color: #2563eb; }
     .admin-card h3 .badge-count { background: #eef2f6; padding: 0.1rem 0.7rem; border-radius: 40px; font-size: 0.75rem; color: #64748b; font-weight: 500; }
-    .admin-order-item { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
+
+    /* ─── ORDER DETAILS ─── */
+    .admin-order-item { display: flex; flex-direction: column; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
     .admin-order-item:last-child { border-bottom: none; }
+    .admin-order-item .order-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
     .admin-order-item .order-info { display: flex; flex-direction: column; gap: 0.1rem; }
     .admin-order-item .order-info .order-name { font-weight: 600; font-size: 0.95rem; }
-    .admin-order-item .order-info .order-meta { font-size: 0.8rem; color: #94a3b8; }
+    .admin-order-item .order-info .order-meta { font-size: 0.75rem; color: #94a3b8; }
+    .admin-order-item .order-info .order-custom-details { font-size: 0.8rem; color: #475569; background: #f8fafc; padding: 0.5rem 0.8rem; border-radius: 0.5rem; margin-top: 0.3rem; border-left: 3px solid #2563eb; width: 100%; }
+    .admin-order-item .order-info .order-custom-details strong { color: #0f2b4b; }
     .admin-order-item .order-status-select { padding: 0.2rem 0.8rem; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.75rem; font-weight: 600; background: white; cursor: pointer; transition: 0.2s; }
     .admin-order-item .order-status-select:focus { outline: none; border-color: #2563eb; }
     .admin-order-item .order-status-select.status-processing { background: #e0f2fe; color: #0369a1; border-color: #b8d4f0; }
     .admin-order-item .order-status-select.status-shipped { background: #fef9c3; color: #854d0e; border-color: #f5e28a; }
     .admin-order-item .order-status-select.status-delivered { background: #dcfce7; color: #166534; border-color: #a8d5b5; }
     .admin-order-item .order-price { font-weight: 700; color: #0f2b4b; font-size: 0.95rem; }
+    .custom-badge { font-size: 0.65rem; background: #7c3aed10; color: #7c3aed; padding: 0.15rem 0.5rem; border-radius: 30px; border: 1px solid #7c3aed20; }
+
     .admin-product-item { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
     .admin-product-item:last-child { border-bottom: none; }
     .admin-product-item .product-info { display: flex; align-items: center; gap: 1rem; flex: 1; }
@@ -71,10 +81,15 @@
     .admin-product-item .product-actions button { background: none; border: none; color: #94a3b8; cursor: pointer; transition: 0.15s; font-size: 0.9rem; padding: 0.2rem 0.5rem; border-radius: 20px; }
     .admin-product-item .product-actions button:hover { background: #eef2f6; color: #0f2b4b; }
     .admin-product-item .product-actions button.delete:hover { background: #fee2e2; color: #b91c1c; }
+
     .add-product-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
     .add-product-form input, .add-product-form select { padding: 0.6rem 1rem; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.9rem; background: #f8fafc; transition: 0.2s; }
     .add-product-form input:focus, .add-product-form select:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); background: white; }
     .add-product-form .full { grid-column: 1 / -1; }
+    .add-product-btn { background: #0f2b4b; color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
+    .add-product-btn:hover { background: #1a3a5e; transform: scale(1.02); }
+    .add-product-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
     .image-upload-wrapper { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center; padding: 0.5rem; background: #f8fafc; border-radius: 1rem; border: 1px dashed #dce3ec; }
     .image-upload-wrapper .image-preview-item { width: 70px; height: 70px; border-radius: 10px; object-fit: cover; border: 1px solid #e9eef3; background: white; position: relative; }
     .image-upload-wrapper .image-preview-item .remove-img { position: absolute; top: -6px; right: -6px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 0.6rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
@@ -83,9 +98,6 @@
     .image-upload-wrapper input[type="file"]::-webkit-file-upload-button { background: #eef2f6; border: none; padding: 0.3rem 1rem; border-radius: 30px; font-weight: 600; font-size: 0.8rem; cursor: pointer; transition: 0.2s; }
     .image-upload-wrapper input[type="file"]::-webkit-file-upload-button:hover { background: #2563eb; color: white; }
     .image-upload-wrapper .image-count { font-size: 0.75rem; color: #64748b; margin-left: auto; }
-    .add-product-btn { background: #0f2b4b; color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
-    .add-product-btn:hover { background: #1a3a5e; transform: scale(1.02); }
-    .add-product-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
     .login-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,43,75,0.95); display: flex; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(8px); transition: opacity 0.4s ease; }
     .login-overlay.hidden { opacity: 0; pointer-events: none; }
@@ -120,13 +132,12 @@
     .toast.show { transform: translateY(0); opacity: 1; }
     .toast i { color: #22c55e; font-size: 1.2rem; }
 
-    /* Deal Banner */
     .deal-banner { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 0.8rem 1.5rem; border-radius: 1rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; font-weight: 600; }
     .deal-banner i { font-size: 1.5rem; }
     .deal-banner .deal-tag { background: rgba(255,255,255,0.2); padding: 0.2rem 0.8rem; border-radius: 30px; font-size: 0.7rem; }
 
-    @media (max-width: 900px) { .admin-grid { grid-template-columns: 1fr; } .admin-header { flex-direction: column; align-items: flex-start; gap: 1rem; } .stats-grid { grid-template-columns: 1fr 1fr; } .add-product-form { grid-template-columns: 1fr; } .add-product-form .full { grid-column: 1; } .login-box { padding: 2rem 1.5rem; margin: 1rem; } .admin-product-item { flex-wrap: wrap; gap: 0.5rem; } }
-    @media (max-width: 700px) { .app { padding: 1rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .admin-header { padding: 1.5rem; } .admin-header h1 { font-size: 1.6rem; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; } .stat-card { padding: 1rem; } .stat-card .stat-number { font-size: 1.5rem; } .admin-card { padding: 1.2rem 1.5rem; } .image-upload-wrapper { flex-direction: column; align-items: stretch; } }
+    @media (max-width: 900px) { .admin-grid { grid-template-columns: 1fr; } .admin-header { flex-direction: column; align-items: flex-start; gap: 1rem; } .stats-grid { grid-template-columns: 1fr 1fr; } .add-product-form { grid-template-columns: 1fr; } .add-product-form .full { grid-column: 1; } .login-box { padding: 2rem 1.5rem; margin: 1rem; } }
+    @media (max-width: 700px) { .app { padding: 1rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .admin-header { padding: 1.5rem; } .admin-header h1 { font-size: 1.6rem; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; } .stat-card { padding: 1rem; } .stat-card .stat-number { font-size: 1.5rem; } .admin-card { padding: 1.2rem 1.5rem; } .admin-order-item .order-row { flex-direction: column; align-items: stretch; } }
   </style>
 </head>
 <body>
@@ -147,7 +158,6 @@
 
     <div id="adminContent">
 
-      <!-- Deal Banner -->
       <div class="deal-banner">
         <i class="fas fa-fire"></i>
         <span>🔥 New: Encrypted Chat App Website Deal! Get 25% off on all Chat App packages this week!</span>
@@ -204,7 +214,6 @@
             <div style="color:#94a3b8;text-align:center;padding:1rem 0;">Loading products...</div>
           </div>
 
-          <!-- Add Product -->
           <div class="add-product-form" id="addProductForm">
             <input type="text" id="newProductName" placeholder="Product name" />
             <input type="text" id="newProductDesc" placeholder="Description" />
@@ -218,9 +227,7 @@
               <option value="landing">Landing Page</option>
               <option value="custom">Custom</option>
             </select>
-            <div class="full">
-              <input type="text" id="newProductFeatures" placeholder="Features (comma separated)" />
-            </div>
+            <div class="full"><input type="text" id="newProductFeatures" placeholder="Features (comma separated)" /></div>
             <div class="full">
               <label style="font-weight:600;font-size:0.9rem;color:#1e293b;margin-bottom:0.3rem;display:block;">
                 <i class="fas fa-images"></i> Screenshots (Max 5)
@@ -285,7 +292,6 @@
     let uploadedImages = [];
     const MAX_IMAGES = 5;
 
-    // ─── ADMIN CREDENTIALS ───
     const ADMIN_EMAIL = 'faisalyousafyousaf3@gmail.com';
     const ADMIN_PASSWORD = "Obito's@wifu#akary'143";
 
@@ -300,7 +306,6 @@
       toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // ─── FORMAT PKR ───
     function formatPKR(amount) {
       return '₨ ' + (amount || 0).toLocaleString('en-PK');
     }
@@ -344,7 +349,6 @@
     function loginAdmin(email, password) {
       const trimmedEmail = email.trim();
       const trimmedPassword = password.trim();
-
       if (trimmedEmail === ADMIN_EMAIL && trimmedPassword === ADMIN_PASSWORD) {
         localStorage.setItem('pixlnex_admin_session', 'true');
         document.getElementById('loginOverlay').classList.add('hidden');
@@ -363,7 +367,6 @@
       location.reload();
     }
 
-    // ─── LOGIN FORM ───
     document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const email = document.getElementById('adminEmail').value;
@@ -372,7 +375,6 @@
       const loginBtn = document.getElementById('loginBtn');
 
       errorMsg.classList.remove('show');
-
       if (!email || !password) {
         errorMsg.textContent = '⚠️ Please enter both email and password.';
         errorMsg.classList.add('show');
@@ -398,7 +400,7 @@
       }, 600);
     });
 
-    // ─── IMAGE UPLOAD HANDLING ───
+    // ─── IMAGE UPLOAD ───
     const imageInput = document.getElementById('newProductImage');
     const imagePreviewContainer = document.getElementById('imagePreviewContainer');
     const imagePreviewPlaceholder = document.getElementById('imagePreviewPlaceholder');
@@ -442,7 +444,7 @@
       renderImagePreviews();
     }
 
-    // ─── UPLOAD IMAGES TO SUPABASE ───
+    // ─── UPLOAD IMAGES ───
     async function uploadImagesToSupabase(files) {
       if (!supabaseConnected || !supabaseClient) throw new Error('Supabase not connected');
       const urls = [];
@@ -468,7 +470,6 @@
       try {
         console.log('📦 Loading admin data...');
 
-        // ─── LOAD ORDERS ───
         const { data: ordersData, error: ordersError } = await supabaseClient
           .from('orders')
           .select('*')
@@ -478,7 +479,6 @@
         const orders = ordersData || [];
         console.log('✅ Orders loaded:', orders.length);
 
-        // ─── LOAD PRODUCTS ───
         const { data: productsData, error: productsError } = await supabaseClient
           .from('products')
           .select('*')
@@ -499,7 +499,7 @@
         document.getElementById('totalCustomers').textContent = customers || 0;
         document.getElementById('pendingOrders').textContent = pending;
 
-        // ─── RENDER ORDERS ───
+        // ─── RENDER ORDERS WITH DETAILS ───
         const orderList = document.getElementById('orderList');
         const orderCountBadge = document.getElementById('orderCountBadge');
 
@@ -513,24 +513,48 @@
             const div = document.createElement('div');
             div.className = 'admin-order-item';
             const statusClass = order.status || 'processing';
+
+            // Check if this is a custom order
+            const isCustom = order.name && order.name.toLowerCase().includes('custom');
+            const customDetails = order.custom_details || '';
+            const customType = order.custom_type || '';
+            const customBudget = order.custom_budget || '';
+
             div.innerHTML = `
-              <div class="order-info">
-                <span class="order-name">${order.name}</span>
-                <span class="order-meta">${order.order_id || '#ORD-' + (orders.length - index)} · ${order.created_at ? new Date(order.created_at).toLocaleDateString() : 'N/A'} · ${order.customer_email || 'guest'}</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;">
-                <select class="order-status-select status-${statusClass}" data-order-id="${order.id || index}">
-                  <option value="processing" ${statusClass === 'processing' ? 'selected' : ''}>⏳ Processing</option>
-                  <option value="shipped" ${statusClass === 'shipped' ? 'selected' : ''}>📦 Shipped</option>
-                  <option value="delivered" ${statusClass === 'delivered' ? 'selected' : ''}>✅ Delivered</option>
-                </select>
-                <span class="order-price">${formatPKR(order.price)}</span>
+              <div class="order-row">
+                <div class="order-info">
+                  <span class="order-name">
+                    ${order.name}
+                    ${isCustom ? '<span class="custom-badge">🎨 Custom</span>' : ''}
+                  </span>
+                  <span class="order-meta">
+                    ${order.order_id || '#ORD-' + (orders.length - index)} · 
+                    ${order.created_at ? new Date(order.created_at).toLocaleDateString() : 'N/A'} · 
+                    ${order.customer_email || 'guest'}
+                    ${order.customer_name ? ' (' + order.customer_name + ')' : ''}
+                  </span>
+                  ${isCustom ? `
+                    <div class="order-custom-details">
+                      <strong>📋 Project Details:</strong><br />
+                      ${customType ? '<strong>Type:</strong> ' + customType + ' | ' : ''}
+                      ${customBudget ? '<strong>Budget:</strong> ' + customBudget : ''}
+                      <br /><strong>Description:</strong> ${customDetails || 'No details provided'}
+                    </div>
+                  ` : ''}
+                </div>
+                <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;">
+                  <select class="order-status-select status-${statusClass}" data-order-id="${order.id || index}">
+                    <option value="processing" ${statusClass === 'processing' ? 'selected' : ''}>⏳ Processing</option>
+                    <option value="shipped" ${statusClass === 'shipped' ? 'selected' : ''}>📦 Shipped</option>
+                    <option value="delivered" ${statusClass === 'delivered' ? 'selected' : ''}>✅ Delivered</option>
+                  </select>
+                  <span class="order-price">${formatPKR(order.price)}</span>
+                </div>
               </div>
             `;
             orderList.appendChild(div);
           });
 
-          // Order status change listeners
           document.querySelectorAll('.order-status-select').forEach(select => {
             select.addEventListener('change', async function() {
               const orderId = this.dataset.orderId;
@@ -566,7 +590,6 @@
       }
     }
 
-    // ─── RENDER PRODUCTS LIST ───
     function renderProductsList(products) {
       const productList = document.getElementById('productList');
       const productCountBadge = document.getElementById('productCountBadge');
@@ -610,7 +633,6 @@
         productList.appendChild(div);
       });
 
-      // Delete product
       document.querySelectorAll('.delete-product').forEach(btn => {
         btn.addEventListener('click', async function() {
           const idx = parseInt(this.dataset.index);
@@ -633,7 +655,6 @@
         });
       });
 
-      // Edit product price
       document.querySelectorAll('.edit-product').forEach(btn => {
         btn.addEventListener('click', function() {
           const idx = parseInt(this.dataset.index);
@@ -703,11 +724,9 @@
 
         if (error) throw error;
 
-        // Reload products
         const { data: productsData } = await supabaseClient.from('products').select('*').order('created_at', { ascending: true });
         renderProductsList(productsData || []);
 
-        // Clear form
         document.getElementById('newProductName').value = '';
         document.getElementById('newProductDesc').value = '';
         document.getElementById('newProductPrice').value = '';
