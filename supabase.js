@@ -1,5 +1,6 @@
-// supabase.js - Complete Pixlnex Supabase Configuration
+// supabase.js - Pixlnex Complete Configuration
 
+// ─── SUPABASE CREDENTIALS ───
 const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
 const SUPABASE_BUCKET = 'product-images';
@@ -9,6 +10,7 @@ let supabaseConnected = false;
 
 console.log('🚀 supabase.js loading...');
 
+// ─── INIT SUPABASE ───
 function initSupabase() {
   try {
     if (typeof supabase !== 'undefined') {
@@ -62,6 +64,7 @@ async function signOutUser() {
 // ─── PRODUCT FUNCTIONS ───
 async function getProducts() {
   if (!supabaseConnected || !supabaseClient) {
+    console.warn('⚠️ Supabase not connected, returning empty array');
     return [];
   }
   try {
@@ -70,6 +73,7 @@ async function getProducts() {
       .select('*')
       .order('created_at', { ascending: true });
     if (error) throw error;
+    console.log('✅ Products fetched:', data?.length || 0);
     return data || [];
   } catch (e) {
     console.error('Products error:', e);
@@ -190,7 +194,7 @@ window.Pixlnex = {
 
 console.log('📦 Pixlnex supabase.js loaded!');
 
-// Auto-init
+// Auto-init when DOM is ready
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
   initSupabase();
 } else {
