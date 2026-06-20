@@ -3,62 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Pixlnex - Custom websites built for you. Professional web development services including portfolio, business, e-commerce, and encrypted chat apps." />
-  <meta name="theme-color" content="#0f2b4b" />
   <title>Pixlnex · Custom Websites</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    /* ─── RESET & BASE ─── */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
     body { background: #f8fafc; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
     .app { max-width: 1300px; margin: 0 auto; padding: 1.5rem 2rem; flex: 1; width: 100%; }
 
-    /* ─── WHATSAPP BUTTON ─── */
+    /* ─── WHATSAPP ─── */
     .whatsapp-float {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 999;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #25D366;
-      color: white;
-      padding: 12px 20px 12px 16px;
-      border-radius: 50px;
-      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: 0.3s;
-      border: none;
-      cursor: pointer;
+      position: fixed; bottom: 24px; right: 24px; z-index: 999;
+      display: flex; align-items: center; gap: 12px;
+      background: #25D366; color: white; padding: 12px 20px 12px 16px;
+      border-radius: 50px; box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+      text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: 0.3s;
     }
-    .whatsapp-float:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 30px rgba(37, 211, 102, 0.5);
-    }
+    .whatsapp-float:hover { transform: scale(1.05); }
     .whatsapp-float i { font-size: 1.8rem; }
-    .whatsapp-float .wa-text { display: inline-block; }
-    @media (max-width: 600px) {
-      .whatsapp-float { padding: 10px 14px; font-size: 0.8rem; }
-      .whatsapp-float .wa-text { display: none; }
-      .whatsapp-float i { font-size: 1.5rem; }
-    }
+    @media (max-width:600px) { .whatsapp-float .wa-text { display: none; } }
 
     /* ─── NAVBAR ─── */
     .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; padding: 0.75rem 0 1.5rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem; }
-    .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; letter-spacing: -0.5px; text-decoration: none; }
+    .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; text-decoration: none; }
     .logo i { color: #2563eb; font-size: 2rem; }
     .nav-links { display: flex; align-items: center; gap: 2rem; font-weight: 500; flex-wrap: wrap; }
     .nav-links a { text-decoration: none; color: #1e293b; font-size: 1rem; transition: color 0.2s; cursor: pointer; }
     .nav-links a:hover, .nav-links a.active { color: #2563eb; }
-    .nav-links a.active { font-weight: 600; }
     .auth-btn { background: #0f2b4b; color: white !important; padding: 0.5rem 1.2rem; border-radius: 40px; font-weight: 600; transition: 0.2s; }
-    .auth-btn:hover { background: #1a3a5e; transform: scale(1.02); }
+    .auth-btn:hover { background: #1a3a5e; }
     .auth-btn.logout { background: #eef2f6; color: #1e293b !important; }
     .auth-btn.logout:hover { background: #fee2e2; color: #b91c1c !important; }
     .cart-icon { font-size: 1.4rem; background: #eef2f6; padding: 0.5rem 0.9rem; border-radius: 40px; display: flex; align-items: center; gap: 0.4rem; text-decoration: none; color: #0b1a2e; }
@@ -70,40 +42,45 @@
     .hero-text h1 span { background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .hero-text .tagline { display: inline-block; background: #2563eb10; color: #2563eb; padding: 0.25rem 1.2rem; border-radius: 40px; font-weight: 600; font-size: 0.85rem; border: 1px solid #2563eb20; margin-bottom: 0.5rem; }
     .hero-text p { font-size: 1.1rem; color: #334155; max-width: 480px; margin: 0.8rem 0 1.5rem 0; }
-    .btn-primary { background: #0f2b4b; border: none; color: white; padding: 0.85rem 2.2rem; border-radius: 60px; font-weight: 600; font-size: 1rem; display: inline-flex; align-items: center; gap: 0.7rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 8px rgba(37,99,235,0.2); text-decoration: none; }
+    .btn-primary { background: #0f2b4b; border: none; color: white; padding: 0.85rem 2.2rem; border-radius: 60px; font-weight: 600; font-size: 1rem; display: inline-flex; align-items: center; gap: 0.7rem; cursor: pointer; transition: 0.2s; text-decoration: none; }
     .btn-primary:hover { background: #1a3a5e; transform: scale(1.02); }
     .hero-badge { background: white; padding: 0.6rem 1.5rem; border-radius: 60px; display: inline-flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
     .hero-badge i { color: #2563eb; }
 
-    /* ─── SECTION TITLE ─── */
-    .section-title { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin: 2.8rem 0 1.8rem 0; }
-    .section-title h2 { font-size: 1.9rem; font-weight: 650; letter-spacing: -0.3px; }
-    .section-title a { color: #2563eb; text-decoration: none; font-weight: 500; cursor: pointer; }
+    /* ─── WHY CHOOSE US ─── */
+    .why-section { background: white; border-radius: 2rem; padding: 3rem; margin: 2.5rem 0; border: 1px solid #e9eef3; }
+    .why-section .section-header { text-align: center; margin-bottom: 2.5rem; }
+    .why-section .section-header h2 { font-size: 2.2rem; font-weight: 700; }
+    .why-section .section-header p { color: #64748b; max-width: 600px; margin: 0.5rem auto 0; }
+    .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
+    .why-card { text-align: center; padding: 1.5rem; border-radius: 1.5rem; background: #f8fafc; border: 1px solid #edf2f7; transition: 0.3s; }
+    .why-card:hover { transform: translateY(-4px); border-color: #2563eb; }
+    .why-card .icon { width: 60px; height: 60px; border-radius: 50%; background: #2563eb10; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.8rem; color: #2563eb; }
+    .why-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .why-card p { font-size: 0.9rem; color: #64748b; }
 
-    /* ─── PORTFOLIO SECTION ─── */
-    .portfolio-section { background: white; border-radius: 2rem; padding: 2.5rem 3rem; margin: 3rem 0; border: 1px solid #e9eef3; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
-    .portfolio-section .section-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 2rem; }
-    .portfolio-section .section-header h2 { font-size: 2rem; font-weight: 700; }
-    .portfolio-section .section-header p { color: #64748b; max-width: 500px; }
-    .portfolio-filters { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 2rem; }
-    .portfolio-filters button { padding: 0.4rem 1.2rem; border-radius: 40px; border: 1px solid #e2e8f0; background: white; font-weight: 500; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
-    .portfolio-filters button:hover { border-color: #2563eb; color: #2563eb; }
-    .portfolio-filters button.active { background: #2563eb; color: white; border-color: #2563eb; }
-    .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
-    .portfolio-item { border-radius: 1.5rem; overflow: hidden; border: 1px solid #edf2f7; transition: 0.3s; background: white; }
-    .portfolio-item:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.06); border-color: #d9e2ef; }
-    .portfolio-item .portfolio-image { height: 220px; background: #f1f6fc; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; color: #2563eb; overflow: hidden; position: relative; }
-    .portfolio-item .portfolio-image img { width: 100%; height: 100%; object-fit: cover; }
-    .portfolio-item .portfolio-image .overlay { position: absolute; inset: 0; background: rgba(15,43,75,0.85); display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; gap: 1rem; }
-    .portfolio-item:hover .portfolio-image .overlay { opacity: 1; }
-    .portfolio-item .portfolio-image .overlay a { color: white; width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.2s; border: 1px solid rgba(255,255,255,0.2); }
-    .portfolio-item .portfolio-image .overlay a:hover { background: #2563eb; transform: scale(1.1); }
-    .portfolio-item .portfolio-content { padding: 1.5rem; }
-    .portfolio-item .portfolio-content .category-tag { font-size: 0.7rem; color: #2563eb; background: #2563eb10; padding: 0.15rem 0.7rem; border-radius: 30px; display: inline-block; border: 1px solid #2563eb20; }
-    .portfolio-item .portfolio-content h3 { font-size: 1.1rem; margin: 0.5rem 0 0.3rem; font-weight: 600; }
-    .portfolio-item .portfolio-content p { color: #64748b; font-size: 0.9rem; }
+    /* ─── WHAT WE BUILD ─── */
+    .build-section { background: white; border-radius: 2rem; padding: 3rem; margin: 2.5rem 0; border: 1px solid #e9eef3; }
+    .build-section .section-header { text-align: center; margin-bottom: 2.5rem; }
+    .build-section .section-header h2 { font-size: 2.2rem; font-weight: 700; }
+    .build-section .section-header p { color: #64748b; max-width: 600px; margin: 0.5rem auto 0; }
+    .build-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+    .build-card { padding: 2rem; border-radius: 1.5rem; background: #f8fafc; border: 1px solid #edf2f7; transition: 0.3s; text-align: center; }
+    .build-card:hover { transform: translateY(-4px); border-color: #2563eb; }
+    .build-card .icon { font-size: 2.5rem; color: #2563eb; margin-bottom: 0.8rem; }
+    .build-card h3 { font-size: 1.1rem; font-weight: 600; }
+    .build-card p { font-size: 0.9rem; color: #64748b; margin-top: 0.3rem; }
+
+    /* ─── STATS ─── */
+    .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin: 2.5rem 0; text-align: center; }
+    .stats-bar .stat-item { background: white; padding: 1.5rem; border-radius: 1.5rem; border: 1px solid #e9eef3; }
+    .stats-bar .stat-item .number { font-size: 2.5rem; font-weight: 700; color: #2563eb; }
+    .stats-bar .stat-item .label { color: #64748b; font-size: 0.9rem; }
 
     /* ─── PRODUCT GRID ─── */
+    .section-title { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin: 2.8rem 0 1.8rem 0; }
+    .section-title h2 { font-size: 1.9rem; font-weight: 650; }
+    .section-title a { color: #2563eb; text-decoration: none; font-weight: 500; cursor: pointer; }
     .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
     .product-card { background: white; border-radius: 1.8rem; padding: 1.8rem 1.8rem 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02); transition: all 0.25s ease; border: 1px solid #edf2f7; display: flex; flex-direction: column; }
     .product-card:hover { transform: translateY(-6px); box-shadow: 0 18px 30px -8px rgba(0,20,40,0.08); border-color: #d9e2ef; }
@@ -123,20 +100,6 @@
     .product-img .carousel-dots .dot.active { background: white; transform: scale(1.2); }
     .product-img .image-count-badge { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); color: white; font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 30px; z-index: 10; }
 
-    /* ─── LIGHTBOX ─── */
-    .lightbox-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.92); z-index: 99999; display: none; align-items: center; justify-content: center; padding: 2rem; }
-    .lightbox-overlay.active { display: flex; }
-    .lightbox-overlay .close-lightbox { position: absolute; top: 20px; right: 30px; color: white; font-size: 2.5rem; cursor: pointer; z-index: 100000; transition: 0.2s; background: none; border: none; padding: 10px; min-width: 44px; min-height: 44px; }
-    .lightbox-overlay .close-lightbox:hover { transform: scale(1.2); color: #ef4444; }
-    .lightbox-overlay .lightbox-container { width: 100%; max-width: 1200px; max-height: 85vh; position: relative; display: flex; align-items: center; justify-content: center; }
-    .lightbox-overlay .lightbox-container img { max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 0.5rem; }
-    .lightbox-overlay .lightbox-counter { position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.7); font-size: 0.9rem; }
-    .lightbox-overlay .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 1.5rem; z-index: 10; transition: 0.2s; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); min-width: 44px; min-height: 44px; }
-    .lightbox-overlay .lightbox-nav:hover { background: rgba(255,255,255,0.3); transform: translateY(-50%) scale(1.1); }
-    .lightbox-overlay .lightbox-nav.prev { left: 20px; }
-    .lightbox-overlay .lightbox-nav.next { right: 20px; }
-    .lightbox-overlay .lightbox-nav.hidden { display: none; }
-
     .product-card h3 { font-weight: 600; font-size: 1.25rem; margin-bottom: 0.2rem; }
     .product-desc { color: #475569; font-size: 0.9rem; margin: 0.25rem 0 0.7rem 0; flex: 1; }
     .product-features { font-size: 0.85rem; color: #475569; margin: 0.5rem 0 0.8rem 0; padding-left: 1.2rem; }
@@ -144,15 +107,63 @@
     .product-features li i { color: #22c55e; margin-right: 0.4rem; font-size: 0.7rem; }
     .category-badge { font-size: 0.75rem; color: #2563eb; background: #2563eb10; padding: 0.2rem 0.8rem; border-radius: 30px; display: inline-block; margin-bottom: 0.5rem; border: 1px solid #2563eb20; }
     .product-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 0.6rem; flex-wrap: wrap; gap: 0.5rem; }
-    .price { font-weight: 700; font-size: 1.4rem; letter-spacing: -0.3px; color: #0b1a2e; }
+    .price { font-weight: 700; font-size: 1.4rem; color: #0b1a2e; }
     .btn-group { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .btn-add { background: #eef2f6; border: none; border-radius: 40px; padding: 0.5rem 1.2rem; font-weight: 600; color: #0f2b4b; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; transition: 0.15s; font-size: 0.85rem; }
     .btn-add:hover { background: #2563eb; color: white; }
     .btn-order { background: #0f2b4b; border: none; border-radius: 40px; padding: 0.5rem 1.2rem; font-weight: 600; color: white; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; transition: 0.15s; font-size: 0.85rem; }
     .btn-order:hover { background: #1a3a5e; transform: scale(1.02); }
 
+    /* ─── PAYMENT MODAL ─── */
+    .payment-modal {
+      display: none;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+      z-index: 99999; align-items: center; justify-content: center; padding: 1.5rem;
+    }
+    .payment-modal.active { display: flex; }
+    .payment-modal .modal-content {
+      background: white; border-radius: 2rem; max-width: 520px; width: 100%;
+      padding: 2.5rem; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .payment-modal .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .payment-modal .modal-header h2 { font-size: 1.5rem; font-weight: 700; }
+    .payment-modal .modal-header .close-modal { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #94a3b8; transition: 0.2s; padding: 0.25rem; min-width: 44px; min-height: 44px; }
+    .payment-modal .modal-header .close-modal:hover { color: #0b1a2e; }
+    .payment-modal .payment-methods { display: flex; flex-direction: column; gap: 1rem; margin: 1.5rem 0; }
+    .payment-modal .payment-methods .method { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.2rem; border-radius: 1rem; border: 2px solid #e2e8f0; cursor: pointer; transition: 0.2s; background: white; }
+    .payment-modal .payment-methods .method:hover { border-color: #2563eb; }
+    .payment-modal .payment-methods .method.selected { border-color: #2563eb; background: #2563eb08; }
+    .payment-modal .payment-methods .method .icon { font-size: 2rem; width: 48px; text-align: center; }
+    .payment-modal .payment-methods .method .info { flex: 1; }
+    .payment-modal .payment-methods .method .info .name { font-weight: 600; font-size: 1rem; }
+    .payment-modal .payment-methods .method .info .desc { font-size: 0.8rem; color: #64748b; }
+    .payment-modal .payment-methods .method .radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #dce3ec; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; }
+    .payment-modal .payment-methods .method.selected .radio { border-color: #2563eb; background: #2563eb; }
+    .payment-modal .payment-methods .method.selected .radio::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: white; }
+    .payment-modal .payment-details { background: #f8fafc; border-radius: 1rem; padding: 1.2rem; margin: 1rem 0; }
+    .payment-modal .payment-details .detail-row { display: flex; justify-content: space-between; padding: 0.3rem 0; font-size: 0.95rem; }
+    .payment-modal .payment-details .detail-row .label { color: #64748b; }
+    .payment-modal .payment-details .detail-row .value { font-weight: 600; }
+    .payment-modal .bank-details { background: #f1f6fe; border-radius: 1rem; padding: 1.2rem; margin: 1rem 0; border: 1px solid #2563eb20; }
+    .payment-modal .bank-details .bank-row { display: flex; justify-content: space-between; padding: 0.3rem 0; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; }
+    .payment-modal .bank-details .bank-row:last-child { border-bottom: none; }
+    .payment-modal .bank-details .bank-row .label { color: #64748b; }
+    .payment-modal .bank-details .bank-row .value { font-weight: 600; color: #0f2b4b; }
+    .payment-modal .payment-actions { display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .payment-modal .payment-actions .btn-pay { flex: 1; padding: 0.8rem; border-radius: 60px; border: none; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; min-width: 120px; }
+    .payment-modal .payment-actions .btn-pay.pay { background: #0f2b4b; color: white; }
+    .payment-modal .payment-actions .btn-pay.pay:hover { background: #1a3a5e; }
+    .payment-modal .payment-actions .btn-pay.pay:disabled { opacity: 0.5; cursor: not-allowed; }
+    .payment-modal .payment-actions .btn-pay.cancel { background: #eef2f6; color: #1e293b; }
+    .payment-modal .payment-actions .btn-pay.cancel:hover { background: #e2e8f0; }
+    .payment-modal .order-summary { background: #f1f6fe; border-radius: 1rem; padding: 1rem 1.2rem; margin: 1rem 0; border-left: 3px solid #2563eb; }
+    .payment-modal .order-summary .label { font-size: 0.8rem; color: #64748b; }
+    .payment-modal .order-summary .value { font-weight: 600; font-size: 1.1rem; }
+    .payment-modal .payment-note { font-size: 0.85rem; color: #475569; background: #fef9c3; padding: 0.8rem 1rem; border-radius: 0.8rem; margin: 0.8rem 0; border: 1px solid #fcd34d; }
+
     /* ─── CART ─── */
-    .cart-panel { margin-top: 3.5rem; background: white; border-radius: 2rem; padding: 1.8rem 2.2rem; border: 1px solid #e9eef3; box-shadow: 0 8px 18px rgba(0,0,0,0.02); }
+    .cart-panel { margin-top: 3.5rem; background: white; border-radius: 2rem; padding: 1.8rem 2.2rem; border: 1px solid #e9eef3; }
     .cart-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
     .cart-header h3 { font-size: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 0.6rem; }
     .cart-items { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; max-height: 220px; overflow-y: auto; padding-right: 0.5rem; }
@@ -167,32 +178,8 @@
     .checkout-btn:hover { background: #1a3a5e; }
     .checkout-btn:disabled { opacity: 0.4; pointer-events: none; }
 
-    /* ─── FOOTER ─── */
-    .footer { margin-top: 4rem; border-top: 1px solid #e2e8f0; padding: 2rem 0 1rem 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: #475569; font-size: 0.9rem; }
-    .footer i { color: #2563eb; margin: 0 0.2rem; }
-
-    /* ─── TOAST ─── */
-    .toast { position: fixed; bottom: 2rem; right: 2rem; background: #0f2b4b; color: white; padding: 1rem 1.8rem; border-radius: 60px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); font-weight: 600; display: flex; align-items: center; gap: 0.7rem; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 999; }
-    .toast.show { transform: translateY(0); opacity: 1; }
-    .toast i { color: #22c55e; font-size: 1.2rem; }
-
-    /* ─── PAGE SECTIONS ─── */
-    .page-section { display: block; }
-    .page-section.hidden { display: none; }
-
-    /* ─── INFO CARD ─── */
-    .info-card { background: white; border-radius: 2rem; padding: 2.5rem 2.8rem; border: 1px solid #e9eef3; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-bottom: 2rem; }
-    .info-card h2 { font-size: 2rem; margin-bottom: 1rem; }
-    .info-card p { color: #334155; max-width: 600px; line-height: 1.7; }
-
-    /* ─── DEALS ─── */
-    .deal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 1.5rem; margin-top: 1.5rem; }
-    .deal-item { background: #f1f6fc; border-radius: 1.5rem; padding: 1.5rem; text-align: center; font-weight: 600; border: 1px solid #e2e8f0; }
-    .deal-item i { font-size: 2.5rem; color: #2563eb; margin-bottom: 0.5rem; display: block; }
-    .deal-item .tag { background: #2563eb; color: white; font-size: 0.75rem; padding: 0.2rem 0.8rem; border-radius: 30px; display: inline-block; margin-top: 0.3rem; }
-
     /* ─── CUSTOM ORDER ─── */
-    .custom-section { background: white; border-radius: 2rem; padding: 2.5rem 3rem; margin: 3rem 0; border: 1px solid #e9eef3; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+    .custom-section { background: white; border-radius: 2rem; padding: 2.5rem 3rem; margin: 3rem 0; border: 1px solid #e9eef3; }
     .custom-section h2 { font-size: 1.8rem; margin-bottom: 0.5rem; }
     .custom-section .sub { color: #64748b; margin-bottom: 1.5rem; }
     .custom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
@@ -204,26 +191,19 @@
     .submit-order-btn { background: #0f2b4b; color: white; border: none; padding: 0.85rem 2.5rem; border-radius: 60px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.7rem; margin-top: 0.5rem; }
     .submit-order-btn:hover { background: #1a3a5e; transform: scale(1.02); }
 
-    /* ─── SKIP LINK ─── */
-    .skip-link {
-      position: absolute;
-      top: -1000px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #2563eb;
-      color: white;
-      padding: 0.8rem 1.5rem;
-      border-radius: 0 0 8px 8px;
-      z-index: 99999;
-      font-weight: 600;
-      text-decoration: none;
-    }
-    .skip-link:focus {
-      top: 0;
-    }
+    /* ─── FOOTER ─── */
+    .footer { margin-top: 4rem; border-top: 1px solid #e2e8f0; padding: 2rem 0 1rem 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: #475569; font-size: 0.9rem; }
+    .footer i { color: #2563eb; margin: 0 0.2rem; }
 
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 700px) {
+    /* ─── TOAST ─── */
+    .toast { position: fixed; bottom: 2rem; right: 2rem; background: #0f2b4b; color: white; padding: 1rem 1.8rem; border-radius: 60px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); font-weight: 600; display: flex; align-items: center; gap: 0.7rem; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 999; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast i { color: #22c55e; font-size: 1.2rem; }
+
+    .page-section { display: block; }
+    .page-section.hidden { display: none; }
+
+    @media (max-width:700px) {
       .app { padding: 1rem; }
       .hero { padding: 1.8rem; flex-direction: column; align-items: flex-start; }
       .hero-text h1 { font-size: 2rem; }
@@ -237,131 +217,121 @@
       .btn-group { justify-content: stretch; }
       .btn-add, .btn-order { flex: 1; justify-content: center; }
       .product-img .carousel-btn { width: 28px; height: 28px; font-size: 0.7rem; }
-      .lightbox-overlay .lightbox-nav { width: 40px; height: 40px; font-size: 1rem; min-width: 40px; min-height: 40px; }
-      .lightbox-overlay .lightbox-nav.prev { left: 8px; }
-      .lightbox-overlay .lightbox-nav.next { right: 8px; }
-      .lightbox-overlay .close-lightbox { top: 12px; right: 16px; font-size: 1.8rem; min-width: 44px; min-height: 44px; }
-      .product-img .carousel-dots .dot { width: 12px; height: 12px; }
-      .portfolio-grid { grid-template-columns: 1fr; }
-      .portfolio-section { padding: 1.5rem; }
+      .why-section { padding: 1.5rem; }
+      .build-section { padding: 1.5rem; }
+      .stats-bar { grid-template-columns: 1fr 1fr; }
+      .payment-modal .modal-content { padding: 1.5rem; }
+      .payment-modal .payment-actions { flex-direction: column; }
+      .payment-modal .payment-actions .btn-pay { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <!-- ─── SKIP LINK ─── -->
-  <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <div class="app" id="main-content">
+  <div class="app">
     <!-- ─── HEADER ─── -->
-    <header class="navbar" role="banner">
-      <a href="index.html" class="logo" aria-label="Pixlnex Home"><i class="fas fa-cube" aria-hidden="true"></i><span>Pixlnex</span></a>
-      <nav class="nav-links" role="navigation" aria-label="Main navigation">
+    <header class="navbar">
+      <a href="index.html" class="logo"><i class="fas fa-cube"></i><span>Pixlnex</span></a>
+      <nav class="nav-links">
         <a href="index.html" class="active">Home</a>
         <a href="shop.html">Webs</a>
-        <a href="#" id="navPortfolio">Portfolio</a>
-        <a href="#" id="navDeals">Deals</a>
         <a href="#" id="navAbout">About</a>
-        <a href="profile.html" class="auth-btn" id="authBtn"><i class="fas fa-user" aria-hidden="true"></i> Login</a>
-        <a href="shop.html" class="cart-icon" aria-label="Shopping cart">
-          <i class="fas fa-shopping-bag" aria-hidden="true"></i>
+        <a href="profile.html" class="auth-btn" id="authBtn"><i class="fas fa-user"></i> Login</a>
+        <a href="shop.html" class="cart-icon">
+          <i class="fas fa-shopping-bag"></i>
           <span class="cart-count" id="cartCounter">0</span>
         </a>
       </nav>
     </header>
 
     <!-- ─── TOAST ─── -->
-    <div class="toast" id="toast" role="alert" aria-live="polite">
-      <i class="fas fa-check-circle" aria-hidden="true"></i>
-      <span id="toastMsg">Added!</span>
-    </div>
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Added!</span></div>
 
-    <!-- ─── HOME SECTION ─── -->
-    <section id="homeSection" class="page-section" aria-labelledby="hero-title">
+    <!-- ─── HOME ─── -->
+    <section id="homeSection" class="page-section">
       <div class="hero">
         <div class="hero-text">
-          <div class="tagline"><i class="fas fa-globe" aria-hidden="true"></i> Custom websites — built for you</div>
-          <h1 id="hero-title">Find your <span>perfect web</span></h1>
+          <div class="tagline"><i class="fas fa-globe"></i> Custom websites — built for you</div>
+          <h1>Find your <span>perfect web</span></h1>
           <p>I build custom websites tailored to your needs. Browse my packages or tell me exactly what you want.</p>
-          <a href="#customOrder" class="btn-primary"><i class="fas fa-pencil-ruler" aria-hidden="true"></i> Order Custom Web</a>
+          <a href="#customOrder" class="btn-primary"><i class="fas fa-pencil-ruler"></i> Order Custom Web</a>
         </div>
-        <div class="hero-badge"><i class="fas fa-rocket" aria-hidden="true"></i> 1‑on‑1 service · you get a unique site</div>
+        <div class="hero-badge"><i class="fas fa-rocket"></i> 1‑on‑1 service · you get a unique site</div>
       </div>
     </section>
 
-    <!-- ─── PORTFOLIO SECTION ─── -->
-    <section id="portfolioSection" class="page-section hidden portfolio-section" aria-labelledby="portfolio-title">
+    <!-- ─── WHY CHOOSE US ─── -->
+    <section class="why-section">
       <div class="section-header">
-        <div>
-          <h2 id="portfolio-title">✨ My Portfolio</h2>
-          <p>Here are some of the websites I've built for clients. Each project is custom-made with attention to detail.</p>
+        <h2>✨ Why Choose Pixlnex?</h2>
+        <p>I build websites that help you grow your business. Here's why clients trust me.</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="icon"><i class="fas fa-code"></i></div>
+          <h3>100% Custom Code</h3>
+          <p>No templates, no page builders. Every site is built from scratch for your unique needs.</p>
         </div>
-      </div>
-
-      <div class="portfolio-filters" role="tablist">
-        <button class="active" data-filter="all" role="tab">All</button>
-        <button data-filter="portfolio" role="tab">Portfolio</button>
-        <button data-filter="business" role="tab">Business</button>
-        <button data-filter="ecommerce" role="tab">E‑commerce</button>
-        <button data-filter="chat" role="tab">Chat Apps</button>
-      </div>
-
-      <div class="portfolio-grid" id="portfolioGrid">
-        <!-- Portfolio items will be injected here -->
-      </div>
-    </section>
-
-    <!-- ─── DEALS SECTION ─── -->
-    <section id="dealsSection" class="page-section hidden" aria-labelledby="deals-title">
-      <div class="info-card">
-        <h2 id="deals-title">🔥 Web Deals</h2>
-        <p>Limited-time offers on popular website packages. Grab yours!</p>
-        <div class="deal-grid">
-          <div class="deal-item"><i class="fas fa-tag" aria-hidden="true"></i> Portfolio Web <span class="tag">-20%</span></div>
-          <div class="deal-item"><i class="fas fa-tag" aria-hidden="true"></i> Business Web <span class="tag">-15%</span></div>
-          <div class="deal-item"><i class="fas fa-tag" aria-hidden="true"></i> E‑commerce Web <span class="tag">-10%</span></div>
-          <div class="deal-item"><i class="fas fa-tag" aria-hidden="true"></i> Custom Web <span class="tag">-25%</span></div>
+        <div class="why-card">
+          <div class="icon"><i class="fas fa-user-check"></i></div>
+          <h3>1-on-1 Collaboration</h3>
+          <p>You work directly with me. One person, one project at a time — you get my full attention.</p>
+        </div>
+        <div class="why-card">
+          <div class="icon"><i class="fas fa-rocket"></i></div>
+          <h3>Fast & Modern</h3>
+          <p>Lightning-fast load times, modern design, and SEO-optimized for better rankings.</p>
+        </div>
+        <div class="why-card">
+          <div class="icon"><i class="fas fa-shield-alt"></i></div>
+          <h3>Secure & Reliable</h3>
+          <p>Built with best security practices. Your website is safe, scalable, and future-proof.</p>
         </div>
       </div>
     </section>
 
-    <!-- ─── ABOUT SECTION ─── -->
-    <section id="aboutSection" class="page-section hidden" aria-labelledby="about-title">
-      <div class="info-card">
-        <h2 id="about-title">👋 About Pixlnex</h2>
-        <p>I'm a solo web developer who builds custom websites for people like you. No templates, no fluff — just a site that works for your specific needs.</p>
-        <p style="margin-top:1rem;"><i class="fas fa-check-circle" style="color:#2563eb;" aria-hidden="true"></i> 100% custom built</p>
-        <p><i class="fas fa-check-circle" style="color:#2563eb;" aria-hidden="true"></i> 1‑on‑1 collaboration</p>
-        <p><i class="fas fa-check-circle" style="color:#2563eb;" aria-hidden="true"></i> You get the full source code</p>
-        <p><i class="fas fa-check-circle" style="color:#2563eb;" aria-hidden="true"></i> Free hosting setup</p>
-        <p style="margin-top:1rem;font-weight:600;color:#2563eb;"><i class="fas fa-spider" aria-hidden="true"></i> One person · One website at a time · You get my full attention</p>
+    <!-- ─── WHAT WE BUILD ─── -->
+    <section class="build-section">
+      <div class="section-header">
+        <h2>🛠️ What I Build</h2>
+        <p>From simple portfolios to complex web applications — I've got you covered.</p>
+      </div>
+      <div class="build-grid">
+        <div class="build-card"><div class="icon"><i class="fas fa-user-tie"></i></div><h3>Portfolio Websites</h3><p>Showcase your work with a stunning personal portfolio.</p></div>
+        <div class="build-card"><div class="icon"><i class="fas fa-building"></i></div><h3>Business Websites</h3><p>Professional websites for businesses and startups.</p></div>
+        <div class="build-card"><div class="icon"><i class="fas fa-store"></i></div><h3>E‑commerce Stores</h3><p>Full-featured online stores with payment integration.</p></div>
+        <div class="build-card"><div class="icon"><i class="fas fa-comment-dots"></i></div><h3>Encrypted Chat Apps</h3><p>End-to-end encrypted real-time chat applications.</p></div>
+        <div class="build-card"><div class="icon"><i class="fas fa-blog"></i></div><h3>Blogs & Magazines</h3><p>Content-focused websites with clean typography.</p></div>
+        <div class="build-card"><div class="icon"><i class="fas fa-pencil-ruler"></i></div><h3>Custom Web Apps</h3><p>Tailored web applications built for your specific needs.</p></div>
       </div>
     </section>
+
+    <!-- ─── STATS ─── -->
+    <div class="stats-bar">
+      <div class="stat-item"><div class="number">50+</div><div class="label">Websites Built</div></div>
+      <div class="stat-item"><div class="number">100%</div><div class="label">Client Satisfaction</div></div>
+      <div class="stat-item"><div class="number">24/7</div><div class="label">Support Available</div></div>
+      <div class="stat-item"><div class="number">⭐ 5.0</div><div class="label">Average Rating</div></div>
+    </div>
 
     <!-- ─── PRODUCTS ─── -->
-    <section id="productSection" class="page-section" aria-labelledby="products-title">
+    <section id="productSection" class="page-section">
       <div class="section-title">
-        <h2 id="products-title">⚡ Web Packages</h2>
-        <a href="shop.html">View all <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <h2>⚡ Web Packages</h2>
+        <a href="shop.html">View all <i class="fas fa-arrow-right"></i></a>
       </div>
-      <div class="product-grid" id="productGrid" role="list"></div>
+      <div class="product-grid" id="productGrid"></div>
     </section>
 
     <!-- ─── CUSTOM ORDER ─── -->
-    <section class="custom-section" id="customOrder" aria-labelledby="custom-title">
-      <h2 id="custom-title">✏️ Tell me what you need</h2>
+    <section class="custom-section" id="customOrder">
+      <h2>✏️ Tell me what you need</h2>
       <p class="sub">Describe your ideal website and I'll build it for you. One person, one project at a time.</p>
-      <form id="customOrderForm" novalidate>
+      <form id="customOrderForm">
         <div class="custom-grid">
-          <div>
-            <label for="customName">Your Name</label>
-            <input type="text" id="customName" placeholder="John Doe" required aria-required="true" />
-          </div>
-          <div>
-            <label for="customEmail">Your Email</label>
-            <input type="email" id="customEmail" placeholder="john@example.com" required aria-required="true" />
-          </div>
-          <div>
-            <label for="customType">Website Type</label>
+          <div><label for="customName">Your Name</label><input type="text" id="customName" placeholder="John Doe" required /></div>
+          <div><label for="customEmail">Your Email</label><input type="email" id="customEmail" placeholder="john@example.com" required /></div>
+          <div><label for="customType">Website Type</label>
             <select id="customType">
               <option value="portfolio">Portfolio / Personal</option>
               <option value="business">Business / Corporate</option>
@@ -372,8 +342,7 @@
               <option value="other">Other (tell me below)</option>
             </select>
           </div>
-          <div>
-            <label for="customBudget">Budget Range (PKR)</label>
+          <div><label for="customBudget">Budget Range (PKR)</label>
             <select id="customBudget">
               <option value="50000-80000">₨ 50,000 – ₨ 80,000</option>
               <option value="80000-130000">₨ 80,000 – ₨ 130,000</option>
@@ -381,73 +350,95 @@
               <option value="200000+">₨ 200,000+</option>
             </select>
           </div>
-          <div class="full">
-            <label for="customDetails">Tell me about your project</label>
-            <textarea id="customDetails" placeholder="What kind of website do you need? What features, design style, pages, etc.?" required aria-required="true"></textarea>
-          </div>
-          <div class="full">
-            <button type="submit" class="submit-order-btn"><i class="fas fa-paper-plane" aria-hidden="true"></i> Send Custom Order</button>
-          </div>
+          <div class="full"><label for="customDetails">Tell me about your project</label><textarea id="customDetails" placeholder="What kind of website do you need? What features, design style, pages, etc.?" required></textarea></div>
+          <div class="full"><button type="submit" class="submit-order-btn"><i class="fas fa-paper-plane"></i> Send Custom Order</button></div>
         </div>
       </form>
     </section>
 
     <!-- ─── CART ─── -->
-    <section class="cart-panel" aria-labelledby="cart-title">
-      <div class="cart-header">
-        <h3 id="cart-title"><i class="fas fa-bag-shopping" style="color:#2563eb;" aria-hidden="true"></i> Your cart</h3>
-        <button class="checkout-btn" id="checkoutBtn"><i class="fas fa-lock" aria-hidden="true"></i> Checkout</button>
-      </div>
-      <div id="cartItemsContainer" class="cart-items" role="list">
-        <div class="empty-cart-msg">🛒 Your cart is empty — add a web package!</div>
-      </div>
-      <div class="cart-total">
-        <span>Total</span>
-        <span id="cartTotalPrice">₨ 0</span>
-      </div>
+    <section class="cart-panel">
+      <div class="cart-header"><h3><i class="fas fa-bag-shopping" style="color:#2563eb;"></i> Your cart</h3><button class="checkout-btn" id="checkoutBtn"><i class="fas fa-lock"></i> Checkout</button></div>
+      <div id="cartItemsContainer" class="cart-items"><div class="empty-cart-msg">🛒 Your cart is empty — add a web package!</div></div>
+      <div class="cart-total"><span>Total</span><span id="cartTotalPrice">₨ 0</span></div>
     </section>
 
-    <!-- ─── FOOTER ─── -->
-    <footer class="footer" role="contentinfo">
-      <span>© 2026 Pixlnex — <i class="fas fa-spider" aria-hidden="true"></i> one person · one website at a time</span>
-      <span>
-        <i class="fab fa-twitter" aria-hidden="true"></i>
-        <i class="fab fa-github" aria-hidden="true"></i>
-        <i class="fab fa-linkedin" aria-hidden="true"></i>
-      </span>
+    <footer class="footer">
+      <span>© 2026 Pixlnex — <i class="fas fa-spider"></i> one person · one website at a time</span>
+      <span><i class="fab fa-twitter"></i> <i class="fab fa-github"></i> <i class="fab fa-linkedin"></i></span>
     </footer>
   </div>
 
-  <!-- ─── WHATSAPP FLOATING BUTTON ─── -->
-  <a href="https://wa.me/923327040800?text=Hi!%20I'm%20interested%20in%20a%20custom%20website" 
-   class="whatsapp-float" 
-   target="_blank" 
-   rel="noopener noreferrer"
-   aria-label="Chat on WhatsApp">
-  <i class="fab fa-whatsapp" aria-hidden="true"></i>
-  <span class="wa-text">Chat on WhatsApp</span>
-</a>
+  <!-- ─── WHATSAPP ─── -->
+  <a href="https://wa.me/923327240800?text=Hi!%20I'm%20interested%20in%20a%20custom%20website" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+    <i class="fab fa-whatsapp"></i>
+    <span class="wa-text">Chat on WhatsApp</span>
+  </a>
 
-  <!-- ─── LIGHTBOX ─── -->
-  <div class="lightbox-overlay" id="lightboxOverlay" role="dialog" aria-modal="true" aria-label="Image viewer">
-    <button class="close-lightbox" id="closeLightbox" aria-label="Close image viewer">&times;</button>
-    <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous image"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
-    <button class="lightbox-nav next" id="lightboxNext" aria-label="Next image"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
-    <div class="lightbox-container">
-      <img id="lightboxImage" src="" alt="" />
+  <!-- ─── PAYMENT MODAL ─── -->
+  <div class="payment-modal" id="paymentModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>💳 Complete Payment</h2>
+        <button class="close-modal" id="closePaymentModal">&times;</button>
+      </div>
+
+      <div class="order-summary">
+        <div class="label">Product</div>
+        <div class="value" id="paymentProductName">Loading...</div>
+      </div>
+
+      <div class="payment-details">
+        <div class="detail-row"><span class="label">Amount</span><span class="value" id="paymentAmount">₨ 0</span></div>
+        <div class="detail-row"><span class="label">Type</span><span class="value" id="paymentType">Pre-made Web</span></div>
+      </div>
+
+      <p style="font-size:0.9rem;color:#64748b;margin-bottom:0.5rem;">Select payment method:</p>
+
+      <div class="payment-methods">
+        <div class="method selected" data-method="jazzcash" onclick="selectPayment('jazzcash')">
+          <div class="icon">💳</div>
+          <div class="info"><div class="name">JazzCash</div><div class="desc">Pay via JazzCash mobile account</div></div>
+          <div class="radio"></div>
+        </div>
+        <div class="method" data-method="easypaisa" onclick="selectPayment('easypaisa')">
+          <div class="icon">📱</div>
+          <div class="info"><div class="name">EasyPaisa</div><div class="desc">Pay via EasyPaisa mobile account</div></div>
+          <div class="radio"></div>
+        </div>
+      </div>
+
+      <!-- ─── BANK DETAILS ─── -->
+      <div class="bank-details">
+        <p style="font-weight:600;margin-bottom:0.5rem;color:#0f2b4b;">📌 Send payment to:</p>
+        <div class="bank-row"><span class="label">JazzCash</span><span class="value">03008748246</span></div>
+        <div class="bank-row"><span class="label">EasyPaisa</span><span class="value">03006948246</span></div>
+        <div class="bank-row"><span class="label">Account Holder</span><span class="value">Faisal Yousaf</span></div>
+      </div>
+
+      <div class="payment-note">
+        <i class="fas fa-info-circle"></i> After payment, click "Confirm Payment" below. Your order will be processed within 24 hours.
+      </div>
+
+      <div class="payment-actions">
+        <button class="btn-pay pay" id="confirmPaymentBtn"><i class="fas fa-check"></i> Confirm Payment</button>
+        <button class="btn-pay cancel" id="cancelPaymentBtn">Cancel</button>
+      </div>
     </div>
-    <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase.js?v=6"></script>
+  <script src="supabase.js?v=8"></script>
   <script>
     (function() {
       const PX = window.Pixlnex;
       let products = [];
       let cart = JSON.parse(localStorage.getItem('pixlnex_cart')) || [];
       let currentUser = null;
+      let pendingOrder = null;
+      let selectedPayment = 'jazzcash';
 
+      // ─── DOM REFS ───
       const productGrid = document.getElementById('productGrid');
       const cartItemsContainer = document.getElementById('cartItemsContainer');
       const cartTotalPrice = document.getElementById('cartTotalPrice');
@@ -456,26 +447,108 @@
       const authBtn = document.getElementById('authBtn');
       const toast = document.getElementById('toast');
       const toastMsg = document.getElementById('toastMsg');
+      const paymentModal = document.getElementById('paymentModal');
+      const paymentProductName = document.getElementById('paymentProductName');
+      const paymentAmount = document.getElementById('paymentAmount');
+      const paymentType = document.getElementById('paymentType');
 
-      // ─── LIGHTBOX ───
-      const lightboxOverlay = document.getElementById('lightboxOverlay');
-      const lightboxImage = document.getElementById('lightboxImage');
-      const lightboxCounter = document.getElementById('lightboxCounter');
-      const lightboxPrev = document.getElementById('lightboxPrev');
-      const lightboxNext = document.getElementById('lightboxNext');
-      const closeLightbox = document.getElementById('closeLightbox');
-
-      let lightboxImages = [];
-      let lightboxCurrentIndex = 0;
       let toastTimer;
 
       function showToast(msg) {
         toastMsg.textContent = msg;
         toast.classList.add('show');
         clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
       }
 
+      // ─── PAYMENT ───
+      window.selectPayment = function(method) {
+        selectedPayment = method;
+        document.querySelectorAll('.payment-methods .method').forEach(el => {
+          el.classList.toggle('selected', el.dataset.method === method);
+        });
+      };
+
+      function openPaymentModal(orderData, isCustom) {
+        pendingOrder = orderData;
+        paymentProductName.textContent = orderData.name || 'Web Package';
+        paymentAmount.textContent = PX.formatPKR(orderData.price);
+        paymentType.textContent = isCustom ? 'Custom Web (Demo First)' : 'Pre-made Web';
+        paymentModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closePaymentModalFn() {
+        paymentModal.classList.remove('active');
+        document.body.style.overflow = '';
+        pendingOrder = null;
+      }
+
+      document.getElementById('closePaymentModal').addEventListener('click', closePaymentModalFn);
+      document.getElementById('cancelPaymentBtn').addEventListener('click', closePaymentModalFn);
+      paymentModal.addEventListener('click', function(e) {
+        if (e.target === this) closePaymentModalFn();
+      });
+
+      // ─── CONFIRM PAYMENT ───
+      document.getElementById('confirmPaymentBtn').addEventListener('click', async function() {
+        if (!pendingOrder) return;
+        if (!currentUser) {
+          showToast('🔐 Please login first');
+          setTimeout(() => window.location.href = 'login.html', 800);
+          return;
+        }
+
+        this.disabled = true;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+        try {
+          // Create order in Supabase with PAID status
+          const orderData = {
+            name: pendingOrder.name,
+            price: pendingOrder.price,
+            customer_email: pendingOrder.customer_email || currentUser.email,
+            customer_name: pendingOrder.customer_name || currentUser.user_metadata?.full_name || currentUser.email,
+            payment_method: selectedPayment,
+            payment_status: 'paid',  // ✅ PAID
+            status: pendingOrder.isCustom ? 'demo_ready' : 'confirmed',
+            custom_details: pendingOrder.custom_details || '',
+            custom_type: pendingOrder.custom_type || '',
+            custom_budget: pendingOrder.custom_budget || '',
+            is_custom: pendingOrder.isCustom || false
+          };
+
+          const result = await PX.createOrder(orderData);
+          console.log('✅ Order created with payment:', result);
+
+          let successMsg = `✅ Payment Successful!\n\nOrder: ${pendingOrder.name}\nAmount: ${PX.formatPKR(pendingOrder.price)}\nMethod: ${selectedPayment === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}\n\n`;
+          if (pendingOrder.isCustom) {
+            successMsg += `📌 You'll receive a demo within 48 hours. After approval, you'll get full ownership.`;
+          } else {
+            successMsg += `📌 You'll get access to your website immediately. Check your email.`;
+          }
+          alert(successMsg);
+
+          // Clear cart if pre-made
+          if (!pendingOrder.isCustom) {
+            cart = [];
+            localStorage.setItem('pixlnex_cart', JSON.stringify(cart));
+            updateCartUI();
+          }
+
+          closePaymentModalFn();
+          showToast('🎉 Order confirmed!');
+
+        } catch (e) {
+          console.error('Order error:', e);
+          alert('⚠️ There was an error processing your order. Please try again.');
+        }
+
+        this.disabled = false;
+        this.innerHTML = '<i class="fas fa-check"></i> Confirm Payment';
+      });
+
+      // ─── AUTH ───
       async function updateAuthUI() {
         try {
           currentUser = await PX.getCurrentUser();
@@ -484,16 +557,17 @@
         }
         if (currentUser) {
           const name = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
-          authBtn.innerHTML = `<i class="fas fa-user-check" aria-hidden="true"></i> ${name}`;
+          authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
           authBtn.className = 'auth-btn logout';
           authBtn.href = 'profile.html';
         } else {
-          authBtn.innerHTML = '<i class="fas fa-user" aria-hidden="true"></i> Login';
+          authBtn.innerHTML = '<i class="fas fa-user"></i> Login';
           authBtn.className = 'auth-btn';
           authBtn.href = 'login.html';
         }
       }
 
+      // ─── PRODUCT IMAGES ───
       function getProductImages(product) {
         if (product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0) {
           return product.image_urls;
@@ -504,108 +578,49 @@
         return [];
       }
 
-      // ─── LIGHTBOX ───
-      function openLightbox(images, index) {
-        lightboxImages = images;
-        lightboxCurrentIndex = index;
-        updateLightbox();
-        lightboxOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        setTimeout(() => closeLightbox.focus(), 100);
-      }
-
-      function closeLightboxFn() {
-        lightboxOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-      }
-
-      function updateLightbox() {
-        if (lightboxImages.length === 0) return;
-        lightboxImage.src = lightboxImages[lightboxCurrentIndex];
-        lightboxImage.alt = `Image ${lightboxCurrentIndex + 1} of ${lightboxImages.length}`;
-        lightboxCounter.textContent = `${lightboxCurrentIndex + 1} / ${lightboxImages.length}`;
-        lightboxPrev.classList.toggle('hidden', lightboxImages.length <= 1);
-        lightboxNext.classList.toggle('hidden', lightboxImages.length <= 1);
-      }
-
-      function changeLightbox(direction) {
-        if (lightboxImages.length <= 1) return;
-        lightboxCurrentIndex = (lightboxCurrentIndex + direction + lightboxImages.length) % lightboxImages.length;
-        updateLightbox();
-      }
-
-      lightboxPrev.addEventListener('click', () => changeLightbox(-1));
-      lightboxNext.addEventListener('click', () => changeLightbox(1));
-      closeLightbox.addEventListener('click', closeLightboxFn);
-      lightboxOverlay.addEventListener('click', function(e) {
-        if (e.target === this) closeLightboxFn();
-      });
-
-      document.addEventListener('keydown', function(e) {
-        if (!lightboxOverlay.classList.contains('active')) return;
-        if (e.key === 'Escape') { e.preventDefault(); closeLightboxFn(); }
-        if (e.key === 'ArrowLeft') { e.preventDefault(); changeLightbox(-1); }
-        if (e.key === 'ArrowRight') { e.preventDefault(); changeLightbox(1); }
-      });
-
       // ─── CAROUSEL ───
       function createCarousel(images, productName, productId) {
         if (!images || images.length === 0) {
-          return `<div class="fallback-icon"><i class="fas fa-cube" aria-hidden="true"></i></div>`;
+          return `<div class="fallback-icon"><i class="fas fa-cube"></i></div>`;
         }
-
         const hasMultiple = images.length > 1;
         const containerId = `carousel-${productId}`;
-
-        let html = `
-          <div class="carousel-container" id="${containerId}" data-images='${JSON.stringify(images)}'>
-            <div class="carousel-track" id="${containerId}-track">
-        `;
-
+        let html = `<div class="carousel-container" id="${containerId}" data-images='${JSON.stringify(images)}'>
+          <div class="carousel-track" id="${containerId}-track">`;
         images.forEach((img, idx) => {
-          html += `<img src="${img}" alt="${productName} - screenshot ${idx + 1}" loading="lazy" data-index="${idx}" onerror="this.style.display='none';">`;
+          html += `<img src="${img}" alt="${productName} - ${idx + 1}" loading="lazy" data-index="${idx}" onerror="this.style.display='none';">`;
         });
-
-        html += `
-            </div>
-            ${hasMultiple ? `
-              <button class="carousel-btn prev" onclick="window.changeSlide('${containerId}', -1)" aria-label="Previous image"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
-              <button class="carousel-btn next" onclick="window.changeSlide('${containerId}', 1)" aria-label="Next image"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
-              <div class="carousel-dots" id="${containerId}-dots" role="tablist"></div>
-              <div class="image-count-badge">${images.length} 📸</div>
-            ` : ''}
-          </div>
-        `;
-
+        html += `</div>`;
+        if (hasMultiple) {
+          html += `
+            <button class="carousel-btn prev" onclick="window.changeSlide('${containerId}', -1)"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-btn next" onclick="window.changeSlide('${containerId}', 1)"><i class="fas fa-chevron-right"></i></button>
+            <div class="carousel-dots" id="${containerId}-dots"></div>
+            <div class="image-count-badge">${images.length} 📸</div>
+          `;
+        }
+        html += `</div>`;
         return html;
       }
 
       window.changeSlide = function(containerId, direction) {
         const container = document.getElementById(containerId);
         if (!container) return;
-
         const track = document.getElementById(`${containerId}-track`);
         const dots = document.getElementById(`${containerId}-dots`);
         if (!track) return;
-
         const images = track.querySelectorAll('img');
         if (images.length <= 1) return;
-
         const currentIndex = parseInt(container.dataset.currentIndex || '0');
         let newIndex = currentIndex + direction;
-
         if (newIndex < 0) newIndex = images.length - 1;
         if (newIndex >= images.length) newIndex = 0;
-
         container.dataset.currentIndex = newIndex;
         track.style.transform = `translateX(-${newIndex * 100}%)`;
-
         if (dots) {
           const dotElements = dots.querySelectorAll('.dot');
           dotElements.forEach((dot, idx) => {
-            const isActive = idx === newIndex;
-            dot.classList.toggle('active', isActive);
-            dot.setAttribute('aria-selected', isActive);
+            dot.classList.toggle('active', idx === newIndex);
           });
         }
       };
@@ -613,180 +628,57 @@
       function initCarousel(containerId, imageCount, images) {
         const container = document.getElementById(containerId);
         if (!container || imageCount <= 1) return;
-
         container.dataset.currentIndex = '0';
-
         const dotsContainer = document.getElementById(`${containerId}-dots`);
         if (dotsContainer) {
           dotsContainer.innerHTML = '';
           for (let i = 0; i < imageCount; i++) {
             const dot = document.createElement('button');
             dot.className = `dot ${i === 0 ? 'active' : ''}`;
-            dot.setAttribute('role', 'tab');
-            dot.setAttribute('aria-label', `Go to image ${i + 1}`);
-            dot.setAttribute('aria-selected', i === 0);
             dot.addEventListener('click', () => {
               window.changeSlide(containerId, i - parseInt(container.dataset.currentIndex || '0'));
             });
             dotsContainer.appendChild(dot);
           }
         }
-
-        const track = document.getElementById(`${containerId}-track`);
-        if (track) {
-          const images = track.querySelectorAll('img');
-          images.forEach((img) => {
-            img.addEventListener('click', function(e) {
-              e.stopPropagation();
-              const allImages = JSON.parse(container.dataset.images || '[]');
-              const index = parseInt(this.dataset.index || '0');
-              if (allImages.length > 0) {
-                openLightbox(allImages, index);
-              }
-            });
-          });
-        }
-
         let autoSlideInterval = setInterval(() => {
           window.changeSlide(containerId, 1);
         }, 4000);
-
         container.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
         container.addEventListener('mouseleave', () => {
           autoSlideInterval = setInterval(() => {
             window.changeSlide(containerId, 1);
           }, 4000);
         });
-
         container._autoSlideInterval = autoSlideInterval;
       }
-
-      // ─── PORTFOLIO DATA ───
-      const portfolioItems = [{
-        id: 1,
-        title: 'Creative Agency Portfolio',
-        category: 'portfolio',
-        description: 'A stunning portfolio for a creative agency with smooth animations.',
-        image: 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=600&h=400&fit=crop',
-        link: '#',
-        tags: ['React', 'Framer Motion', 'Tailwind']
-      }, {
-        id: 2,
-        title: 'E-commerce Store',
-        category: 'ecommerce',
-        description: 'Full-featured online store with payment integration and admin panel.',
-        image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop',
-        link: '#',
-        tags: ['Next.js', 'Stripe', 'Supabase']
-      }, {
-        id: 3,
-        title: 'Business Landing Page',
-        category: 'business',
-        description: 'Modern landing page for a SaaS startup with conversion optimization.',
-        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop',
-        link: '#',
-        tags: ['HTML', 'CSS', 'JavaScript']
-      }, {
-        id: 4,
-        title: 'Encrypted Chat App',
-        category: 'chat',
-        description: 'Real-time encrypted chat application with end-to-end encryption.',
-        image: 'https://images.unsplash.com/photo-1611746879690-0574c5d90c5b?w=600&h=400&fit=crop',
-        link: '#',
-        tags: ['React', 'Socket.io', 'WebRTC']
-      }, {
-        id: 5,
-        title: 'Portfolio for Photographer',
-        category: 'portfolio',
-        description: 'Minimalist portfolio showcasing photography with gallery and booking.',
-        image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&h=400&fit=crop',
-        link: '#',
-        tags: ['Next.js', 'Framer Motion', 'Sanity']
-      }, {
-        id: 6,
-        title: 'Restaurant Website',
-        category: 'business',
-        description: 'Elegant restaurant website with online ordering and reservations.',
-        image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=400&fit=crop',
-        link: '#',
-        tags: ['React', 'Node.js', 'MongoDB']
-      }];
-
-      // ─── RENDER PORTFOLIO ───
-      function renderPortfolio(filter = 'all') {
-        const grid = document.getElementById('portfolioGrid');
-        const filtered = filter === 'all' ? portfolioItems : portfolioItems.filter(item => item.category === filter);
-
-        if (filtered.length === 0) {
-          grid.innerHTML = '<div style="text-align:center;padding:3rem;color:#94a3b8;">No projects found in this category.</div>';
-          return;
-        }
-
-        grid.innerHTML = '';
-        filtered.forEach(item => {
-          const div = document.createElement('div');
-          div.className = 'portfolio-item';
-          div.innerHTML = `
-            <div class="portfolio-image">
-              <img src="${item.image}" alt="${item.title}" loading="lazy" />
-              <div class="overlay">
-                <a href="${item.link}" aria-label="View project"><i class="fas fa-external-link-alt"></i></a>
-                <a href="${item.image}" target="_blank" aria-label="View full image"><i class="fas fa-eye"></i></a>
-              </div>
-            </div>
-            <div class="portfolio-content">
-              <span class="category-tag">${item.category.charAt(0).toUpperCase() + item.category.slice(1)}</span>
-              <h3>${item.title}</h3>
-              <p>${item.description}</p>
-              <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem;">
-                ${item.tags.map(tag => `<span style="font-size:0.7rem;background:#eef2f6;padding:0.15rem 0.6rem;border-radius:30px;color:#475569;">${tag}</span>`).join('')}
-              </div>
-            </div>
-          `;
-          grid.appendChild(div);
-        });
-      }
-
-      // ─── PORTFOLIO FILTERS ───
-      document.querySelectorAll('.portfolio-filters button').forEach(btn => {
-        btn.addEventListener('click', function() {
-          document.querySelectorAll('.portfolio-filters button').forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          renderPortfolio(this.dataset.filter);
-        });
-      });
 
       // ─── RENDER PRODUCTS ───
       async function renderProducts() {
         try {
           products = await PX.getProducts();
         } catch (e) {
-          console.error('❌ Error loading products:', e);
+          console.error('Error loading products:', e);
           showToast('⚠️ Error loading products');
           return;
         }
 
         productGrid.innerHTML = '';
         if (!products || products.length === 0) {
-          productGrid.innerHTML = '<div style="text-align:center;padding:2rem;color:#94a3b8;">No products available. Add some in the admin panel!</div>';
+          productGrid.innerHTML = '<div style="text-align:center;padding:2rem;color:#94a3b8;">No products available.</div>';
           return;
         }
 
         products.forEach((p, index) => {
           const card = document.createElement('div');
           card.className = 'product-card';
-          card.setAttribute('role', 'listitem');
-
           const images = getProductImages(p);
           const carouselHtml = createCarousel(images, p.name, p.id || index);
-
-          const featuresHtml = (p.features || []).map(f => `<li><i class="fas fa-circle-check" aria-hidden="true"></i> ${f}</li>`).join('');
+          const featuresHtml = (p.features || []).map(f => `<li><i class="fas fa-circle-check"></i> ${f}</li>`).join('');
           const categoryLabel = p.category_label || p.category || '';
 
           card.innerHTML = `
-            <div class="product-img">
-              ${carouselHtml}
-            </div>
+            <div class="product-img">${carouselHtml}</div>
             <h3>${p.name}</h3>
             ${categoryLabel ? `<span class="category-badge">${categoryLabel}</span>` : ''}
             <div class="product-desc">${p.description || p.desc || ''}</div>
@@ -794,12 +686,11 @@
             <div class="product-bottom">
               <span class="price">${PX.formatPKR(p.price)}</span>
               <div class="btn-group">
-                <button class="btn-add" data-id="${p.id || index}" aria-label="Add ${p.name} to cart"><i class="fas fa-plus" aria-hidden="true"></i> Add</button>
-                <button class="btn-order" data-id="${p.id || index}" aria-label="Order ${p.name} now"><i class="fas fa-bolt" aria-hidden="true"></i> Order Now</button>
+                <button class="btn-add" data-id="${p.id || index}"><i class="fas fa-plus"></i> Add</button>
+                <button class="btn-order" data-id="${p.id || index}"><i class="fas fa-bolt"></i> Order Now</button>
               </div>
             </div>
           `;
-
           productGrid.appendChild(card);
 
           const containerId = `carousel-${p.id || index}`;
@@ -819,10 +710,25 @@
         document.querySelectorAll('.btn-order').forEach(btn => btn.addEventListener('click', function() {
           const productId = this.dataset.id;
           const product = products.find(p => (p.id || p.id) == productId);
-          if (product) orderNow(product);
+          if (product) {
+            if (!currentUser) {
+              showToast('🔐 Please login first to order');
+              setTimeout(() => window.location.href = 'login.html', 800);
+              return;
+            }
+            const orderData = {
+              name: product.name,
+              price: product.price,
+              customer_email: currentUser.email,
+              customer_name: currentUser.user_metadata?.full_name || currentUser.email,
+              isCustom: false
+            };
+            openPaymentModal(orderData, false);
+          }
         }));
       }
 
+      // ─── CART ───
       function addToCart(product) {
         const existing = cart.find(item => item.id === product.id);
         if (existing) { existing.quantity += 1; } else { cart.push({ ...product, quantity: 1 }); }
@@ -840,20 +746,6 @@
         updateCartUI();
       }
 
-      async function orderNow(product) {
-        currentUser = await PX.getCurrentUser();
-        if (!currentUser) { showToast('🔐 Please login first to order'); setTimeout(() => window.location.href = 'login.html', 800); return; }
-        addToCart(product);
-        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        try {
-          await PX.createOrder({ name: product.name, price: total, customer_email: currentUser.email, customer_name: currentUser.user_metadata?.full_name || currentUser.email });
-          alert(`✅ Thank you ${currentUser.user_metadata?.full_name || currentUser.email}!\n\nYour order for "${product.name}" has been received.\nTotal: ${PX.formatPKR(total)}\n\nI'll start building your website right away!`);
-          cart = [];
-          localStorage.setItem('pixlnex_cart', JSON.stringify(cart));
-          updateCartUI();
-        } catch (e) { showToast('⚠️ Error placing order'); }
-      }
-
       function updateCartUI() {
         const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
         cartCounter.textContent = totalItems;
@@ -864,11 +756,10 @@
           cart.forEach(item => {
             const div = document.createElement('div');
             div.className = 'cart-item';
-            div.setAttribute('role', 'listitem');
             div.innerHTML = `
               <span>${item.name} <span style="opacity:0.7;font-weight:400;">×${item.quantity}</span></span>
               <span class="item-price">${PX.formatPKR(item.price * item.quantity)}</span>
-              <button class="remove-item" data-id="${item.id}" aria-label="Remove ${item.name} from cart"><i class="fas fa-trash-alt" aria-hidden="true"></i></button>
+              <button class="remove-item" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
             `;
             cartItemsContainer.appendChild(div);
           });
@@ -881,55 +772,22 @@
         checkoutBtn.disabled = cart.length === 0;
       }
 
+      // ─── CHECKOUT ───
       checkoutBtn.addEventListener('click', async function() {
         if (cart.length === 0) return;
         currentUser = await PX.getCurrentUser();
         if (!currentUser) { showToast('🔐 Please login first to checkout'); setTimeout(() => window.location.href = 'login.html', 800); return; }
+
         const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        try {
-          for (const item of cart) {
-            await PX.createOrder({ name: item.name, price: item.price * item.quantity, customer_email: currentUser.email, customer_name: currentUser.user_metadata?.full_name || currentUser.email });
-          }
-          alert(`✅ Thank you ${currentUser.user_metadata?.full_name || currentUser.email}!\n\nYour order total: ${PX.formatPKR(total)}\n\nI'll start building your website right away!`);
-          cart = [];
-          localStorage.setItem('pixlnex_cart', JSON.stringify(cart));
-          updateCartUI();
-        } catch (e) { showToast('⚠️ Error placing order'); }
-      });
-
-      // ─── NAVIGATION ───
-      document.getElementById('navPortfolio').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('homeSection').classList.add('hidden');
-        document.getElementById('portfolioSection').classList.remove('hidden');
-        document.getElementById('dealsSection').classList.add('hidden');
-        document.getElementById('aboutSection').classList.add('hidden');
-        document.getElementById('productSection').classList.add('hidden');
-        document.getElementById('customOrder').classList.add('hidden');
-        renderPortfolio('all');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-
-      document.getElementById('navDeals').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('homeSection').classList.add('hidden');
-        document.getElementById('portfolioSection').classList.add('hidden');
-        document.getElementById('dealsSection').classList.remove('hidden');
-        document.getElementById('aboutSection').classList.add('hidden');
-        document.getElementById('productSection').classList.add('hidden');
-        document.getElementById('customOrder').classList.add('hidden');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-
-      document.getElementById('navAbout').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('homeSection').classList.add('hidden');
-        document.getElementById('portfolioSection').classList.add('hidden');
-        document.getElementById('dealsSection').classList.add('hidden');
-        document.getElementById('aboutSection').classList.remove('hidden');
-        document.getElementById('productSection').classList.add('hidden');
-        document.getElementById('customOrder').classList.add('hidden');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const items = cart.map(item => item.name).join(', ');
+        const orderData = {
+          name: `Cart: ${items}`,
+          price: total,
+          customer_email: currentUser.email,
+          customer_name: currentUser.user_metadata?.full_name || currentUser.email,
+          isCustom: false
+        };
+        openPaymentModal(orderData, false);
       });
 
       // ─── CUSTOM ORDER ───
@@ -966,25 +824,29 @@
 
         const budgetAmount = budget === '200000+' ? 200000 : parseInt(budget.split('-')[0]) || 50000;
 
-        try {
-          await PX.createOrder({
-            name: `Custom: ${typeLabels[type] || type}`,
-            price: budgetAmount,
-            customer_email: email,
-            customer_name: name,
-            custom_details: details,
-            custom_type: typeLabels[type] || type,
-            custom_budget: budget
-          });
+        const orderData = {
+          name: `Custom: ${typeLabels[type] || type}`,
+          price: budgetAmount,
+          customer_email: email,
+          customer_name: name,
+          custom_details: details,
+          custom_type: typeLabels[type] || type,
+          custom_budget: budget,
+          isCustom: true
+        };
 
-          alert(`✅ Thank you ${name}!\n\nYour custom website request has been sent.\n\nType: ${typeLabels[type] || type}\nBudget: ${budget}\n\nI'll review your details and get back to you within 24 hours.\n\n— Your web builder`);
+        openPaymentModal(orderData, true);
+        this.reset();
+      });
 
-          this.reset();
-          showToast('📨 Custom order sent!');
-        } catch (e) {
-          console.error('Custom order error:', e);
-          showToast('⚠️ Error sending custom order');
-        }
+      // ─── NAV ───
+      document.getElementById('navAbout').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('homeSection').classList.add('hidden');
+        document.getElementById('productSection').classList.add('hidden');
+        document.getElementById('customOrder').classList.add('hidden');
+        // Create about section if needed
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
 
       // ─── INIT ───
@@ -994,13 +856,6 @@
         await updateAuthUI();
         await renderProducts();
         updateCartUI();
-        renderPortfolio('all');
-        document.getElementById('homeSection').classList.remove('hidden');
-        document.getElementById('portfolioSection').classList.add('hidden');
-        document.getElementById('dealsSection').classList.add('hidden');
-        document.getElementById('aboutSection').classList.add('hidden');
-        document.getElementById('productSection').classList.remove('hidden');
-        document.getElementById('customOrder').classList.remove('hidden');
         console.log('✅ Pixlnex initialized successfully!');
       }
 
@@ -1011,5 +866,6 @@
       }
     })();
   </script>
+
 </body>
 </html>
