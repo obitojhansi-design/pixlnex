@@ -1,7 +1,6 @@
-// supabase.js - Pixlnex v2
-// ⚠️ This file is versioned. Update the version number in your HTML when making changes.
+// supabase.js - Complete Pixlnex Supabase Configuration
+// ⚠️ REPLACE WITH YOUR ACTUAL CREDENTIALS
 
-// ─── YOUR ACTUAL CREDENTIALS ───
 const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
 const SUPABASE_BUCKET = 'product-images';
@@ -10,18 +9,18 @@ let supabaseClient = null;
 let supabaseConnected = false;
 let useFallback = false;
 
-console.log('📦 supabase.js v2 loaded'); // This will help you see if the new version loaded
+console.log('🚀 supabase.js loaded');
 
 // ─── FALLBACK DATA ───
 const FALLBACK_PRODUCTS = [
-  { id: 1, name: 'Portfolio Web', description: 'A sleek personal portfolio to showcase your work.', price: 34999, icon: 'fa-user-tie', features: ['1–5 pages', 'Contact form', 'Social links', 'Responsive design'], image_url: '' },
-  { id: 2, name: 'Business Web', description: 'Professional website for your business or startup.', price: 59999, icon: 'fa-building', features: ['5–10 pages', 'Contact form', 'Google Maps', 'Newsletter signup', 'Responsive design'], image_url: '' },
-  { id: 3, name: 'E‑commerce Web', description: 'Full online store with product management.', price: 89999, icon: 'fa-store', features: ['Product catalog', 'Shopping cart', 'Checkout', 'Payment integration', 'Admin panel'], image_url: '' },
-  { id: 4, name: 'Custom Web', description: 'Tell me exactly what you want — I\'ll build it.', price: 49999, icon: 'fa-pencil-ruler', features: ['Fully custom design', 'Any features you need', 'Built from scratch', 'You own the code'], image_url: '' }
+  { id: 1, name: 'Portfolio Web', description: 'A sleek personal portfolio to showcase your work.', price: 34999, icon: 'fa-user-tie', features: ['1–5 pages', 'Contact form', 'Social links', 'Responsive design'], image_urls: [], category: 'portfolio', category_label: 'Portfolio' },
+  { id: 2, name: 'Business Web', description: 'Professional website for your business or startup.', price: 59999, icon: 'fa-building', features: ['5–10 pages', 'Contact form', 'Google Maps', 'Newsletter signup', 'Responsive design'], image_urls: [], category: 'business', category_label: 'Business' },
+  { id: 3, name: 'E‑commerce Web', description: 'Full online store with product management.', price: 89999, icon: 'fa-store', features: ['Product catalog', 'Shopping cart', 'Checkout', 'Payment integration', 'Admin panel'], image_urls: [], category: 'ecommerce', category_label: 'E‑commerce' },
+  { id: 4, name: 'Custom Web', description: 'Tell me exactly what you want — I\'ll build it.', price: 49999, icon: 'fa-pencil-ruler', features: ['Fully custom design', 'Any features you need', 'Built from scratch', 'You own the code'], image_urls: [], category: 'custom', category_label: 'Custom' }
 ];
 
+// ─── INIT SUPABASE ───
 function initSupabase() {
-  console.log('🚀 Initializing Supabase...');
   try {
     if (typeof supabase !== 'undefined') {
       supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -51,6 +50,7 @@ function formatPKR(amount) {
 
 // ─── AUTH FUNCTIONS ───
 
+// Sign Up User
 async function signUpUser(email, password, userData) {
   if (!supabaseConnected || !supabaseClient) {
     console.log('📦 Using fallback signup (localStorage)');
@@ -129,6 +129,7 @@ async function signUpUser(email, password, userData) {
   }
 }
 
+// Sign In User
 async function signInUser(email, password) {
   if (!supabaseConnected || !supabaseClient) {
     console.log('📦 Using fallback login (localStorage)');
@@ -174,6 +175,7 @@ async function signInUser(email, password) {
   }
 }
 
+// Sign Out User
 async function signOutUser() {
   localStorage.removeItem('pixlnex_user');
   
@@ -188,6 +190,7 @@ async function signOutUser() {
   return { success: true };
 }
 
+// Get Current User
 async function getCurrentUser() {
   const localUser = JSON.parse(localStorage.getItem('pixlnex_user') || 'null');
   if (localUser) {
@@ -210,6 +213,7 @@ async function getCurrentUser() {
 
 // ─── PRODUCT FUNCTIONS ───
 
+// Get All Products
 async function getProducts() {
   if (!supabaseConnected || !supabaseClient) {
     console.log('📦 Using fallback products (localStorage)');
@@ -259,6 +263,7 @@ async function getProducts() {
   }
 }
 
+// Add Product
 async function addProduct(productData, imageFile) {
   if (!supabaseConnected || !supabaseClient) {
     console.log('📦 Saving product to localStorage (fallback)');
@@ -274,25 +279,48 @@ async function addProduct(productData, imageFile) {
   }
 
   try {
-    let imageUrl = '';
-    let imagePath = '';
+    let imageUrls = [];
 
     if (imageFile) {
+      // Upload single image
       const fileExt = imageFile.name.split('.').pop();
       const fileName = `${Date.now()}.${fileExt}`;
-      imagePath = `products/${fileName}`;
+      const filePath = `products/${fileName}`;
 
       const { error: uploadError } = await supabaseClient.storage
         .from(SUPABASE_BUCKET)
-        .upload(imagePath, imageFile);
+        .upload(filePath, imageFile);
 
       if (uploadError) throw uploadError;
 
       const { data: urlData } = supabaseClient.storage
         .from(SUPABASE_BUCKET)
-        .getPublicUrl(imagePath);
+        .getPublicUrl(filePath);
 
-      imageUrl = urlData.publicUrl;
+      imageUrls = [urlData.publicUrl];
+    }
+
+    // If multiple images are passed as array
+    if (productData.image_files && Array.isArray(productData.image_files)) {
+      const urls = [];
+      for (const file of productData.image_files) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+        const filePath = `products/${fileName}`;
+
+        const { error: uploadError } = await supabaseClient.storage
+          .from(SUPABASE_BUCKET)
+          .upload(filePath, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: urlData } = supabaseClient.storage
+          .from(SUPABASE_BUCKET)
+          .getPublicUrl(filePath);
+
+        urls.push(urlData.publicUrl);
+      }
+      imageUrls = urls;
     }
 
     const { data, error } = await supabaseClient
@@ -302,9 +330,10 @@ async function addProduct(productData, imageFile) {
         description: productData.desc || productData.description,
         price: productData.price,
         icon: productData.icon || 'fa-cube',
+        category: productData.category || 'custom',
+        category_label: productData.category_label || 'Custom',
         features: productData.features || [],
-        image_url: imageUrl,
-        image_path: imagePath,
+        image_urls: imageUrls,
         created_at: new Date().toISOString()
       }])
       .select();
@@ -317,6 +346,7 @@ async function addProduct(productData, imageFile) {
   }
 }
 
+// Update Product
 async function updateProduct(productId, updates) {
   if (!supabaseConnected || !supabaseClient) {
     const products = JSON.parse(localStorage.getItem('pixlnex_products') || '[]');
@@ -344,6 +374,7 @@ async function updateProduct(productId, updates) {
   }
 }
 
+// Delete Product
 async function deleteProduct(productId, imagePath) {
   if (!supabaseConnected || !supabaseClient) {
     let products = JSON.parse(localStorage.getItem('pixlnex_products') || '[]');
@@ -374,6 +405,7 @@ async function deleteProduct(productId, imagePath) {
 
 // ─── ORDER FUNCTIONS ───
 
+// Get All Orders
 async function getOrders() {
   if (!supabaseConnected || !supabaseClient) {
     return JSON.parse(localStorage.getItem('pixlnex_orders') || '[]');
@@ -398,6 +430,7 @@ async function getOrders() {
   }
 }
 
+// Get Orders for a Specific User
 async function getUserOrders(email) {
   if (!supabaseConnected || !supabaseClient) {
     const orders = JSON.parse(localStorage.getItem('pixlnex_orders') || '[]');
@@ -419,6 +452,7 @@ async function getUserOrders(email) {
   }
 }
 
+// Create Order
 async function createOrder(orderData) {
   if (!supabaseConnected || !supabaseClient) {
     const orders = JSON.parse(localStorage.getItem('pixlnex_orders') || '[]');
@@ -426,7 +460,8 @@ async function createOrder(orderData) {
       id: Date.now(),
       order_id: '#ORD-' + Date.now().toString().slice(-6),
       ...orderData,
-      status: 'processing',
+      payment_status: orderData.payment_status || 'pending',
+      is_custom: orderData.is_custom || false,
       created_at: new Date().toISOString()
     };
     orders.push(newOrder);
@@ -443,7 +478,24 @@ async function createOrder(orderData) {
         price: orderData.price,
         customer_email: orderData.customer_email,
         customer_name: orderData.customer_name,
-        status: 'processing',
+        payment_method: orderData.payment_method || 'jazzcash',
+        payment_status: orderData.payment_status || 'pending',
+        status: orderData.status || 'processing',
+        is_custom: orderData.is_custom || false,
+        order_type: orderData.order_type || (orderData.is_custom ? 'custom' : 'premade'),
+        // Custom fields
+        custom_details: orderData.custom_details || '',
+        custom_type: orderData.custom_type || '',
+        custom_budget: orderData.custom_budget || '',
+        website_goal: orderData.website_goal || '',
+        target_audience: orderData.target_audience || '',
+        design_preference: orderData.design_preference || '',
+        pages_needed: orderData.pages_needed || '',
+        features_needed: orderData.features_needed || '',
+        color_scheme: orderData.color_scheme || '',
+        content_ready: orderData.content_ready || '',
+        deadline: orderData.deadline || '',
+        additional_notes: orderData.additional_notes || '',
         created_at: new Date().toISOString()
       }])
       .select();
@@ -456,6 +508,7 @@ async function createOrder(orderData) {
   }
 }
 
+// Update Order Status
 async function updateOrderStatus(orderId, newStatus) {
   if (!supabaseConnected || !supabaseClient) {
     const orders = JSON.parse(localStorage.getItem('pixlnex_orders') || '[]');
@@ -483,8 +536,80 @@ async function updateOrderStatus(orderId, newStatus) {
   }
 }
 
+// ─── OFFER FUNCTIONS ───
+
+// Get Offer Status
+async function getOfferStatus(offerType) {
+  if (!supabaseConnected || !supabaseClient) {
+    return null;
+  }
+
+  try {
+    const { data, error } = await supabaseClient
+      .from('offers')
+      .select('*')
+      .eq('offer_type', offerType)
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (e) {
+    console.error('Error fetching offer:', e);
+    return null;
+  }
+}
+
+// Claim Offer
+async function claimOffer(offerType, email) {
+  if (!supabaseConnected || !supabaseClient) {
+    throw new Error('Supabase not connected');
+  }
+
+  try {
+    // Get current offer
+    const { data, error } = await supabaseClient
+      .from('offers')
+      .select('*')
+      .eq('offer_type', offerType)
+      .single();
+
+    if (error) throw error;
+
+    if (!data || data.is_active === false) {
+      throw new Error('This offer is no longer active');
+    }
+
+    const claimedArray = data.claimed_by ? data.claimed_by.split(',').filter(Boolean) : [];
+
+    if (claimedArray.includes(email)) {
+      throw new Error('You have already claimed this offer');
+    }
+
+    if (claimedArray.length >= data.total_limit) {
+      throw new Error('Offer fully claimed');
+    }
+
+    claimedArray.push(email);
+    const { error: updateError } = await supabaseClient
+      .from('offers')
+      .update({
+        claimed_by: claimedArray.join(','),
+        claimed_at: new Date().toISOString()
+      })
+      .eq('offer_type', offerType);
+
+    if (updateError) throw updateError;
+
+    return { success: true, claimed: true };
+  } catch (e) {
+    console.error('Error claiming offer:', e);
+    throw e;
+  }
+}
+
 // ─── USER FUNCTIONS ───
 
+// Get All Users (Admin)
 async function getUsers() {
   if (!supabaseConnected || !supabaseClient) {
     return JSON.parse(localStorage.getItem('pixlnex_users') || '[]');
@@ -506,32 +631,48 @@ async function getUsers() {
 
 // ─── EXPOSE GLOBALLY ───
 window.Pixlnex = {
+  // Config
   initSupabase,
   supabaseClient,
   supabaseConnected,
   useFallback,
+  
+  // Helpers
   formatPKR,
+  
+  // Auth
   signUpUser,
   signInUser,
   signOutUser,
   getCurrentUser,
+  
+  // Products
   getProducts,
   addProduct,
   updateProduct,
   deleteProduct,
+  
+  // Orders
   getOrders,
   getUserOrders,
   createOrder,
   updateOrderStatus,
+  
+  // Offers
+  getOfferStatus,
+  claimOffer,
+  
+  // Users
   getUsers,
+  
+  // Constants
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
   SUPABASE_BUCKET,
-  FALLBACK_PRODUCTS,
-  VERSION: '2.0'  // ← ADD VERSION NUMBER
+  FALLBACK_PRODUCTS
 };
 
-console.log('📦 Pixlnex supabase.js v2.0 loaded successfully!');
+console.log('📦 Pixlnex supabase.js loaded successfully!');
 
 // Auto-init when page loads
 document.addEventListener('DOMContentLoaded', function() {
