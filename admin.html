@@ -55,12 +55,14 @@
     /* ─── ORDER DETAILS ─── */
     .admin-order-item { display: flex; flex-direction: column; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
     .admin-order-item:last-child { border-bottom: none; }
-    .admin-order-item .order-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
-    .admin-order-item .order-info { display: flex; flex-direction: column; gap: 0.1rem; }
-    .admin-order-item .order-info .order-name { font-weight: 600; font-size: 0.95rem; }
+    .admin-order-item .order-row { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; }
+    .admin-order-item .order-info { display: flex; flex-direction: column; gap: 0.1rem; flex: 1; }
+    .admin-order-item .order-info .order-name { font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
     .admin-order-item .order-info .order-meta { font-size: 0.75rem; color: #94a3b8; }
-    .admin-order-item .order-info .order-custom-details { font-size: 0.8rem; color: #475569; background: #f8fafc; padding: 0.5rem 0.8rem; border-radius: 0.5rem; margin-top: 0.3rem; border-left: 3px solid #2563eb; width: 100%; }
+    .admin-order-item .order-info .order-custom-details { font-size: 0.85rem; color: #1e293b; background: #f1f6fe; padding: 0.8rem 1rem; border-radius: 0.5rem; margin-top: 0.3rem; border-left: 3px solid #2563eb; width: 100%; }
     .admin-order-item .order-info .order-custom-details strong { color: #0f2b4b; }
+    .admin-order-item .order-info .order-custom-details .detail-label { font-weight: 600; color: #2563eb; }
+    .admin-order-item .order-info .order-custom-details .detail-value { color: #1e293b; }
     .admin-order-item .order-status-select { padding: 0.2rem 0.8rem; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.75rem; font-weight: 600; background: white; cursor: pointer; transition: 0.2s; }
     .admin-order-item .order-status-select:focus { outline: none; border-color: #2563eb; }
     .admin-order-item .order-status-select.status-processing { background: #e0f2fe; color: #0369a1; border-color: #b8d4f0; }
@@ -136,8 +138,8 @@
     .deal-banner i { font-size: 1.5rem; }
     .deal-banner .deal-tag { background: rgba(255,255,255,0.2); padding: 0.2rem 0.8rem; border-radius: 30px; font-size: 0.7rem; }
 
-    @media (max-width: 900px) { .admin-grid { grid-template-columns: 1fr; } .admin-header { flex-direction: column; align-items: flex-start; gap: 1rem; } .stats-grid { grid-template-columns: 1fr 1fr; } .add-product-form { grid-template-columns: 1fr; } .add-product-form .full { grid-column: 1; } .login-box { padding: 2rem 1.5rem; margin: 1rem; } }
-    @media (max-width: 700px) { .app { padding: 1rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .admin-header { padding: 1.5rem; } .admin-header h1 { font-size: 1.6rem; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; } .stat-card { padding: 1rem; } .stat-card .stat-number { font-size: 1.5rem; } .admin-card { padding: 1.2rem 1.5rem; } .admin-order-item .order-row { flex-direction: column; align-items: stretch; } }
+    @media (max-width: 900px) { .admin-grid { grid-template-columns: 1fr; } .admin-header { flex-direction: column; align-items: flex-start; gap: 1rem; } .stats-grid { grid-template-columns: 1fr 1fr; } .add-product-form { grid-template-columns: 1fr; } .add-product-form .full { grid-column: 1; } .login-box { padding: 2rem 1.5rem; margin: 1rem; } .admin-order-item .order-row { flex-direction: column; align-items: stretch; } }
+    @media (max-width: 700px) { .app { padding: 1rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .admin-header { padding: 1.5rem; } .admin-header h1 { font-size: 1.6rem; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; } .stat-card { padding: 1rem; } .stat-card .stat-number { font-size: 1.5rem; } .admin-card { padding: 1.2rem 1.5rem; } }
   </style>
 </head>
 <body>
@@ -499,7 +501,7 @@
         document.getElementById('totalCustomers').textContent = customers || 0;
         document.getElementById('pendingOrders').textContent = pending;
 
-        // ─── RENDER ORDERS WITH DETAILS ───
+        // ─── RENDER ORDERS WITH FULL DETAILS ───
         const orderList = document.getElementById('orderList');
         const orderCountBadge = document.getElementById('orderCountBadge');
 
@@ -509,6 +511,7 @@
         } else {
           orderCountBadge.textContent = orders.length;
           orderList.innerHTML = '';
+          
           orders.slice(0, 10).forEach((order, index) => {
             const div = document.createElement('div');
             div.className = 'admin-order-item';
@@ -516,6 +519,8 @@
 
             // Check if this is a custom order
             const isCustom = order.name && order.name.toLowerCase().includes('custom');
+            
+            // Get custom details with fallbacks
             const customDetails = order.custom_details || '';
             const customType = order.custom_type || '';
             const customBudget = order.custom_budget || '';
@@ -536,9 +541,10 @@
                   ${isCustom ? `
                     <div class="order-custom-details">
                       <strong>📋 Project Details:</strong><br />
-                      ${customType ? '<strong>Type:</strong> ' + customType + ' | ' : ''}
-                      ${customBudget ? '<strong>Budget:</strong> ' + customBudget : ''}
-                      <br /><strong>Description:</strong> ${customDetails || 'No details provided'}
+                      ${customType ? '<span class="detail-label">Type:</span> <span class="detail-value">' + customType + '</span> | ' : ''}
+                      ${customBudget ? '<span class="detail-label">Budget:</span> <span class="detail-value">' + customBudget + '</span>' : ''}
+                      <br /><span class="detail-label">Description:</span><br />
+                      <span class="detail-value">${customDetails || '⚠️ No details provided'}</span>
                     </div>
                   ` : ''}
                 </div>
