@@ -322,21 +322,18 @@ async function getCurrentUser() {
         
         if (!sessionData.session) {
             // FALLBACK: Check localStorage for session cache
-            // This is ONLY for user experience (so they don't have to login again)
             const storedUser = localStorage.getItem('pixlnex_user_secure');
             if (storedUser) {
                 try {
                     const userData = JSON.parse(storedUser);
-                    // Verify the stored data is not tampered
                     const expectedSig = btoa(userData.id + userData.email + 'pixlnex_secret_salt');
                     if (userData._sig === expectedSig) {
-                        // Return cached user data but mark as needing refresh
                         return {
                             id: userData.id,
                             email: userData.email,
                             user_metadata: { full_name: userData.name },
                             created_at: userData.created_at,
-                            _cached: true // Flag to indicate this is from cache
+                            _cached: true
                         };
                     }
                 } catch(e) {
@@ -357,7 +354,6 @@ async function getCurrentUser() {
         
         if (data.user) {
             // Cache user data in localStorage for faster subsequent loads
-            // This is a CACHE, not the primary data source
             const userData = {
                 id: data.user.id,
                 email: data.user.email,
@@ -368,7 +364,6 @@ async function getCurrentUser() {
             };
             localStorage.setItem('pixlnex_user_secure', JSON.stringify(userData));
             
-            // Set CSRF token
             if (!localStorage.getItem('pixlnex_csrf_token')) {
                 localStorage.setItem('pixlnex_csrf_token', generateCSRFToken());
             }
@@ -393,7 +388,6 @@ async function signInUser(email, password) {
         throw new Error('Supabase not connected');
     }
     
-    // Validate inputs before sending
     if (!validateEmail(email)) {
         throw new Error('Invalid email format');
     }
@@ -402,26 +396,22 @@ async function signInUser(email, password) {
         throw new Error('Password must be exactly 8 characters with safe characters only');
     }
     
-    // Rate limiting - max 5 attempts per 5 minutes
     const clientId = getClientIP();
     if (!checkRateLimit('login_' + clientId, 5, 300000)) {
         throw new Error('Too many login attempts. Please try again later.');
     }
     
-    // Sanitize inputs
     const sanitizedEmail = sanitizeInput(email.trim());
     
     try {
-        // PRIMARY: Authenticate with Supabase
         const { data, error } = await supabaseClient.auth.signInWithPassword({
             email: sanitizedEmail,
-            password: password // Password is already validated
+            password: password
         });
         
         if (error) throw error;
         
         if (data.user) {
-            // Cache user data in localStorage (CACHE ONLY)
             const userData = {
                 id: data.user.id,
                 email: data.user.email,
@@ -431,10 +421,7 @@ async function signInUser(email, password) {
                 _cached: false
             };
             localStorage.setItem('pixlnex_user_secure', JSON.stringify(userData));
-            
-            // Generate CSRF token
             localStorage.setItem('pixlnex_csrf_token', generateCSRFToken());
-            
             currentUser = data.user;
         }
         
@@ -454,7 +441,6 @@ async function signUpUser(email, password, userData) {
         throw new Error('Supabase not connected');
     }
     
-    // Validate inputs
     if (!validateEmail(email)) {
         throw new Error('Invalid email format');
     }
@@ -463,26 +449,14 @@ async function signUpUser(email, password, userData) {
         throw new Error('Password must be exactly 8 characters with safe characters only');
     }
     
-    // Sanitize user data
     const sanitizedUserData = sanitizeObject(userData);
     const sanitizedEmail = sanitizeInput(email.trim());
-    
-    // PRIMARY: Check if email already exists in Supabase
-    const { data: existingUser, error: checkError } = await supabaseClient
-        .from('users')
-        .select('email')
-        .eq('email', sanitizedEmail)
-        .maybeSingle();
-    
-    if (existingUser) {
-        throw new Error('This email is already registered. Please login instead.');
-    }
     
     try {
         // PRIMARY: Create user in Supabase Auth
         const { data, error } = await supabaseClient.auth.signUp({
             email: sanitizedEmail,
-            password: password, // Password is already validated
+            password: password,
             options: {
                 data: {
                     full_name: sanitizedUserData.full_name || sanitizedUserData.name || 'User'
@@ -492,7 +466,6 @@ async function signUpUser(email, password, userData) {
         
         if (error) throw error;
         
-        // PRIMARY: Create user record in users table
         if (data.user) {
             try {
                 await supabaseClient
@@ -505,10 +478,8 @@ async function signUpUser(email, password, userData) {
                     }]);
             } catch (e) {
                 console.warn('User record error:', e);
-                // Don't throw - user is already created in auth
             }
             
-            // Cache user data in localStorage (CACHE ONLY)
             const userDataSecure = {
                 id: data.user.id,
                 email: data.user.email,
@@ -536,36 +507,27 @@ async function signUpUser(email, password, userData) {
 async function signOutUser() {
     try {
         if (supabaseConnected && supabaseClient) {
-            // PRIMARY: Sign out from Supabase
             await supabaseClient.auth.signOut();
         }
     } catch (e) {
         console.error('Sign out error:', e);
     }
     
-    // Clear localStorage cache
     localStorage.removeItem('pixlnex_user_secure');
     localStorage.removeItem('pixlnex_csrf_token');
     
     currentUser = null;
     
-    // Redirect to login
     window.location.href = 'login.html';
 }
 
 // ─── PRODUCT FUNCTIONS ───
-// DATA SOURCE: Supabase Products Table (100% database)
-
-/**
- * Get all products from Supabase
- */
 async function getProducts() {
     if (!supabaseConnected || !supabaseClient) {
         console.warn('⚠️ Supabase not connected');
         return [];
     }
     
-    // Rate limiting
     const clientId = getClientIP();
     if (!checkRateLimit('products_' + clientId, 100, 60000)) {
         console.warn('⚠️ Products rate limit exceeded');
@@ -573,15 +535,12 @@ async function getProducts() {
     }
     
     try {
-        // PRIMARY: Fetch from Supabase
         const { data, error } = await supabaseClient
             .from('products')
             .select('*')
             .order('created_at', { ascending: true });
         
         if (error) throw error;
-        
-        // Sanitize all product data before returning
         return (data || []).map(product => sanitizeObject(product));
     } catch (e) {
         console.error('Products error:', e);
@@ -597,7 +556,6 @@ async function getProductById(productId) {
     if (!productId) return null;
     
     try {
-        // PRIMARY: Fetch from Supabase
         const { data, error } = await supabaseClient
             .from('products')
             .select('*')
@@ -620,17 +578,14 @@ async function createProduct(productData) {
         throw new Error('Supabase not connected');
     }
     
-    // Validate CSRF token
     if (!validateCSRFToken(productData.csrfToken)) {
         throw new Error('Invalid CSRF token');
     }
     
-    // Sanitize product data
     const sanitizedData = sanitizeObject(productData);
     delete sanitizedData.csrfToken;
     
     try {
-        // PRIMARY: Insert into Supabase
         const { data, error } = await supabaseClient
             .from('products')
             .insert([{
@@ -661,18 +616,15 @@ async function updateProduct(productId, productData) {
         throw new Error('Supabase not connected');
     }
     
-    // Validate CSRF token
     if (!validateCSRFToken(productData.csrfToken)) {
         throw new Error('Invalid CSRF token');
     }
     
-    // Sanitize product data
     const sanitizedData = sanitizeObject(productData);
     delete sanitizedData.csrfToken;
     delete sanitizedData.id;
     
     try {
-        // PRIMARY: Update in Supabase
         const { data, error } = await supabaseClient
             .from('products')
             .update({
@@ -698,13 +650,11 @@ async function deleteProduct(productId, csrfToken) {
         throw new Error('Supabase not connected');
     }
     
-    // Validate CSRF token
     if (!validateCSRFToken(csrfToken)) {
         throw new Error('Invalid CSRF token');
     }
     
     try {
-        // PRIMARY: Delete from Supabase
         const { error } = await supabaseClient
             .from('products')
             .delete()
@@ -719,17 +669,11 @@ async function deleteProduct(productId, csrfToken) {
 }
 
 // ─── OFFER FUNCTIONS ───
-// DATA SOURCE: Supabase Offers Table (100% database)
-
-/**
- * Get offer status from Supabase
- */
 async function getOfferStatus(offerType) {
     if (!supabaseConnected || !supabaseClient) return null;
     if (!offerType) return null;
     
     try {
-        // PRIMARY: Fetch from Supabase
         const { data, error } = await supabaseClient
             .from('offers')
             .select('*')
@@ -752,26 +696,22 @@ async function claimOffer(offerType, email, csrfToken) {
         throw new Error('Supabase not connected');
     }
     
-    // Validate CSRF token
     if (!validateCSRFToken(csrfToken)) {
         throw new Error('Invalid CSRF token');
     }
     
-    // Validate email
     if (!validateEmail(email)) {
         throw new Error('Invalid email format');
     }
     
     const sanitizedEmail = sanitizeInput(email.trim());
     
-    // Rate limiting for claim attempts
     const clientId = getClientIP();
     if (!checkRateLimit('claim_' + clientId, 5, 60000)) {
         throw new Error('Too many claim attempts. Please try again later.');
     }
     
     try {
-        // PRIMARY: Get offer data from Supabase
         const { data, error } = await supabaseClient
             .from('offers')
             .select('*')
@@ -784,14 +724,12 @@ async function claimOffer(offerType, email, csrfToken) {
             throw new Error('Offer not active');
         }
         
-        // Check if already claimed
         const claimedArray = data.claimed_by ? data.claimed_by.split(',').filter(Boolean) : [];
         
         if (claimedArray.includes(sanitizedEmail)) {
             throw new Error('Already claimed this offer');
         }
         
-        // Check if offer is fully claimed (with admin bypass)
         const adminEmails = ['faisalyousafyousaf3@gmail.com', 'noor@gmail.com'];
         const isAdmin = adminEmails.includes(sanitizedEmail.toLowerCase());
         
@@ -799,10 +737,8 @@ async function claimOffer(offerType, email, csrfToken) {
             throw new Error('Offer is fully claimed');
         }
         
-        // Add email to claimed list
         claimedArray.push(sanitizedEmail);
         
-        // PRIMARY: Update offer in Supabase
         const { error: updateError } = await supabaseClient
             .from('offers')
             .update({
@@ -821,35 +757,25 @@ async function claimOffer(offerType, email, csrfToken) {
 }
 
 // ─── ORDER FUNCTIONS ───
-// DATA SOURCE: Supabase Orders Table (100% database)
-
-/**
- * Create a new order in Supabase
- */
 async function createOrder(orderData) {
     if (!supabaseConnected || !supabaseClient) {
         throw new Error('Supabase not connected');
     }
     
-    // Validate CSRF token
     if (!validateCSRFToken(orderData.csrfToken)) {
         throw new Error('Invalid CSRF token');
     }
     
-    // Validate email
     if (orderData.customer_email && !validateEmail(orderData.customer_email)) {
         throw new Error('Invalid customer email');
     }
     
-    // Sanitize order data
     const sanitizedData = sanitizeObject(orderData);
     delete sanitizedData.csrfToken;
     
-    // Generate secure order ID
     const orderId = '#ORD-' + Date.now().toString().slice(-6) + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
     
     try {
-        // PRIMARY: Insert into Supabase
         const { data, error } = await supabaseClient
             .from('orders')
             .insert([{
@@ -887,7 +813,6 @@ async function getUserOrders(email) {
     const sanitizedEmail = sanitizeInput(email.trim());
     
     try {
-        // PRIMARY: Fetch from Supabase
         const { data, error } = await supabaseClient
             .from('orders')
             .select('*')
@@ -909,7 +834,6 @@ async function getAllOrders() {
     if (!supabaseConnected || !supabaseClient) return [];
     
     try {
-        // PRIMARY: Fetch from Supabase
         const { data, error } = await supabaseClient
             .from('orders')
             .select('*')
@@ -931,19 +855,16 @@ async function updateOrderStatus(orderId, status, csrfToken) {
         throw new Error('Supabase not connected');
     }
     
-    // Validate CSRF token
     if (!validateCSRFToken(csrfToken)) {
         throw new Error('Invalid CSRF token');
     }
     
-    // Validate status
     const validStatuses = ['processing', 'working', 'demo_ready', 'completed', 'delivered'];
     if (!validStatuses.includes(status)) {
         throw new Error('Invalid order status');
     }
     
     try {
-        // PRIMARY: Update in Supabase
         const { data, error } = await supabaseClient
             .from('orders')
             .update({
@@ -962,16 +883,10 @@ async function updateOrderStatus(orderId, status, csrfToken) {
 }
 
 // ─── USER FUNCTIONS ───
-// DATA SOURCE: Supabase Users Table (100% database)
-
-/**
- * Get all users from Supabase (admin only)
- */
 async function getUsers() {
     if (!supabaseConnected || !supabaseClient) return [];
     
     try {
-        // PRIMARY: Fetch from Supabase
         const { data, error } = await supabaseClient
             .from('users')
             .select('*')
@@ -993,7 +908,6 @@ async function getUserById(userId) {
     if (!userId) return null;
     
     try {
-        // PRIMARY: Fetch from Supabase
         const { data, error } = await supabaseClient
             .from('users')
             .select('*')
@@ -1011,7 +925,6 @@ async function getUserById(userId) {
 // ─── EXPOSE ───
 
 const PixlnexDB = {
-    // Supabase
     initSupabase,
     waitForSupabase,
     supabaseClient,
@@ -1019,7 +932,6 @@ const PixlnexDB = {
     isInitialized,
     currentUser,
     
-    // Security
     validateEmail,
     validatePassword,
     sanitizeInput,
@@ -1029,46 +941,37 @@ const PixlnexDB = {
     checkRateLimit,
     getClientIP,
     
-    // Helpers
     formatPKR,
     
-    // Auth (Supabase Auth + localStorage cache)
     getCurrentUser,
     signInUser,
     signUpUser,
     signOutUser,
     
-    // Products (100% Supabase Database)
     getProducts,
     getProductById,
     createProduct,
     updateProduct,
     deleteProduct,
     
-    // Offers (100% Supabase Database)
     getOfferStatus,
     claimOffer,
     
-    // Orders (100% Supabase Database)
     createOrder,
     getUserOrders,
     getAllOrders,
     updateOrderStatus,
     
-    // Users (100% Supabase Database)
     getUsers,
     getUserById,
     
-    // Constants
     SUPABASE_URL,
     SUPABASE_ANON_KEY,
     SUPABASE_BUCKET
 };
 
-// Export for browser
 window.PixlnexDB = PixlnexDB;
 
-// Export for modules
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = PixlnexDB;
 }
@@ -1076,14 +979,12 @@ if (typeof module !== 'undefined' && module.exports) {
 console.log('📦 PixlnexDB object created and exposed globally');
 
 // ─── AUTO-INIT ───
-// Try to connect immediately
 setTimeout(() => {
     if (!isInitialized) {
         initSupabase();
     }
 }, 100);
 
-// Also init on DOM ready
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
     if (!isInitialized) initSupabase();
 } else {
