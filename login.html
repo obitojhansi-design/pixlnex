@@ -23,7 +23,6 @@
     .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
     .login-footer { text-align: center; margin-top: 1.5rem; color: #64748b; font-size: 0.9rem; }
     .login-footer a { color: #2563eb; text-decoration: none; font-weight: 600; }
-    .login-footer a:hover { text-decoration: underline; }
     .demo-cred { background: #f1f6fe; padding: 0.8rem 1.2rem; border-radius: 60px; font-size: 0.85rem; color: #475569; text-align: center; margin-top: 1.2rem; border: 1px dashed #2563eb40; }
     .demo-cred code { background: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-weight: 600; color: #2563eb; }
     .error-msg { background: #fee2e2; color: #b91c1c; padding: 0.7rem 1rem; border-radius: 40px; font-size: 0.9rem; text-align: center; margin-bottom: 1rem; display: none; }
@@ -57,31 +56,89 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js?v=999"></script>
 <script>
-  document.getElementById('loginForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-    const errorMsg = document.getElementById('errorMsg');
-    const loginBtn = document.getElementById('loginBtn');
+// ============================================
+// PIXLNEX - EMBEDDED SUPABASE (LOGIN)
+// ============================================
 
-    errorMsg.classList.remove('show');
-    loginBtn.disabled = true;
-    loginBtn.innerHTML = '<span class="loading-spinner"></span> Signing in...';
+// ─── SUPABASE CONFIG ───
+const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
 
-    const result = await window.Pixlnex.signInUser(email, password);
+let supabaseClient = null;
+let supabaseConnected = false;
 
-    loginBtn.disabled = false;
-    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign in';
+function initSupabase() {
+  try {
+    if (typeof supabase !== 'undefined') {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      supabaseConnected = true;
+      console.log('✅ Supabase connected (Login)');
+      return true;
+    }
+    return false;
+  } catch(e) {
+    console.error('Supabase error:', e);
+    return false;
+  }
+}
 
-    if (result.success) {
+async function signInUser(email, password) {
+  if (!supabaseConnected || !supabaseClient) throw new Error('Supabase not connected');
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+  if (error) throw error;
+  return data;
+}
+
+function waitForSupabase() {
+  return new Promise((resolve) => {
+    let attempts = 0;
+    const check = () => {
+      if (supabaseConnected && supabaseClient) { resolve(true); return; }
+      attempts++;
+      if (attempts > 30) { resolve(false); return; }
+      setTimeout(check, 300);
+    };
+    if (!supabaseConnected) { initSupabase(); }
+    check();
+  });
+}
+
+// ─── LOGIN ───
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const errorMsg = document.getElementById('errorMsg');
+  const loginBtn = document.getElementById('loginBtn');
+
+  errorMsg.classList.remove('show');
+  loginBtn.disabled = true;
+  loginBtn.innerHTML = '<span class="loading-spinner"></span> Signing in...';
+
+  try {
+    const connected = await waitForSupabase();
+    if (!connected) {
+      throw new Error('Database not connected. Please refresh.');
+    }
+
+    const result = await signInUser(email, password);
+
+    if (result && result.user) {
       window.location.href = 'index.html';
     } else {
-      errorMsg.textContent = `⚠️ ${result.error || 'Invalid email or password'}`;
+      errorMsg.textContent = '⚠️ Invalid email or password. Please try again.';
       errorMsg.classList.add('show');
+      loginBtn.disabled = false;
+      loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign in';
     }
-  });
+  } catch (e) {
+    errorMsg.textContent = '⚠️ ' + (e.message || 'Something went wrong. Please try again.');
+    errorMsg.classList.add('show');
+    loginBtn.disabled = false;
+    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign in';
+  }
+});
 </script>
 </body>
 </html>

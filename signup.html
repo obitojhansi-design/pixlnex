@@ -73,140 +73,168 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js?v=18"></script>
 <script>
-  (function() {
-    function waitForPixlnex() {
-      return new Promise((resolve) => {
-        let attempts = 0;
-        const check = () => {
-          if (window.Pixlnex && window.Pixlnex.supabaseConnected) {
-            resolve(window.Pixlnex);
-            return;
-          }
-          attempts++;
-          if (attempts > 50) {
-            resolve(null);
-            return;
-          }
-          setTimeout(check, 200);
-        };
-        check();
-      });
+// ============================================
+// PIXLNEX - EMBEDDED SUPABASE (SIGNUP)
+// ============================================
+
+const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
+
+let supabaseClient = null;
+let supabaseConnected = false;
+
+function initSupabase() {
+  try {
+    if (typeof supabase !== 'undefined') {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      supabaseConnected = true;
+      console.log('✅ Supabase connected (Signup)');
+      return true;
+    }
+    return false;
+  } catch(e) {
+    console.error('Supabase error:', e);
+    return false;
+  }
+}
+
+async function signUpUser(email, password, userData) {
+  if (!supabaseConnected || !supabaseClient) throw new Error('Supabase not connected');
+  const { data, error } = await supabaseClient.auth.signUp({
+    email, password,
+    options: { data: { full_name: userData.full_name || userData.name } }
+  });
+  if (error) throw error;
+  return data;
+}
+
+function waitForSupabase() {
+  return new Promise((resolve) => {
+    let attempts = 0;
+    const check = () => {
+      if (supabaseConnected && supabaseClient) { resolve(true); return; }
+      attempts++;
+      if (attempts > 30) { resolve(false); return; }
+      setTimeout(check, 300);
+    };
+    if (!supabaseConnected) { initSupabase(); }
+    check();
+  });
+}
+
+// ─── SIGNUP ───
+const form = document.getElementById('signupForm');
+const fullNameInput = document.getElementById('fullName');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const confirmPasswordInput = document.getElementById('confirmPassword');
+const signupBtn = document.getElementById('signupBtn');
+const errorMsg = document.getElementById('errorMsg');
+const successMsg = document.getElementById('successMsg');
+
+const bar1 = document.getElementById('bar1');
+const bar2 = document.getElementById('bar2');
+const bar3 = document.getElementById('bar3');
+const strengthText = document.getElementById('strengthText');
+
+function checkPasswordStrength(password) {
+  let score = 0;
+  if (password.length >= 8) score++;
+  if (password.match(/[a-z]/) && password.match(/[A-Z]/)) score++;
+  if (password.match(/[0-9]/) || password.match(/[^a-zA-Z0-9]/)) score++;
+  return score;
+}
+
+passwordInput.addEventListener('input', function() {
+  const password = this.value;
+  const score = checkPasswordStrength(password);
+  bar1.className = 'bar';
+  bar2.className = 'bar';
+  bar3.className = 'bar';
+  if (password.length === 0) {
+    strengthText.textContent = 'Enter a strong password';
+    strengthText.className = 'password-strength-text';
+    return;
+  }
+  if (score <= 1) {
+    bar1.className = 'bar weak';
+    strengthText.textContent = 'Weak — add uppercase, numbers, or symbols';
+    strengthText.className = 'password-strength-text weak';
+  } else if (score === 2) {
+    bar1.className = 'bar medium';
+    bar2.className = 'bar medium';
+    strengthText.textContent = 'Medium — add more variety';
+    strengthText.className = 'password-strength-text medium';
+  } else {
+    bar1.className = 'bar strong';
+    bar2.className = 'bar strong';
+    bar3.className = 'bar strong';
+    strengthText.textContent = 'Strong password!';
+    strengthText.className = 'password-strength-text strong';
+  }
+});
+
+form.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const name = fullNameInput.value.trim();
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+  const confirmPassword = confirmPasswordInput.value;
+
+  errorMsg.classList.remove('show');
+  successMsg.classList.remove('show');
+
+  if (!name || name.length < 2) {
+    errorMsg.textContent = '⚠️ Please enter your full name.';
+    errorMsg.classList.add('show');
+    return;
+  }
+  if (!email || !email.includes('@')) {
+    errorMsg.textContent = '⚠️ Please enter a valid email address.';
+    errorMsg.classList.add('show');
+    return;
+  }
+  if (password.length < 8) {
+    errorMsg.textContent = '⚠️ Password must be at least 8 characters.';
+    errorMsg.classList.add('show');
+    return;
+  }
+  if (password !== confirmPassword) {
+    errorMsg.textContent = '⚠️ Passwords do not match.';
+    errorMsg.classList.add('show');
+    return;
+  }
+
+  signupBtn.disabled = true;
+  signupBtn.innerHTML = '<span class="loading-spinner"></span> Creating...';
+
+  try {
+    const connected = await waitForSupabase();
+    if (!connected) {
+      throw new Error('Database not connected. Please refresh.');
     }
 
-    const form = document.getElementById('signupForm');
-    const fullNameInput = document.getElementById('fullName');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const confirmPasswordInput = document.getElementById('confirmPassword');
-    const signupBtn = document.getElementById('signupBtn');
-    const errorMsg = document.getElementById('errorMsg');
-    const successMsg = document.getElementById('successMsg');
+    const result = await signUpUser(email, password, { full_name: name });
 
-    const bar1 = document.getElementById('bar1');
-    const bar2 = document.getElementById('bar2');
-    const bar3 = document.getElementById('bar3');
-    const strengthText = document.getElementById('strengthText');
-
-    function checkPasswordStrength(password) {
-      let score = 0;
-      if (password.length >= 8) score++;
-      if (password.match(/[a-z]/) && password.match(/[A-Z]/)) score++;
-      if (password.match(/[0-9]/) || password.match(/[^a-zA-Z0-9]/)) score++;
-      return score;
+    if (result && result.user) {
+      successMsg.textContent = `✅ Account created successfully! Welcome ${name}! Redirecting...`;
+      successMsg.classList.add('show');
+      setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+    } else {
+      errorMsg.textContent = '⚠️ ' + (result?.error || 'Something went wrong. Please try again.');
+      errorMsg.classList.add('show');
+      signupBtn.disabled = false;
+      signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
     }
-
-    passwordInput.addEventListener('input', function() {
-      const password = this.value;
-      const score = checkPasswordStrength(password);
-      bar1.className = 'bar';
-      bar2.className = 'bar';
-      bar3.className = 'bar';
-      if (password.length === 0) {
-        strengthText.textContent = 'Enter a strong password';
-        strengthText.className = 'password-strength-text';
-        return;
-      }
-      if (score <= 1) {
-        bar1.className = 'bar weak';
-        strengthText.textContent = 'Weak — add uppercase, numbers, or symbols';
-        strengthText.className = 'password-strength-text weak';
-      } else if (score === 2) {
-        bar1.className = 'bar medium';
-        bar2.className = 'bar medium';
-        strengthText.textContent = 'Medium — add more variety';
-        strengthText.className = 'password-strength-text medium';
-      } else {
-        bar1.className = 'bar strong';
-        bar2.className = 'bar strong';
-        bar3.className = 'bar strong';
-        strengthText.textContent = 'Strong password!';
-        strengthText.className = 'password-strength-text strong';
-      }
-    });
-
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      const name = fullNameInput.value.trim();
-      const email = emailInput.value.trim();
-      const password = passwordInput.value;
-      const confirmPassword = confirmPasswordInput.value;
-
-      errorMsg.classList.remove('show');
-      successMsg.classList.remove('show');
-
-      if (!name || name.length < 2) {
-        errorMsg.textContent = '⚠️ Please enter your full name.';
-        errorMsg.classList.add('show');
-        return;
-      }
-      if (!email || !email.includes('@')) {
-        errorMsg.textContent = '⚠️ Please enter a valid email address.';
-        errorMsg.classList.add('show');
-        return;
-      }
-      if (password.length < 8) {
-        errorMsg.textContent = '⚠️ Password must be at least 8 characters.';
-        errorMsg.classList.add('show');
-        return;
-      }
-      if (password !== confirmPassword) {
-        errorMsg.textContent = '⚠️ Passwords do not match.';
-        errorMsg.classList.add('show');
-        return;
-      }
-
-      signupBtn.disabled = true;
-      signupBtn.innerHTML = '<span class="loading-spinner"></span> Creating...';
-
-      try {
-        const PX = await waitForPixlnex();
-        if (!PX) {
-          throw new Error('Database not connected. Please refresh.');
-        }
-
-        const result = await PX.signUpUser(email, password, { full_name: name });
-
-        if (result && result.user) {
-          successMsg.textContent = `✅ Account created successfully! Welcome ${name}! Redirecting...`;
-          successMsg.classList.add('show');
-          setTimeout(() => { window.location.href = 'index.html'; }, 2000);
-        } else {
-          errorMsg.textContent = '⚠️ ' + (result?.error || 'Something went wrong. Please try again.');
-          errorMsg.classList.add('show');
-          signupBtn.disabled = false;
-          signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
-        }
-      } catch (e) {
-        errorMsg.textContent = '⚠️ ' + (e.message || 'Something went wrong. Please try again.');
-        errorMsg.classList.add('show');
-        signupBtn.disabled = false;
-        signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
-      }
-    });
-  })();
+  } catch (e) {
+    errorMsg.textContent = '⚠️ ' + (e.message || 'Something went wrong. Please try again.');
+    errorMsg.classList.add('show');
+    signupBtn.disabled = false;
+    signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+  }
+});
 </script>
 </body>
 </html>
