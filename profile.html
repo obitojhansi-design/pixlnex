@@ -3,11 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
   <title>Pixlnex · Profile</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
     body { background: #f8fafc; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
@@ -26,17 +23,7 @@
     .cart-icon { font-size: 1.4rem; background: #eef2f6; padding: 0.5rem 0.9rem; border-radius: 40px; display: flex; align-items: center; gap: 0.4rem; text-decoration: none; color: #0b1a2e; }
     .cart-count { background: #2563eb; color: white; font-size: 0.75rem; font-weight: 600; padding: 0.15rem 0.55rem; border-radius: 30px; margin-left: 0.2rem; }
 
-    .profile-header {
-      background: linear-gradient(145deg, #ffffff, #f1f6fe);
-      padding: 2.5rem 2.8rem;
-      border-radius: 2.5rem;
-      margin-bottom: 2.8rem;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 8px 20px rgba(0,20,40,0.04);
-    }
+    .profile-header { background: linear-gradient(145deg, #ffffff, #f1f6fe); padding: 2.5rem 2.8rem; border-radius: 2.5rem; margin-bottom: 2.8rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; box-shadow: 0 8px 20px rgba(0,20,40,0.04); }
     .profile-avatar { display: flex; align-items: center; gap: 1.5rem; }
     .profile-avatar .avatar-icon { width: 80px; height: 80px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.8rem; color: white; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
     .profile-avatar .user-info h1 { font-size: 2rem; font-weight: 700; }
@@ -91,7 +78,6 @@
 <body>
 <div class="app">
 
-  <!-- ─── NAVBAR ─── -->
   <header class="navbar">
     <a href="index.html" class="logo"><i class="fas fa-cube"></i><span>Pixlnex</span></a>
     <div class="nav-links">
@@ -104,10 +90,8 @@
     </div>
   </header>
 
-  <!-- ─── TOAST ─── -->
   <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Done!</span></div>
 
-  <!-- ─── PROFILE CONTENT ─── -->
   <div class="profile-header" id="profileHeader">
     <div class="profile-avatar">
       <div class="avatar-icon"><i class="fas fa-user"></i></div>
@@ -125,7 +109,6 @@
   </div>
 
   <div class="profile-grid">
-    <!-- Personal Information -->
     <div class="profile-card">
       <h3><i class="fas fa-id-card"></i> Personal Information</h3>
       <div class="info-row"><span class="label">Full Name</span><span class="value" id="profileName">Loading...</span></div>
@@ -134,7 +117,6 @@
       <div class="info-row"><span class="label">Status</span><span class="value" style="color:#22c55e;"><i class="fas fa-circle" style="font-size:0.6rem;"></i> Active</span></div>
     </div>
 
-    <!-- Account Settings -->
     <div class="profile-card">
       <h3><i class="fas fa-cog"></i> Account Settings</h3>
       <div class="info-row"><span class="label">Password</span><span class="value">••••••••</span></div>
@@ -146,14 +128,12 @@
       </div>
     </div>
 
-    <!-- Order History -->
     <div class="order-history">
       <h3><i class="fas fa-clock-rotate"></i> Your Website Orders</h3>
       <div id="orderList"><div class="no-orders">📦 Loading orders...</div></div>
     </div>
   </div>
 
-  <!-- ─── FOOTER ─── -->
   <footer class="footer">
     <span>© 2026 Pixlnex — <i class="fas fa-spider"></i> one person · one website at a time</span>
     <span><i class="fab fa-twitter"></i> <i class="fab fa-github"></i> <i class="fab fa-linkedin"></i></span>
@@ -161,248 +141,188 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js?v=5"></script>
 <script>
-  (function() {
-    // ─── DIRECT SUPABASE CONFIG ───
-    const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
+// ============================================
+// PIXLNEX - EMBEDDED SUPABASE (PROFILE)
+// ============================================
 
-    let supabaseClient = null;
-    let supabaseConnected = false;
+const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
 
-    function initSupabase() {
-      try {
-        if (typeof supabase !== 'undefined') {
-          supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-          supabaseConnected = true;
-          console.log('✅ Direct Supabase connected');
-          return supabaseClient;
-        } else {
-          console.error('❌ Supabase SDK not loaded');
-          supabaseConnected = false;
-          return null;
-        }
-      } catch (e) {
-        console.error('❌ Supabase connection error:', e);
-        supabaseConnected = false;
-        return null;
-      }
+let supabaseClient = null;
+let supabaseConnected = false;
+
+function initSupabase() {
+  try {
+    if (typeof supabase !== 'undefined') {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      supabaseConnected = true;
+      console.log('✅ Supabase connected (Profile)');
+      return true;
     }
+    return false;
+  } catch(e) {
+    console.error('Supabase error:', e);
+    return false;
+  }
+}
 
-    // ─── HELPER: Format PKR ───
-    function formatPKR(amount) {
-      return '₨ ' + (amount || 0).toLocaleString('en-PK');
+function formatPKR(amount) {
+  return '₨ ' + (amount || 0).toLocaleString('en-PK');
+}
+
+async function getCurrentUser() {
+  if (!supabaseConnected || !supabaseClient) return null;
+  try {
+    // Try to get session first
+    const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+    if (sessionError) throw sessionError;
+    
+    if (!sessionData.session) {
+      console.log('No active session');
+      return null;
     }
+    
+    const { data, error } = await supabaseClient.auth.getUser();
+    if (error) throw error;
+    return data.user;
+  } catch(e) {
+    console.error('Get user error:', e);
+    return null;
+  }
+}
 
-    // ─── DOM REFS ───
-    const authBtn = document.getElementById('authBtn');
-    const cartCounter = document.getElementById('cartCounter');
-    const toast = document.getElementById('toast');
-    const toastMsg = document.getElementById('toastMsg');
+async function signOutUser() {
+  if (supabaseConnected && supabaseClient) {
+    try { await supabaseClient.auth.signOut(); } catch(e) {}
+  }
+  window.location.href = 'index.html';
+}
 
-    // ─── TOAST ───
-    let toastTimer;
+async function getUserOrders(email) {
+  if (!supabaseConnected || !supabaseClient) return [];
+  try {
+    const { data, error } = await supabaseClient.from('orders').select('*').eq('customer_email', email).order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
+  } catch(e) { 
+    console.error('Orders error:', e);
+    return []; 
+  }
+}
 
-    function showToast(msg) {
-      toastMsg.textContent = msg;
-      toast.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+function waitForSupabase() {
+  return new Promise((resolve) => {
+    let attempts = 0;
+    const check = () => {
+      if (supabaseConnected && supabaseClient) { resolve(true); return; }
+      attempts++;
+      if (attempts > 30) { resolve(false); return; }
+      setTimeout(check, 300);
+    };
+    if (!supabaseConnected) { initSupabase(); }
+    check();
+  });
+}
+
+// ─── APP ───
+(async function() {
+  console.log('🚀 Profile page loading...');
+  
+  const connected = await waitForSupabase();
+  if (!connected) {
+    document.getElementById('userName').textContent = 'Connection Error';
+    document.getElementById('userEmail').textContent = 'Please refresh';
+    document.getElementById('toastMsg').textContent = '⚠️ Database not connected. Please refresh.';
+    document.getElementById('toast').classList.add('show');
+    return;
+  }
+
+  // Try to get user with multiple attempts
+  let user = null;
+  let attempts = 0;
+  while (!user && attempts < 5) {
+    user = await getCurrentUser();
+    if (!user) {
+      attempts++;
+      await new Promise(resolve => setTimeout(resolve, 500));
     }
+  }
 
-    // ─── UPDATE CART ───
-    function updateCart() {
-      try {
-        const cart = JSON.parse(localStorage.getItem('pixlnex_cart') || '[]');
-        const total = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
-        cartCounter.textContent = total;
-      } catch (e) {
-        cartCounter.textContent = '0';
-      }
-    }
+  if (!user) {
+    console.log('No user found, redirecting to login');
+    window.location.href = 'login.html';
+    return;
+  }
 
-    // ─── GET CURRENT USER DIRECTLY ───
-    async function getCurrentUser() {
-      if (!supabaseConnected || !supabaseClient) {
-        console.warn('⚠️ Supabase not connected, trying to connect...');
-        initSupabase();
-        if (!supabaseConnected || !supabaseClient) {
-          return null;
-        }
-      }
+  console.log('✅ User found:', user.email);
 
-      try {
-        const { data, error } = await supabaseClient.auth.getUser();
-        if (error) {
-          console.error('❌ Get user error:', error);
-          return null;
-        }
-        return data.user;
-      } catch (e) {
-        console.error('❌ Get user exception:', e);
-        return null;
-      }
-    }
+  const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+  const email = user.email || 'No email';
 
-    // ─── GET USER ORDERS DIRECTLY ───
-    async function getUserOrders(email) {
-      if (!supabaseConnected || !supabaseClient) {
-        return [];
-      }
+  document.getElementById('userName').textContent = name;
+  document.getElementById('userEmail').textContent = email;
+  document.getElementById('profileName').textContent = name;
+  document.getElementById('profileEmail').textContent = email;
 
-      try {
-        const { data, error } = await supabaseClient
-          .from('orders')
-          .select('*')
-          .eq('customer_email', email)
-          .order('created_at', { ascending: false });
+  const createdAt = user.created_at ? new Date(user.created_at).getFullYear() : '2026';
+  document.getElementById('profileSince').textContent = createdAt;
+  document.getElementById('memberSince').textContent = createdAt;
 
-        if (error) {
-          console.error('❌ Orders error:', error);
-          return [];
-        }
-        return data || [];
-      } catch (e) {
-        console.error('❌ Orders exception:', e);
-        return [];
-      }
-    }
+  // ─── UPDATE NAVBAR ───
+  const authBtn = document.getElementById('authBtn');
+  authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
+  authBtn.className = 'auth-btn logout';
+  authBtn.href = 'profile.html';
 
-    // ─── LOGOUT ───
-    async function handleLogout() {
-      try {
-        if (supabaseConnected && supabaseClient) {
-          await supabaseClient.auth.signOut();
-        }
-        localStorage.removeItem('pixlnex_cart');
-        localStorage.removeItem('pixlnex_user');
-        window.location.href = 'index.html';
-      } catch (e) {
-        showToast('⚠️ Error logging out');
-        console.error('Logout error:', e);
-      }
-    }
+  // ─── LOGOUT ───
+  document.getElementById('logoutBtn').addEventListener('click', function() {
+    signOutUser();
+  });
 
-    document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+  // ─── LOAD ORDERS ───
+  try {
+    const orders = await getUserOrders(email);
+    const orderList = document.getElementById('orderList');
 
-    // ─── LOAD PROFILE ───
-    async function loadProfile() {
-      console.log('🔄 Loading profile with direct Supabase...');
+    if (!orders || orders.length === 0) {
+      orderList.innerHTML = '<div class="no-orders">📦 No orders yet. Start shopping for your perfect web!</div>';
+      document.getElementById('orderCount').textContent = '0';
+      document.getElementById('totalSpent').textContent = formatPKR(0);
+    } else {
+      document.getElementById('orderCount').textContent = orders.length;
+      const totalSpent = orders.reduce((sum, o) => sum + (o.price || 0), 0);
+      document.getElementById('totalSpent').textContent = formatPKR(totalSpent);
 
-      // Initialize Supabase
-      initSupabase();
-
-      if (!supabaseConnected || !supabaseClient) {
-        console.error('❌ Supabase not connected');
-        document.getElementById('userName').textContent = 'Connection Error';
-        document.getElementById('userEmail').textContent = 'Please refresh and try again';
-        showToast('⚠️ Could not connect to Supabase');
-        return;
-      }
-
-      try {
-        // Get current user
-        const user = await getCurrentUser();
-        console.log('👤 User data:', user);
-
-        if (!user) {
-          console.log('❌ No user found, redirecting to login');
-          window.location.href = 'login.html';
-          return;
-        }
-
-        // ─── UPDATE USER INFO ───
-        const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
-        const email = user.email || 'No email';
-
-        console.log('✅ User loaded:', name, email);
-
-        document.getElementById('userName').textContent = name;
-        document.getElementById('userEmail').textContent = email;
-        document.getElementById('profileName').textContent = name;
-        document.getElementById('profileEmail').textContent = email;
-
-        // Member since
-        const createdAt = user.created_at ? new Date(user.created_at).getFullYear() : '2026';
-        document.getElementById('profileSince').textContent = createdAt;
-        document.getElementById('memberSince').textContent = createdAt;
-
-        // Update navbar
-        authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
-        authBtn.className = 'auth-btn logout';
-        authBtn.href = 'profile.html';
-
-        // ─── LOAD ORDERS ───
-        try {
-          console.log('📦 Fetching orders for:', email);
-          const orders = await getUserOrders(email);
-          console.log('✅ Orders found:', orders?.length || 0);
-
-          const orderList = document.getElementById('orderList');
-
-          if (!orders || orders.length === 0) {
-            orderList.innerHTML = '<div class="no-orders">📦 No orders yet. Start shopping for your perfect web!</div>';
-            document.getElementById('orderCount').textContent = '0';
-            document.getElementById('totalSpent').textContent = '₨ 0';
-          } else {
-            document.getElementById('orderCount').textContent = orders.length;
-            const totalSpent = orders.reduce((sum, o) => sum + (o.price || 0), 0);
-            document.getElementById('totalSpent').textContent = formatPKR(totalSpent);
-
-            orderList.innerHTML = '';
-            orders.forEach(order => {
-              const div = document.createElement('div');
-              div.className = 'order-item';
-              const statusClass = order.status || 'processing';
-              const statusLabels = {
-                'delivered': 'Delivered ✅',
-                'shipped': 'Shipped 📦',
-                'processing': 'Processing ⏳'
-              };
-              div.innerHTML = `
-                <div class="order-info">
-                  <span class="order-name">${order.name}</span>
-                  <span class="order-date">${order.order_id || '#ORD-' + Date.now()} · ${order.created_at ? new Date(order.created_at).toLocaleDateString() : 'N/A'}</span>
-                </div>
-                <span class="order-status ${statusClass}">${statusLabels[statusClass] || statusClass}</span>
-                <span class="order-price">${formatPKR(order.price)}</span>
-              `;
-              orderList.appendChild(div);
-            });
-          }
-        } catch (e) {
-          console.error('❌ Error loading orders:', e);
-          document.getElementById('orderList').innerHTML = '<div class="no-orders">⚠️ Could not load orders. Please refresh.</div>';
-          showToast('⚠️ Could not load order history');
-        }
-
-      } catch (e) {
-        console.error('❌ Profile load error:', e);
-        document.getElementById('userName').textContent = 'Error Loading Profile';
-        document.getElementById('userEmail').textContent = 'Please refresh and try again';
-        showToast('⚠️ Error loading profile');
-      }
-    }
-
-    // ─── INIT ───
-    async function init() {
-      console.log('🚀 Profile page initializing (direct mode)...');
-      updateCart();
-      await loadProfile();
-
-      // Listen for cart changes
-      window.addEventListener('storage', function(e) {
-        if (e.key === 'pixlnex_cart') updateCart();
+      orderList.innerHTML = '';
+      orders.forEach(order => {
+        const div = document.createElement('div');
+        div.className = 'order-item';
+        const statusClass = order.status || 'processing';
+        const statusLabels = { 'delivered': 'Delivered ✅', 'shipped': 'Shipped 📦', 'processing': 'Processing ⏳' };
+        div.innerHTML = `
+          <div class="order-info">
+            <span class="order-name">${order.name}</span>
+            <span class="order-date">${order.order_id || '#ORD-' + Date.now()} · ${order.created_at ? new Date(order.created_at).toLocaleDateString() : 'N/A'}</span>
+          </div>
+          <span class="order-status ${statusClass}">${statusLabels[statusClass] || statusClass}</span>
+          <span class="order-price">${formatPKR(order.price)}</span>
+        `;
+        orderList.appendChild(div);
       });
     }
+  } catch(e) {
+    console.error('Orders error:', e);
+    document.getElementById('orderList').innerHTML = '<div class="no-orders">⚠️ Could not load orders.</div>';
+  }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else {
-      init();
-    }
-  })();
+  // ─── CART ───
+  const cart = JSON.parse(localStorage.getItem('pixlnex_cart') || '[]');
+  const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+  document.getElementById('cartCounter').textContent = totalItems;
+
+  console.log('✅ Profile initialized successfully!');
+})();
 </script>
 </body>
 </html>

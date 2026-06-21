@@ -61,7 +61,6 @@
 // PIXLNEX - EMBEDDED SUPABASE (LOGIN)
 // ============================================
 
-// ─── SUPABASE CONFIG ───
 const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
 
@@ -104,7 +103,6 @@ function waitForSupabase() {
   });
 }
 
-// ─── LOGIN ───
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   const email = document.getElementById('email').value.trim();
@@ -125,6 +123,13 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     const result = await signInUser(email, password);
 
     if (result && result.user) {
+      // Store user info in localStorage for fast access
+      const userData = {
+        name: result.user.user_metadata?.full_name || email.split('@')[0],
+        email: result.user.email,
+        id: result.user.id
+      };
+      localStorage.setItem('pixlnex_user', JSON.stringify(userData));
       window.location.href = 'index.html';
     } else {
       errorMsg.textContent = '⚠️ Invalid email or password. Please try again.';
