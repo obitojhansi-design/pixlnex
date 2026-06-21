@@ -102,9 +102,8 @@
     <div class="nav-links">
       <a href="index.html">Home</a>
       <a href="shop.html" class="active">Webs</a>
-      <a href="index.html#deals">Deals</a>
       <a href="index.html#about">About</a>
-      <a href="profile.html" class="auth-btn" id="authBtn"><i class="fas fa-user"></i> Login</a>
+      <a href="profile.html" id="authBtn" class="auth-btn"><i class="fas fa-user"></i> Login</a>
       <a href="shop.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCounter">0</span></a>
     </div>
   </header>
@@ -178,8 +177,32 @@ async function getProducts() {
 async function getCurrentUser() {
   if (!supabaseConnected || !supabaseClient) return null;
   try {
+    const { data: sessionData } = await supabaseClient.auth.getSession();
+    if (!sessionData.session) {
+      const storedUser = localStorage.getItem('pixlnex_user');
+      if (storedUser) {
+        try {
+          const userData = JSON.parse(storedUser);
+          return {
+            id: userData.id,
+            email: userData.email,
+            user_metadata: { full_name: userData.name },
+            created_at: userData.created_at
+          };
+        } catch(e) {}
+      }
+      return null;
+    }
     const { data, error } = await supabaseClient.auth.getUser();
     if (error) throw error;
+    if (data.user) {
+      localStorage.setItem('pixlnex_user', JSON.stringify({
+        id: data.user.id,
+        email: data.user.email,
+        name: data.user.user_metadata?.full_name || data.user.email?.split('@')[0],
+        created_at: data.user.created_at
+      }));
+    }
     return data.user;
   } catch(e) { return null; }
 }
@@ -315,22 +338,23 @@ function waitForSupabase() {
     container._autoSlideInterval = autoSlideInterval;
   }
 
+  // ─── FIXED: UPDATE AUTH UI ───
   async function updateAuthUI() {
     try {
       currentUser = await getCurrentUser();
-    } catch(e) { currentUser = null; }
+    } catch(e) { 
+      currentUser = null; 
+    }
+    
+    const authBtn = document.getElementById('authBtn');
+    
     if (currentUser) {
       const name = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
       authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
       authBtn.className = 'auth-btn logout';
+      // FIX: Just set href to profile, remove onclick handler
       authBtn.href = 'profile.html';
-      authBtn.onclick = function(e) {
-        e.preventDefault();
-        if (supabaseConnected && supabaseClient) {
-          supabaseClient.auth.signOut();
-          window.location.href = 'index.html';
-        }
-      };
+      authBtn.onclick = null; // Remove any onclick handler
     } else {
       authBtn.innerHTML = '<i class="fas fa-user"></i> Login';
       authBtn.className = 'auth-btn';

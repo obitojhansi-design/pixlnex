@@ -191,7 +191,7 @@
       <a href="index.html" class="active">Home</a>
       <a href="shop.html">Webs</a>
       <a href="#" id="navAbout">About</a>
-      <a href="profile.html" class="auth-btn" id="authBtn"><i class="fas fa-user"></i> Login</a>
+      <a href="profile.html" id="authBtn" class="auth-btn"><i class="fas fa-user"></i> Login</a>
       <a href="shop.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCounter">0</span></a>
     </nav>
   </header>
@@ -367,17 +367,50 @@ function formatPKR(amount) {
 async function getCurrentUser() {
   if (!supabaseConnected || !supabaseClient) return null;
   try {
+    // Check session first
+    const { data: sessionData } = await supabaseClient.auth.getSession();
+    if (!sessionData.session) {
+      // Check localStorage fallback
+      const storedUser = localStorage.getItem('pixlnex_user');
+      if (storedUser) {
+        try {
+          const userData = JSON.parse(storedUser);
+          return {
+            id: userData.id,
+            email: userData.email,
+            user_metadata: { full_name: userData.name },
+            created_at: userData.created_at
+          };
+        } catch(e) {}
+      }
+      return null;
+    }
+    
     const { data, error } = await supabaseClient.auth.getUser();
     if (error) throw error;
+    
+    if (data.user) {
+      localStorage.setItem('pixlnex_user', JSON.stringify({
+        id: data.user.id,
+        email: data.user.email,
+        name: data.user.user_metadata?.full_name || data.user.email?.split('@')[0],
+        created_at: data.user.created_at
+      }));
+    }
+    
     return data.user;
-  } catch(e) { return null; }
+  } catch(e) { 
+    console.error('Get user error:', e);
+    return null; 
+  }
 }
 
 async function signOutUser() {
   if (supabaseConnected && supabaseClient) {
     try { await supabaseClient.auth.signOut(); } catch(e) {}
   }
-  window.location.href = 'index.html';
+  localStorage.removeItem('pixlnex_user');
+  window.location.href = 'login.html';
 }
 
 async function signUpUser(email, password, userData) {
@@ -463,7 +496,6 @@ function waitForSupabase() {
       if (attempts > 30) { resolve(false); return; }
       setTimeout(check, 300);
     };
-    // Try to init if not done
     if (!supabaseConnected) { initSupabase(); }
     check();
   });
@@ -473,7 +505,6 @@ function waitForSupabase() {
 (async function() {
   console.log('🚀 Starting Pixlnex...');
   
-  // Wait for Supabase
   const connected = await waitForSupabase();
   if (!connected) {
     document.getElementById('toastMsg').textContent = '⚠️ Database not connected. Please refresh.';
@@ -599,20 +630,23 @@ function waitForSupabase() {
     container._autoSlideInterval = autoSlideInterval;
   }
 
+  // ─── FIXED: UPDATE AUTH UI ───
   async function updateAuthUI() {
     try {
       currentUser = await getCurrentUser();
-    } catch(e) { currentUser = null; }
+    } catch(e) { 
+      currentUser = null; 
+    }
+    
+    const authBtn = document.getElementById('authBtn');
+    
     if (currentUser) {
       const name = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
       authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
       authBtn.className = 'auth-btn logout';
+      // FIX: Just set href to profile, remove onclick handler
       authBtn.href = 'profile.html';
-      authBtn.onclick = function(e) {
-        e.preventDefault();
-        signOutUser();
-      };
-      setTimeout(loadOfferStatus, 500);
+      authBtn.onclick = null; // Remove any onclick handler
     } else {
       authBtn.innerHTML = '<i class="fas fa-user"></i> Login';
       authBtn.className = 'auth-btn';
@@ -747,7 +781,7 @@ function waitForSupabase() {
         customer_name: pendingOrder.customer_name || user.user_metadata?.full_name || user.email,
         payment_method: selectedPayment,
         payment_status: 'paid',
-        status: pendingOrder.isCustom ? 'demo_ready' : 'confirmed',
+        status: pendingOrder.isCustom ? 'demo_ready' : 'completed',
         custom_details: pendingOrder.custom_details || '',
         custom_type: pendingOrder.custom_type || '',
         custom_budget: pendingOrder.custom_budget || '',
