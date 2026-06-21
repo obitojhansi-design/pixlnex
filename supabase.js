@@ -1,10 +1,9 @@
 // ============================================
-// PIXLNEX - SUPABASE CONFIGURATION
+// PIXLNEX - CENTRAL SUPABASE CONFIGURATION
 // ============================================
 
 const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
-const SUPABASE_BUCKET = 'product-images';
 
 let supabaseClient = null;
 let supabaseConnected = false;
@@ -17,6 +16,7 @@ function initSupabase() {
       supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       supabaseConnected = true;
       console.log('✅ Supabase connected successfully');
+      console.log('📍 URL:', SUPABASE_URL);
       return supabaseClient;
     } else {
       console.error('❌ Supabase SDK not loaded');
@@ -55,6 +55,45 @@ async function signOutUser() {
   window.location.href = 'index.html';
 }
 
+async function signUpUser(email, password, userData) {
+  if (!supabaseConnected || !supabaseClient) {
+    throw new Error('Supabase not connected');
+  }
+  try {
+    const { data, error } = await supabaseClient.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          full_name: userData.full_name || userData.name
+        }
+      }
+    });
+    if (error) throw error;
+    return data;
+  } catch (e) {
+    console.error('Signup error:', e);
+    throw e;
+  }
+}
+
+async function signInUser(email, password) {
+  if (!supabaseConnected || !supabaseClient) {
+    throw new Error('Supabase not connected');
+  }
+  try {
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+    if (error) throw error;
+    return data;
+  } catch (e) {
+    console.error('Login error:', e);
+    throw e;
+  }
+}
+
 // ─── PRODUCTS ───
 async function getProducts() {
   if (!supabaseConnected || !supabaseClient) {
@@ -69,10 +108,6 @@ async function getProducts() {
       .order('created_at', { ascending: true });
     if (error) throw error;
     console.log('✅ Products fetched:', data?.length || 0);
-    // Log image data for debugging
-    if (data && data.length > 0) {
-      console.log('📸 Sample product images:', data[0].image_urls);
-    }
     return data || [];
   } catch (e) {
     console.error('Products error:', e);
@@ -173,6 +208,22 @@ async function createOrder(orderData) {
   }
 }
 
+// ─── USER FUNCTIONS ───
+async function getUsers() {
+  if (!supabaseConnected || !supabaseClient) return [];
+  try {
+    const { data, error } = await supabaseClient
+      .from('users')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
+  } catch (e) {
+    console.error('Users error:', e);
+    return [];
+  }
+}
+
 // ─── EXPOSE ───
 window.Pixlnex = {
   initSupabase,
@@ -181,10 +232,13 @@ window.Pixlnex = {
   formatPKR,
   getCurrentUser,
   signOutUser,
+  signUpUser,
+  signInUser,
   getProducts,
   createOrder,
   getOfferStatus,
   claimOffer,
+  getUsers,
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 };
