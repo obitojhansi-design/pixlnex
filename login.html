@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pixlnex · Login</title>
+  <link rel="icon" href="logo.png" type="image/png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
     body { background: #f8fafc; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
     .login-container { max-width: 420px; width: 100%; background: white; border-radius: 2.5rem; padding: 2.8rem 2.5rem; box-shadow: 0 12px 40px rgba(0,0,0,0.06); border: 1px solid #e9eef3; }
     .login-container .logo { display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; text-decoration: none; margin-bottom: 0.5rem; }
+    .login-container .logo img { height: 30px; width: auto; }
     .login-container .logo i { color: #2563eb; font-size: 2rem; }
     .login-container h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.3rem; text-align: center; }
     .login-container .sub { text-align: center; color: #64748b; margin-bottom: 2rem; font-size: 0.95rem; }
@@ -34,19 +36,24 @@
     .back-link i { margin-right: 0.4rem; }
     .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 0.6s ease-in-out infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .password-hint { font-size: 0.7rem; color: #64748b; margin-top: 0.3rem; }
     @media (max-width: 500px) { .login-container { padding: 2rem 1.5rem; } }
   </style>
 </head>
 <body>
 
 <div class="login-container">
-  <a href="index.html" class="logo"><i class="fas fa-cube"></i><span>Pixlnex</span></a>
+  <a href="index.html" class="logo"><img src="logo.png" alt="Pixlnex" /><span>Pixlnex</span></a>
   <h2>Welcome back</h2>
   <p class="sub"><i class="fas fa-globe"></i> We only sell webs</p>
   <div id="errorMsg" class="error-msg">⚠️ Invalid credentials. Try again.</div>
   <form id="loginForm">
-    <div class="form-group"><label for="email"><i class="far fa-envelope"></i> Email</label><input type="email" id="email" placeholder="demo@pixlnex.com" required></div>
-    <div class="form-group"><label for="password"><i class="fas fa-lock"></i> Password</label><input type="password" id="password" placeholder="••••••••" required></div>
+    <div class="form-group"><label for="email"><i class="far fa-envelope"></i> Email</label><input type="email" id="email" placeholder="demo@pixlnex.com" required autocomplete="email"></div>
+    <div class="form-group">
+      <label for="password"><i class="fas fa-lock"></i> Password</label>
+      <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password" maxlength="8" minlength="8">
+      <div class="password-hint">Password must be exactly 8 characters</div>
+    </div>
     <button type="submit" class="login-btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Sign in</button>
   </form>
   <div class="demo-cred"><i class="fas fa-info-circle"></i> Demo: <code>demo@pixlnex.com</code> / <code>password123</code></div>
@@ -58,9 +65,44 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ============================================
-// PIXLNEX - EMBEDDED SUPABASE (LOGIN)
+// SECURE PIXLNEX - LOGIN
 // ============================================
 
+// ─── SECURITY FUNCTIONS ───
+function validateEmail(email) {
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  if (!email || typeof email !== 'string') return false;
+  if (email.length > 254) return false;
+  if (email.includes('..') || email.includes('@@')) return false;
+  return emailRegex.test(email);
+}
+
+function validatePassword(password) {
+  if (!password || typeof password !== 'string') return false;
+  if (password.length !== 8) return false;
+  const allowedChars = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
+  if (!allowedChars.test(password)) return false;
+  const sqlPatterns = /(\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bDROP\b|\bUNION\b|\b--\b|;)/i;
+  if (sqlPatterns.test(password)) return false;
+  const cmdPatterns = /(\bexec\b|\bping\b|\bcurl\b|\bwget\b|\bnc\b|\bnetcat\b|\bbash\b|\bsh\b)/i;
+  if (cmdPatterns.test(password)) return false;
+  return true;
+}
+
+// ─── RATE LIMITING ───
+const rateLimits = {};
+
+function checkRateLimit(key, maxRequests, timeWindow) {
+  const now = Date.now();
+  if (!rateLimits[key]) { rateLimits[key] = { count: 1, firstRequest: now }; return true; }
+  const limit = rateLimits[key];
+  if (now - limit.firstRequest > timeWindow) { limit.count = 1; limit.firstRequest = now; return true; }
+  if (limit.count >= maxRequests) return false;
+  limit.count++;
+  return true;
+}
+
+// ─── SUPABASE ───
 const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
 
@@ -84,29 +126,23 @@ function initSupabase() {
 
 async function signInUser(email, password) {
   if (!supabaseConnected || !supabaseClient) throw new Error('Supabase not connected');
-  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+  if (!validateEmail(email)) throw new Error('Invalid email format');
+  if (!validatePassword(password)) throw new Error('Password must be exactly 8 characters with safe characters only');
+  
+  const clientIP = localStorage.getItem('client_ip') || 'unknown';
+  if (!checkRateLimit('login_' + clientIP, 5, 300000)) {
+    throw new Error('Too many login attempts. Please try again later.');
+  }
+  
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ email: email.trim(), password: password });
   if (error) throw error;
   return data;
-}
-
-function waitForSupabase() {
-  return new Promise((resolve) => {
-    let attempts = 0;
-    const check = () => {
-      if (supabaseConnected && supabaseClient) { resolve(true); return; }
-      attempts++;
-      if (attempts > 30) { resolve(false); return; }
-      setTimeout(check, 300);
-    };
-    if (!supabaseConnected) { initSupabase(); }
-    check();
-  });
 }
 
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value.trim();
+  const password = document.getElementById('password').value;
   const errorMsg = document.getElementById('errorMsg');
   const loginBtn = document.getElementById('loginBtn');
 
@@ -115,35 +151,35 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
   loginBtn.innerHTML = '<span class="loading-spinner"></span> Signing in...';
 
   try {
-    const connected = await waitForSupabase();
-    if (!connected) {
-      throw new Error('Database not connected. Please refresh.');
-    }
-
+    initSupabase();
+    if (!supabaseConnected) throw new Error('Database not connected');
+    if (!validateEmail(email)) throw new Error('Please enter a valid email address');
+    if (!validatePassword(password)) throw new Error('Password must be exactly 8 characters with safe characters only');
+    
     const result = await signInUser(email, password);
-
+    
     if (result && result.user) {
-      // Store user info in localStorage for fast access
       const userData = {
-        name: result.user.user_metadata?.full_name || email.split('@')[0],
+        id: result.user.id,
         email: result.user.email,
-        id: result.user.id
+        name: result.user.user_metadata?.full_name || email.split('@')[0],
+        created_at: result.user.created_at,
+        _sig: btoa(result.user.id + result.user.email + 'pixlnex_secret_salt')
       };
-      localStorage.setItem('pixlnex_user', JSON.stringify(userData));
+      localStorage.setItem('pixlnex_user_secure', JSON.stringify(userData));
       window.location.href = 'index.html';
     } else {
-      errorMsg.textContent = '⚠️ Invalid email or password. Please try again.';
-      errorMsg.classList.add('show');
-      loginBtn.disabled = false;
-      loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign in';
+      throw new Error('Invalid credentials');
     }
   } catch (e) {
-    errorMsg.textContent = '⚠️ ' + (e.message || 'Something went wrong. Please try again.');
+    errorMsg.textContent = '⚠️ ' + (e.message || 'Something went wrong');
     errorMsg.classList.add('show');
     loginBtn.disabled = false;
     loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign in';
   }
 });
+
+initSupabase();
 </script>
 </body>
 </html>

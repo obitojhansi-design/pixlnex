@@ -4,14 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pixlnex · Profile</title>
+  <link rel="icon" href="logo.png" type="image/png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* ... your existing styles ... */
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
     body { background: #f8fafc; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
     .app { max-width: 1300px; margin: 0 auto; padding: 1.5rem 2rem; flex: 1; width: 100%; }
     .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; padding: 0.75rem 0 1.5rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem; }
     .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; letter-spacing: -0.5px; text-decoration: none; }
+    .logo img { height: 35px; width: auto; }
     .logo i { color: #2563eb; font-size: 2rem; }
     .nav-links { display: flex; align-items: center; gap: 2rem; font-weight: 500; flex-wrap: wrap; }
     .nav-links a { text-decoration: none; color: #1e293b; font-size: 1rem; transition: color 0.2s; cursor: pointer; }
@@ -56,6 +57,9 @@
     .order-status.delivered { background: #dcfce7; color: #166534; }
     .order-status.shipped { background: #fef9c3; color: #854d0e; }
     .order-status.processing { background: #e0f2fe; color: #0369a1; }
+    .order-status.working { background: #fef3c7; color: #92400e; }
+    .order-status.demo_ready { background: #dbeafe; color: #1e40af; }
+    .order-status.completed { background: #dcfce7; color: #166534; }
     .order-item .order-price { font-weight: 700; color: #0f2b4b; }
     .no-orders { color: #94a3b8; text-align: center; padding: 1.5rem 0; font-style: italic; }
 
@@ -74,18 +78,16 @@
 
     @media (max-width: 900px) { .profile-grid { grid-template-columns: 1fr; } .order-history { grid-column: 1; } .profile-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; } .profile-stats { width: 100%; justify-content: space-around; } }
     @media (max-width: 700px) { .app { padding: 1rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .profile-header { padding: 1.5rem; } .profile-avatar .avatar-icon { width: 60px; height: 60px; font-size: 2rem; } .profile-avatar .user-info h1 { font-size: 1.5rem; } .profile-stats .stat .number { font-size: 1.5rem; } }
-
   </style>
 </head>
 <body>
 <div class="app">
 
   <header class="navbar">
-    <a href="index.html" class="logo"><i class="fas fa-cube"></i><span>Pixlnex</span></a>
+    <a href="index.html" class="logo"><img src="logo.png" alt="Pixlnex" /><span>Pixlnex</span></a>
     <div class="nav-links">
       <a href="index.html">Home</a>
       <a href="shop.html">Webs</a>
-      <a href="index.html#deals">Deals</a>
       <a href="index.html#about">About</a>
       <a href="profile.html" class="active auth-btn" id="authBtn"><i class="fas fa-user"></i> Profile</a>
       <a href="shop.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCounter">0</span></a>
@@ -145,7 +147,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ============================================
-// PIXLNEX - EMBEDDED SUPABASE (PROFILE)
+// PIXLNEX - SECURE PROFILE
 // ============================================
 
 const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
@@ -173,72 +175,58 @@ function formatPKR(amount) {
   return '₨ ' + (amount || 0).toLocaleString('en-PK');
 }
 
-// Get current user from session
 async function getCurrentUser() {
   if (!supabaseConnected || !supabaseClient) return null;
   try {
-    // Check session first
     const { data: sessionData } = await supabaseClient.auth.getSession();
     if (!sessionData.session) {
-      // Check localStorage fallback
-      const storedUser = localStorage.getItem('pixlnex_user');
+      const storedUser = localStorage.getItem('pixlnex_user_secure');
       if (storedUser) {
         try {
           const userData = JSON.parse(storedUser);
-          return {
-            id: userData.id,
-            email: userData.email,
-            user_metadata: { full_name: userData.name },
-            created_at: userData.created_at
-          };
+          if (userData._sig === btoa(userData.id + userData.email + 'pixlnex_secret_salt')) {
+            return {
+              id: userData.id,
+              email: userData.email,
+              user_metadata: { full_name: userData.name },
+              created_at: userData.created_at
+            };
+          }
         } catch(e) {}
       }
       return null;
     }
-    
     const { data, error } = await supabaseClient.auth.getUser();
     if (error) throw error;
-    
     if (data.user) {
-      // Store in localStorage
-      localStorage.setItem('pixlnex_user', JSON.stringify({
+      const userData = {
         id: data.user.id,
         email: data.user.email,
         name: data.user.user_metadata?.full_name || data.user.email?.split('@')[0],
-        created_at: data.user.created_at
-      }));
+        created_at: data.user.created_at,
+        _sig: btoa(data.user.id + data.user.email + 'pixlnex_secret_salt')
+      };
+      localStorage.setItem('pixlnex_user_secure', JSON.stringify(userData));
     }
-    
     return data.user;
-  } catch(e) {
-    console.error('Get user error:', e);
-    return null;
-  }
+  } catch(e) { return null; }
 }
 
 async function signOutUser() {
   if (supabaseConnected && supabaseClient) {
-    try { 
-      await supabaseClient.auth.signOut(); 
-      localStorage.removeItem('pixlnex_user');
-    } catch(e) {}
+    try { await supabaseClient.auth.signOut(); } catch(e) {}
   }
+  localStorage.removeItem('pixlnex_user_secure');
   window.location.href = 'login.html';
 }
 
 async function getUserOrders(email) {
   if (!supabaseConnected || !supabaseClient) return [];
   try {
-    const { data, error } = await supabaseClient
-      .from('orders')
-      .select('*')
-      .eq('customer_email', email)
-      .order('created_at', { ascending: false });
+    const { data, error } = await supabaseClient.from('orders').select('*').eq('customer_email', email).order('created_at', { ascending: false });
     if (error) throw error;
     return data || [];
-  } catch(e) { 
-    return []; 
-  }
+  } catch(e) { return []; }
 }
 
 function waitForSupabase() {
@@ -255,16 +243,13 @@ function waitForSupabase() {
   });
 }
 
-// ─── APP ───
 (async function() {
   console.log('🚀 Profile page loading...');
   
   await waitForSupabase();
   
-  // Get user
   let user = await getCurrentUser();
   
-  // If no user, redirect to login
   if (!user) {
     console.log('🔴 No user found, redirecting to login');
     window.location.href = 'login.html';
@@ -276,7 +261,6 @@ function waitForSupabase() {
   const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
   const email = user.email || 'No email';
 
-  // Update UI
   document.getElementById('userName').textContent = name;
   document.getElementById('userEmail').textContent = email;
   document.getElementById('profileName').textContent = name;
@@ -286,26 +270,21 @@ function waitForSupabase() {
   document.getElementById('profileSince').textContent = createdAt;
   document.getElementById('memberSince').textContent = createdAt;
 
-  // ─── UPDATE NAVBAR AUTH BUTTON ───
   const authBtn = document.getElementById('authBtn');
   if (authBtn) {
     authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
     authBtn.className = 'auth-btn logout';
     authBtn.href = 'profile.html';
-    // FIX: Keep it as a normal link, no onclick to logout
     authBtn.onclick = function(e) {
-      // Just reload the page if already on profile
       e.preventDefault();
       window.location.reload();
     };
   }
 
-  // ─── LOGOUT BUTTON ───
   document.getElementById('logoutBtn').addEventListener('click', function() {
     signOutUser();
   });
 
-  // ─── LOAD ORDERS ───
   try {
     const orders = await getUserOrders(email);
     const orderList = document.getElementById('orderList');
@@ -348,7 +327,6 @@ function waitForSupabase() {
     document.getElementById('orderList').innerHTML = '<div class="no-orders">⚠️ Could not load orders.</div>';
   }
 
-  // ─── CART ───
   const cart = JSON.parse(localStorage.getItem('pixlnex_cart') || '[]');
   const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
   document.getElementById('cartCounter').textContent = totalItems;

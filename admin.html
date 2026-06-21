@@ -7,6 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <title>Pixlnex · Admin Panel</title>
+  <link rel="icon" href="logo.png" type="image/png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
@@ -14,6 +15,7 @@
     .app { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; flex: 1; width: 100%; }
     .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; padding: 0.75rem 0 1.5rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem; }
     .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; text-decoration: none; }
+    .logo img { height: 35px; width: auto; }
     .logo i { color: #2563eb; font-size: 2rem; }
     .nav-links { display: flex; align-items: center; gap: 2rem; font-weight: 500; flex-wrap: wrap; }
     .nav-links a { text-decoration: none; color: #1e293b; font-size: 1rem; transition: color 0.2s; cursor: pointer; }
@@ -50,7 +52,6 @@
     .admin-card h3 i { color: #2563eb; }
     .admin-card h3 .badge-count { background: #eef2f6; padding: 0.1rem 0.7rem; border-radius: 40px; font-size: 0.75rem; color: #64748b; font-weight: 500; }
 
-    /* ─── ORDER ITEM ─── */
     .admin-order-item { display: flex; flex-direction: column; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
     .admin-order-item:last-child { border-bottom: none; }
     .admin-order-item .order-row { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; }
@@ -100,6 +101,7 @@
     .login-box { background: white; border-radius: 2.5rem; padding: 3rem 2.8rem; max-width: 420px; width: 100%; box-shadow: 0 25px 60px rgba(0,0,0,0.3); animation: slideUp 0.5s ease; }
     @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .login-box .logo { display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; text-decoration: none; margin-bottom: 0.5rem; }
+    .login-box .logo img { height: 30px; width: auto; }
     .login-box .logo i { color: #2563eb; font-size: 2rem; }
     .login-box h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.3rem; text-align: center; }
     .login-box .sub { text-align: center; color: #64748b; margin-bottom: 2rem; font-size: 0.95rem; }
@@ -135,7 +137,7 @@
   <div class="app">
 
     <header class="navbar">
-      <a href="index.html" class="logo"><i class="fas fa-cube"></i><span>Pixlnex</span></a>
+      <a href="index.html" class="logo"><img src="logo.png" alt="Pixlnex" /><span>Pixlnex</span></a>
       <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="shop.html">Webs</a>
@@ -161,13 +163,11 @@
       </div>
 
       <div class="admin-grid">
-        <!-- Orders -->
         <div class="admin-card">
           <h3><i class="fas fa-list"></i> All Orders <span class="badge-count" id="orderCountBadge">0</span></h3>
           <div id="orderList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">Loading orders...</div></div>
         </div>
 
-        <!-- Products -->
         <div class="admin-card">
           <h3><i class="fas fa-cube"></i> Products <span class="badge-count" id="productCountBadge">0</span></h3>
           <div id="productList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">Loading products...</div></div>
@@ -198,7 +198,7 @@
 
   <div class="login-overlay" id="loginOverlay">
     <div class="login-box">
-      <a href="index.html" class="logo"><i class="fas fa-cube"></i><span>Pixlnex</span></a>
+      <a href="index.html" class="logo"><img src="logo.png" alt="Pixlnex" /><span>Pixlnex</span></a>
       <h2><i class="fas fa-user-shield" style="color:#2563eb;"></i> Admin Access</h2>
       <p class="sub"><i class="fas fa-lock"></i> Enter admin credentials</p>
       <div id="loginError" class="error-msg">⚠️ Invalid credentials.</div>
@@ -253,7 +253,6 @@
       return '₨ ' + (amount || 0).toLocaleString('en-PK');
     }
 
-    // ─── ADMIN AUTH ───
     function checkAdminSession() {
       const session = localStorage.getItem('pixlnex_admin_session');
       if (session === 'true') {
@@ -333,7 +332,6 @@
       }, 600);
     });
 
-    // ─── TOAST ───
     let toastTimer;
     function showToast(msg) {
       const toast = document.getElementById('toast');
@@ -344,7 +342,6 @@
       toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // ─── LOAD ADMIN DATA ───
     async function loadAdminData() {
       if (!supabaseConnected || !supabaseClient) {
         showToast('⚠️ Supabase not connected');
@@ -354,7 +351,6 @@
       try {
         console.log('📦 Loading admin data...');
 
-        // ─── LOAD ALL ORDERS (PAID OR NOT) ───
         const { data: ordersData, error: ordersError } = await supabaseClient
           .from('orders')
           .select('*')
@@ -364,7 +360,6 @@
         const orders = ordersData || [];
         console.log('✅ All orders loaded:', orders.length);
 
-        // ─── LOAD PRODUCTS ───
         const { data: productsData, error: productsError } = await supabaseClient
           .from('products')
           .select('*')
@@ -373,7 +368,6 @@
         if (productsError) throw productsError;
         const products = productsData || [];
 
-        // ─── STATS ───
         const totalOrders = orders.length;
         const totalRevenue = orders.reduce((sum, o) => sum + (o.price || 0), 0);
         const customers = new Set(orders.map(o => o.customer_email || '')).size;
@@ -384,7 +378,6 @@
         document.getElementById('totalCustomers').textContent = customers || 0;
         document.getElementById('pendingOrders').textContent = pending;
 
-        // ─── RENDER ORDERS ───
         const orderList = document.getElementById('orderList');
         const orderCountBadge = document.getElementById('orderCountBadge');
 
@@ -404,7 +397,6 @@
             const isFree = order.price === 0;
             const paymentStatus = order.payment_status || 'pending';
 
-            // Payment badge
             let paymentBadgeHtml = '';
             if (isFree) {
               paymentBadgeHtml = '<span class="payment-badge free">🎁 Free Offer</span>';
@@ -414,7 +406,6 @@
               paymentBadgeHtml = '<span class="payment-badge pending">⏳ Pending Payment</span>';
             }
 
-            // Build custom details HTML with all fields
             let customDetailsHtml = '';
             if (isCustom) {
               const detailFields = [
@@ -503,7 +494,6 @@
           });
         }
 
-        // ─── RENDER PRODUCTS ───
         renderProductsList(products);
 
       } catch (e) {
@@ -593,7 +583,6 @@
       });
     }
 
-    // ─── ADD PRODUCT ───
     document.getElementById('addProductBtn').addEventListener('click', async function() {
       const name = document.getElementById('newProductName').value.trim();
       const desc = document.getElementById('newProductDesc').value.trim();
@@ -644,7 +633,6 @@
       this.innerHTML = '<i class="fas fa-plus"></i> Add Package';
     });
 
-    // ─── INIT ───
     function init() {
       initSupabase();
 
@@ -676,6 +664,5 @@
       init();
     }
   </script>
-
 </body>
 </html>

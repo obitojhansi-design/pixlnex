@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pixlnex · Custom Websites</title>
+  <link rel="icon" href="logo.png" type="image/png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
@@ -32,6 +33,7 @@
 
     .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; padding: 0.75rem 0 1.5rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem; }
     .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; text-decoration: none; }
+    .logo img { height: 35px; width: auto; }
     .logo i { color: #2563eb; font-size: 2rem; }
     .nav-links { display: flex; align-items: center; gap: 2rem; font-weight: 500; flex-wrap: wrap; }
     .nav-links a { text-decoration: none; color: #1e293b; font-size: 1rem; transition: color 0.2s; cursor: pointer; }
@@ -152,24 +154,6 @@
     .payment-modal .payment-actions .btn-pay.cancel { background: #eef2f6; color: #1e293b; }
     .payment-modal .payment-actions .btn-pay.cancel:hover { background: #e2e8f0; }
 
-    /* ─── OFFER CHOICE MODAL ─── */
-    .offer-choice-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 99998; align-items: center; justify-content: center; padding: 1.5rem; }
-    .offer-choice-modal.active { display: flex; }
-    .offer-choice-modal .modal-content { background: white; border-radius: 2rem; max-width: 500px; width: 100%; padding: 2.5rem; animation: slideUp 0.3s ease; }
-    .offer-choice-modal .modal-header { text-align: center; margin-bottom: 1.5rem; }
-    .offer-choice-modal .modal-header h2 { font-size: 1.8rem; font-weight: 700; color: #0f2b4b; }
-    .offer-choice-modal .modal-header p { color: #64748b; }
-    .offer-choice-modal .choice-buttons { display: flex; flex-direction: column; gap: 1rem; }
-    .offer-choice-modal .choice-btn { padding: 1.5rem; border-radius: 1.5rem; border: 2px solid #e2e8f0; background: white; cursor: pointer; transition: 0.3s; text-align: left; display: flex; align-items: center; gap: 1.2rem; }
-    .offer-choice-modal .choice-btn:hover { border-color: #2563eb; transform: scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
-    .offer-choice-modal .choice-btn .icon { font-size: 2.5rem; width: 60px; text-align: center; }
-    .offer-choice-modal .choice-btn .info h4 { font-size: 1.1rem; font-weight: 600; color: #0f2b4b; }
-    .offer-choice-modal .choice-btn .info p { font-size: 0.85rem; color: #64748b; margin: 0; }
-    .offer-choice-modal .choice-btn .arrow { margin-left: auto; color: #94a3b8; font-size: 1.2rem; }
-    .offer-choice-modal .choice-btn:hover .arrow { color: #2563eb; }
-    .offer-choice-modal .close-choice { margin-top: 1.5rem; width: 100%; padding: 0.7rem; border-radius: 60px; border: none; background: #eef2f6; color: #1e293b; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.95rem; }
-    .offer-choice-modal .close-choice:hover { background: #e2e8f0; }
-
     .footer { margin-top: 4rem; border-top: 1px solid #e2e8f0; padding: 2rem 0 1rem 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: #475569; font-size: 0.9rem; }
     .footer i { color: #2563eb; margin: 0 0.2rem; }
     .toast { position: fixed; bottom: 90px; right: 24px; background: #0f2b4b; color: white; padding: 1rem 1.8rem; border-radius: 60px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); font-weight: 600; display: flex; align-items: center; gap: 0.7rem; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 10000; max-width: 90%; }
@@ -178,6 +162,12 @@
 
     .page-section { display: block; }
     .page-section.hidden { display: none; }
+
+    /* Image Modal */
+    .image-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 999999; align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
+    .image-modal.active { display: flex; }
+    .image-modal img { max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 0.5rem; }
+    .image-modal .close-img-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 3rem; cursor: pointer; background: none; border: none; z-index: 999999; }
 
     @media (max-width:700px) {
       .app { padding: 1rem; }
@@ -197,8 +187,6 @@
       .payment-modal .payment-actions { flex-direction: column; }
       .payment-modal .payment-actions .btn-pay { width: 100%; }
       .toast { bottom: 80px; right: 16px; max-width: 85%; padding: 0.8rem 1.2rem; font-size: 0.9rem; }
-      .offer-choice-modal .modal-content { padding: 1.5rem; }
-      .offer-choice-modal .choice-btn { padding: 1rem; }
     }
   </style>
 </head>
@@ -206,7 +194,7 @@
 
 <div class="app">
   <header class="navbar">
-    <a href="index.html" class="logo"><i class="fas fa-cube"></i><span>Pixlnex</span></a>
+    <a href="index.html" class="logo"><img src="logo.png" alt="Pixlnex" /><span>Pixlnex</span></a>
     <nav class="nav-links">
       <a href="index.html" class="active">Home</a>
       <a href="shop.html">Webs</a>
@@ -218,33 +206,10 @@
 
   <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Added!</span></div>
 
-  <!-- OFFER CHOICE MODAL -->
-  <div class="offer-choice-modal" id="offerChoiceModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>🎉 Choose Your Free Website</h2>
-        <p>You claimed the first customer free offer! Choose how you want your website:</p>
-      </div>
-      <div class="choice-buttons">
-        <button class="choice-btn" id="choicePremade">
-          <div class="icon">🛍️</div>
-          <div class="info">
-            <h4>Pre-made Website</h4>
-            <p>Choose from our ready-made packages</p>
-          </div>
-          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
-        </button>
-        <button class="choice-btn" id="choiceCustom">
-          <div class="icon">✏️</div>
-          <div class="info">
-            <h4>Custom Website</h4>
-            <p>Tell me what you need and I'll build it</p>
-          </div>
-          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
-        </button>
-      </div>
-      <button class="close-choice" id="closeChoiceModal">Cancel</button>
-    </div>
+  <!-- Image Modal -->
+  <div class="image-modal" id="imageModal">
+    <button class="close-img-modal" onclick="closeImageModal()">&times;</button>
+    <img id="fullscreenImage" src="" alt="Full view" />
   </div>
 
   <div class="offer-banner" id="offerBanner1">
@@ -384,8 +349,53 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ============================================
-// PIXLNEX - COMPLETE EMBEDDED SUPABASE
+// PIXLNEX - COMPLETE WITH SECURITY FIXES
 // ============================================
+
+// ─── SECURITY FUNCTIONS ───
+function validateEmail(email) {
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  if (!email || typeof email !== 'string') return false;
+  if (email.length > 254) return false;
+  if (email.includes('..') || email.includes('@@')) return false;
+  return emailRegex.test(email);
+}
+
+function validatePassword(password) {
+  if (!password || typeof password !== 'string') return false;
+  if (password.length !== 8) return false;
+  const allowedChars = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
+  if (!allowedChars.test(password)) return false;
+  const sqlPatterns = /(\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bDROP\b|\bUNION\b|\b--\b|;)/i;
+  if (sqlPatterns.test(password)) return false;
+  const cmdPatterns = /(\bexec\b|\bping\b|\bcurl\b|\bwget\b|\bnc\b|\bnetcat\b|\bbash\b|\bsh\b)/i;
+  if (cmdPatterns.test(password)) return false;
+  return true;
+}
+
+function sanitizeInput(input) {
+  if (typeof input !== 'string') return input;
+  let sanitized = input.replace(/<[^>]*>/g, '');
+  sanitized = sanitized.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+  sanitized = sanitized.replace(/on\w+\s*=\s*["'][^"']*["']/gi, '');
+  sanitized = sanitized.replace(/javascript:/gi, '');
+  const escapeMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;', '/': '&#x2F;' };
+  return sanitized.replace(/[&<>"'/]/g, function(m) { return escapeMap[m]; });
+}
+
+// ─── IMAGE FULLSCREEN ───
+function openImageModal(src) {
+  const modal = document.getElementById('imageModal');
+  const img = document.getElementById('fullscreenImage');
+  img.src = src;
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeImageModal() {
+  document.getElementById('imageModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
 
 // ─── SUPABASE CONFIG ───
 const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
@@ -418,16 +428,18 @@ async function getCurrentUser() {
   try {
     const { data: sessionData } = await supabaseClient.auth.getSession();
     if (!sessionData.session) {
-      const storedUser = localStorage.getItem('pixlnex_user');
+      const storedUser = localStorage.getItem('pixlnex_user_secure');
       if (storedUser) {
         try {
           const userData = JSON.parse(storedUser);
-          return {
-            id: userData.id,
-            email: userData.email,
-            user_metadata: { full_name: userData.name },
-            created_at: userData.created_at
-          };
+          if (userData._sig === btoa(userData.id + userData.email + 'pixlnex_secret_salt')) {
+            return {
+              id: userData.id,
+              email: userData.email,
+              user_metadata: { full_name: userData.name },
+              created_at: userData.created_at
+            };
+          }
         } catch(e) {}
       }
       return null;
@@ -435,26 +447,17 @@ async function getCurrentUser() {
     const { data, error } = await supabaseClient.auth.getUser();
     if (error) throw error;
     if (data.user) {
-      localStorage.setItem('pixlnex_user', JSON.stringify({
+      const userData = {
         id: data.user.id,
         email: data.user.email,
         name: data.user.user_metadata?.full_name || data.user.email?.split('@')[0],
-        created_at: data.user.created_at
-      }));
+        created_at: data.user.created_at,
+        _sig: btoa(data.user.id + data.user.email + 'pixlnex_secret_salt')
+      };
+      localStorage.setItem('pixlnex_user_secure', JSON.stringify(userData));
     }
     return data.user;
-  } catch(e) { 
-    console.error('Get user error:', e);
-    return null; 
-  }
-}
-
-async function signOutUser() {
-  if (supabaseConnected && supabaseClient) {
-    try { await supabaseClient.auth.signOut(); } catch(e) {}
-  }
-  localStorage.removeItem('pixlnex_user');
-  window.location.href = 'login.html';
+  } catch(e) { return null; }
 }
 
 async function getProducts() {
@@ -482,7 +485,15 @@ async function claimOffer(offerType, email) {
   if (!data || data.is_active === false) throw new Error('Offer not active');
   const claimedArray = data.claimed_by ? data.claimed_by.split(',').filter(Boolean) : [];
   if (claimedArray.includes(email)) throw new Error('Already claimed');
-  if (claimedArray.length >= data.total_limit) throw new Error('Fully claimed');
+  
+  // Admin bypass - remove limit for testing
+  const adminEmails = ['faisalyousafyousaf3@gmail.com', 'noor@gmail.com'];
+  const isAdmin = adminEmails.includes(email.toLowerCase());
+  
+  if (!isAdmin && claimedArray.length >= data.total_limit) {
+    throw new Error('Fully claimed');
+  }
+  
   claimedArray.push(email);
   const { error: updateError } = await supabaseClient.from('offers').update({
     claimed_by: claimedArray.join(','),
@@ -513,7 +524,6 @@ async function createOrder(orderData) {
   return data ? data[0] : null;
 }
 
-// ─── WAIT FOR SUPABASE ───
 function waitForSupabase() {
   return new Promise((resolve) => {
     let attempts = 0;
@@ -528,7 +538,7 @@ function waitForSupabase() {
   });
 }
 
-// ─── RUN APP ───
+// ─── APP ───
 (async function() {
   console.log('🚀 Starting Pixlnex...');
   
@@ -539,13 +549,11 @@ function waitForSupabase() {
     return;
   }
 
-  // ─── APP CODE ───
   let products = [];
   let cart = JSON.parse(localStorage.getItem('pixlnex_cart')) || [];
   let currentUser = null;
   let pendingOrder = null;
   let selectedPayment = 'jazzcash';
-  let claimedFreeOffer = false;
 
   const productGrid = document.getElementById('productGrid');
   const cartItemsContainer = document.getElementById('cartItemsContainer');
@@ -559,7 +567,6 @@ function waitForSupabase() {
   const paymentProductName = document.getElementById('paymentProductName');
   const paymentAmount = document.getElementById('paymentAmount');
   const paymentType = document.getElementById('paymentType');
-  const offerChoiceModal = document.getElementById('offerChoiceModal');
 
   const claimOfferBtn1 = document.getElementById('claimOfferBtn1');
   const offerCount1 = document.getElementById('offerCount1');
@@ -666,8 +673,6 @@ function waitForSupabase() {
       currentUser = null; 
     }
     
-    const authBtn = document.getElementById('authBtn');
-    
     if (currentUser) {
       const name = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
       authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
@@ -686,7 +691,6 @@ function waitForSupabase() {
     try {
       if (!supabaseConnected) return;
       
-      // Portfolio offer (₨ 300)
       const data1 = await getOfferStatus('free_portfolio');
       if (data1) {
         const claimedArray = data1.claimed_by ? data1.claimed_by.split(',').filter(Boolean) : [];
@@ -694,19 +698,22 @@ function waitForSupabase() {
         const limit = data1.total_limit || 10;
         offerCount1.textContent = `${count}/${limit}`;
         offerCountDisplay1.textContent = `(${count}/${limit} claimed)`;
+        
+        const adminEmails = ['faisalyousafyousaf3@gmail.com', 'noor@gmail.com'];
+        const isAdmin = currentUser && adminEmails.includes(currentUser.email.toLowerCase());
+        
         if (currentUser && claimedArray.includes(currentUser.email)) {
           claimOfferBtn1.disabled = true;
           claimOfferBtn1.textContent = '✅ Claimed';
-        } else if (count >= limit) {
+        } else if (!isAdmin && count >= limit) {
           claimOfferBtn1.disabled = true;
           claimOfferBtn1.textContent = '🎉 All Claimed!';
         } else {
           claimOfferBtn1.disabled = false;
-          claimOfferBtn1.textContent = 'Claim ₨ 300';
+          claimOfferBtn1.textContent = isAdmin ? 'Claim ₨ 300 (Admin)' : 'Claim ₨ 300';
         }
       }
       
-      // Free website offer
       const data2 = await getOfferStatus('first_order_free');
       if (data2) {
         const claimedArray = data2.claimed_by ? data2.claimed_by.split(',').filter(Boolean) : [];
@@ -714,101 +721,57 @@ function waitForSupabase() {
         const limit = data2.total_limit || 1;
         offerCount2.textContent = `${count}/${limit}`;
         offerCountDisplay2.textContent = `(${count}/${limit} claimed)`;
+        
+        const adminEmails = ['faisalyousafyousaf3@gmail.com', 'noor@gmail.com'];
+        const isAdmin = currentUser && adminEmails.includes(currentUser.email.toLowerCase());
+        
         if (currentUser && claimedArray.includes(currentUser.email)) {
           claimOfferBtn2.disabled = true;
           claimOfferBtn2.textContent = '✅ Claimed';
-          claimedFreeOffer = true;
-        } else if (count >= limit) {
+        } else if (!isAdmin && count >= limit) {
           claimOfferBtn2.disabled = true;
           claimOfferBtn2.textContent = '🎉 Claimed!';
         } else {
           claimOfferBtn2.disabled = false;
-          claimOfferBtn2.textContent = 'Claim FREE';
-          claimedFreeOffer = false;
+          claimOfferBtn2.textContent = isAdmin ? 'Claim FREE (Admin)' : 'Claim FREE';
         }
       }
     } catch(e) { console.error('Offer error:', e); }
   }
 
-  // ─── OFFER 1: Portfolio ₨ 300 ───
   claimOfferBtn1.addEventListener('click', async function() {
     if (!supabaseConnected) { showToast('⚠️ System not ready'); return; }
     const user = await getCurrentUser();
     if (!user) { showToast('🔐 Please login first'); setTimeout(() => window.location.href = 'login.html', 800); return; }
     const email = user.email;
-    const blockedEmails = ['faisalyousafyousaf3@gmail.com', 'noor@gmail.com'];
-    if (blockedEmails.includes(email.toLowerCase())) {
-      showToast('⚠️ Not available for admin');
-      return;
-    }
     try {
       await claimOffer('free_portfolio', email);
       showToast('🎉 Portfolio in ₨ 300 claimed!');
       this.disabled = true;
       this.textContent = '✅ Claimed';
       loadOfferStatus();
-      
-      // Redirect to shop with filter for portfolio at ₨ 300
       setTimeout(() => {
         window.location.href = 'shop.html?offer=portfolio&price=300';
       }, 1000);
     } catch(e) { showToast('⚠️ ' + e.message); }
   });
 
-  // ─── OFFER 2: Free Website ───
   claimOfferBtn2.addEventListener('click', async function() {
     if (!supabaseConnected) { showToast('⚠️ System not ready'); return; }
     const user = await getCurrentUser();
     if (!user) { showToast('🔐 Please login first'); setTimeout(() => window.location.href = 'login.html', 800); return; }
     const email = user.email;
-    const blockedEmails = ['faisalyousafyousaf3@gmail.com', 'noor@gmail.com'];
-    if (blockedEmails.includes(email.toLowerCase())) {
-      showToast('⚠️ Not available for admin');
-      return;
-    }
     try {
       await claimOffer('first_order_free', email);
       showToast('⭐ Free Website claimed!');
       this.disabled = true;
       this.textContent = '✅ Claimed';
-      claimedFreeOffer = true;
       loadOfferStatus();
-      
-      // Show choice modal
+      // Show choice modal or redirect
       setTimeout(() => {
-        offerChoiceModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }, 600);
+        window.location.href = 'shop.html?offer=free';
+      }, 1000);
     } catch(e) { showToast('⚠️ ' + e.message); }
-  });
-
-  // ─── OFFER CHOICE MODAL ───
-  document.getElementById('closeChoiceModal').addEventListener('click', function() {
-    offerChoiceModal.classList.remove('active');
-    document.body.style.overflow = '';
-  });
-
-  // Premade choice - redirect to shop
-  document.getElementById('choicePremade').addEventListener('click', function() {
-    offerChoiceModal.classList.remove('active');
-    document.body.style.overflow = '';
-    window.location.href = 'shop.html?offer=free';
-  });
-
-  // Custom choice - scroll to custom order form
-  document.getElementById('choiceCustom').addEventListener('click', function() {
-    offerChoiceModal.classList.remove('active');
-    document.body.style.overflow = '';
-    document.getElementById('customOrder').scrollIntoView({ behavior: 'smooth' });
-    showToast('✏️ Fill out the custom order form below!');
-  });
-
-  // Close modal on outside click
-  offerChoiceModal.addEventListener('click', function(e) {
-    if (e.target === this) {
-      this.classList.remove('active');
-      document.body.style.overflow = '';
-    }
   });
 
   window.selectPayment = function(method) {
@@ -893,7 +856,6 @@ function waitForSupabase() {
       productGrid.innerHTML = '<div style="text-align:center;padding:2rem;color:#94a3b8;">No products available.</div>';
       return;
     }
-    // Show only first 4 products on homepage
     const displayProducts = products.slice(0, 4);
     displayProducts.forEach((p, index) => {
       const card = document.createElement('div');
@@ -917,6 +879,17 @@ function waitForSupabase() {
         </div>
       `;
       productGrid.appendChild(card);
+      
+      // Add click handler for fullscreen image
+      const imgContainer = card.querySelector('.product-img');
+      imgContainer.addEventListener('click', function(e) {
+        const img = this.querySelector('img');
+        if (img && img.src) {
+          e.stopPropagation();
+          openImageModal(img.src);
+        }
+      });
+      
       const containerId = `carousel-${p.id || index}`;
       if (images.length > 1) {
         setTimeout(() => { initCarousel(containerId, images.length, images); }, 200);
@@ -1120,10 +1093,7 @@ function waitForSupabase() {
 
   document.getElementById('navAbout').addEventListener('click', function(e) {
     e.preventDefault();
-    document.getElementById('homeSection').classList.add('hidden');
-    document.getElementById('productSection').classList.add('hidden');
-    document.getElementById('customOrder').classList.add('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    alert('📖 About Pixlnex\n\nWe are a one-person web development service. I build custom websites tailored to your needs.\n\n✅ One person, one website at a time\n✅ Custom designs\n✅ Affordable prices\n✅ 1-on-1 service');
   });
 
   // ─── START ───

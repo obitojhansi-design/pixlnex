@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pixlnex · Sign Up</title>
+  <link rel="icon" href="logo.png" type="image/png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
     body { background: #f8fafc; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
     .signup-container { max-width: 460px; width: 100%; background: white; border-radius: 2.5rem; padding: 2.8rem 2.5rem; box-shadow: 0 12px 40px rgba(0,0,0,0.06); border: 1px solid #e9eef3; }
     .signup-container .logo { display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; text-decoration: none; margin-bottom: 0.5rem; }
+    .signup-container .logo img { height: 30px; width: auto; }
     .signup-container .logo i { color: #2563eb; font-size: 2rem; }
     .signup-container h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.3rem; text-align: center; }
     .signup-container .sub { text-align: center; color: #64748b; margin-bottom: 2rem; font-size: 0.95rem; }
@@ -32,17 +34,7 @@
     .back-link { display: inline-block; margin-top: 1rem; color: #64748b; text-decoration: none; font-size: 0.9rem; transition: 0.2s; text-align: center; width: 100%; }
     .back-link:hover { color: #2563eb; }
     .back-link i { margin-right: 0.4rem; }
-    .password-strength { margin-top: 0.3rem; display: flex; gap: 0.3rem; }
-    .password-strength .bar { height: 4px; flex: 1; border-radius: 4px; background: #e2e8f0; transition: 0.3s; }
-    .password-strength .bar.weak { background: #ef4444; }
-    .password-strength .bar.medium { background: #f59e0b; }
-    .password-strength .bar.strong { background: #22c55e; }
-    .password-strength-text { font-size: 0.75rem; color: #64748b; margin-top: 0.2rem; }
-    .password-strength-text.weak { color: #ef4444; }
-    .password-strength-text.medium { color: #f59e0b; }
-    .password-strength-text.strong { color: #22c55e; }
-    .terms { font-size: 0.8rem; color: #64748b; text-align: center; margin-top: 1rem; }
-    .terms a { color: #2563eb; text-decoration: none; }
+    .password-hint { font-size: 0.7rem; color: #64748b; margin-top: 0.3rem; }
     .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 0.6s ease-in-out infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     @media (max-width: 500px) { .signup-container { padding: 2rem 1.5rem; } }
@@ -51,7 +43,7 @@
 <body>
 
 <div class="signup-container">
-  <a href="index.html" class="logo"><i class="fas fa-cube"></i><span>Pixlnex</span></a>
+  <a href="index.html" class="logo"><img src="logo.png" alt="Pixlnex" /><span>Pixlnex</span></a>
   <h2>Create Account</h2>
   <p class="sub"><i class="fas fa-globe"></i> Join us — we only sell webs</p>
   <div id="errorMsg" class="error-msg">⚠️ Something went wrong. Please try again.</div>
@@ -59,14 +51,14 @@
   <form id="signupForm">
     <div class="form-group"><label for="fullName"><i class="fas fa-user"></i> Full Name</label><input type="text" id="fullName" placeholder="John Doe" required /></div>
     <div class="form-group"><label for="email"><i class="far fa-envelope"></i> Email Address</label><input type="email" id="email" placeholder="john@example.com" required /></div>
-    <div class="form-group"><label for="password"><i class="fas fa-lock"></i> Password</label><input type="password" id="password" placeholder="Min 8 characters" required minlength="8" />
-      <div class="password-strength" id="passwordStrength"><div class="bar" id="bar1"></div><div class="bar" id="bar2"></div><div class="bar" id="bar3"></div></div>
-      <div class="password-strength-text" id="strengthText">Enter a strong password</div>
+    <div class="form-group">
+      <label for="password"><i class="fas fa-lock"></i> Password</label>
+      <input type="password" id="password" placeholder="Exactly 8 characters" required maxlength="8" minlength="8" />
+      <div class="password-hint">Password must be exactly 8 characters (letters, numbers, special chars)</div>
     </div>
-    <div class="form-group"><label for="confirmPassword"><i class="fas fa-check-circle"></i> Confirm Password</label><input type="password" id="confirmPassword" placeholder="Confirm your password" required /></div>
+    <div class="form-group"><label for="confirmPassword"><i class="fas fa-check-circle"></i> Confirm Password</label><input type="password" id="confirmPassword" placeholder="Confirm your password" required maxlength="8" minlength="8" /></div>
     <button type="submit" class="signup-btn" id="signupBtn"><i class="fas fa-user-plus"></i> Create Account</button>
   </form>
-  <div class="terms">By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></div>
   <div class="signup-footer">Already have an account? <a href="login.html">Sign in</a></div>
   <div class="web-badge"><i class="fas fa-spider"></i> We only sell webs — one person, one website at a time</div>
   <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to home</a>
@@ -75,9 +67,31 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ============================================
-// PIXLNEX - EMBEDDED SUPABASE (SIGNUP)
+// SECURE PIXLNEX - SIGNUP
 // ============================================
 
+// ─── SECURITY FUNCTIONS ───
+function validateEmail(email) {
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  if (!email || typeof email !== 'string') return false;
+  if (email.length > 254) return false;
+  if (email.includes('..') || email.includes('@@')) return false;
+  return emailRegex.test(email);
+}
+
+function validatePassword(password) {
+  if (!password || typeof password !== 'string') return false;
+  if (password.length !== 8) return false;
+  const allowedChars = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
+  if (!allowedChars.test(password)) return false;
+  const sqlPatterns = /(\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bDROP\b|\bUNION\b|\b--\b|;)/i;
+  if (sqlPatterns.test(password)) return false;
+  const cmdPatterns = /(\bexec\b|\bping\b|\bcurl\b|\bwget\b|\bnc\b|\bnetcat\b|\bbash\b|\bsh\b)/i;
+  if (cmdPatterns.test(password)) return false;
+  return true;
+}
+
+// ─── SUPABASE ───
 const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
 
@@ -101,103 +115,44 @@ function initSupabase() {
 
 async function signUpUser(email, password, userData) {
   if (!supabaseConnected || !supabaseClient) throw new Error('Supabase not connected');
+  if (!validateEmail(email)) throw new Error('Invalid email format');
+  if (!validatePassword(password)) throw new Error('Password must be exactly 8 characters with safe characters only');
+  
   const { data, error } = await supabaseClient.auth.signUp({
-    email, password,
+    email: email.trim(),
+    password: password,
     options: { data: { full_name: userData.full_name || userData.name } }
   });
   if (error) throw error;
   return data;
 }
 
-function waitForSupabase() {
-  return new Promise((resolve) => {
-    let attempts = 0;
-    const check = () => {
-      if (supabaseConnected && supabaseClient) { resolve(true); return; }
-      attempts++;
-      if (attempts > 30) { resolve(false); return; }
-      setTimeout(check, 300);
-    };
-    if (!supabaseConnected) { initSupabase(); }
-    check();
-  });
-}
-
-// ─── SIGNUP ───
-const form = document.getElementById('signupForm');
-const fullNameInput = document.getElementById('fullName');
-const emailInput = document.getElementById('email');
-const passwordInput = document.getElementById('password');
-const confirmPasswordInput = document.getElementById('confirmPassword');
-const signupBtn = document.getElementById('signupBtn');
-const errorMsg = document.getElementById('errorMsg');
-const successMsg = document.getElementById('successMsg');
-
-const bar1 = document.getElementById('bar1');
-const bar2 = document.getElementById('bar2');
-const bar3 = document.getElementById('bar3');
-const strengthText = document.getElementById('strengthText');
-
-function checkPasswordStrength(password) {
-  let score = 0;
-  if (password.length >= 8) score++;
-  if (password.match(/[a-z]/) && password.match(/[A-Z]/)) score++;
-  if (password.match(/[0-9]/) || password.match(/[^a-zA-Z0-9]/)) score++;
-  return score;
-}
-
-passwordInput.addEventListener('input', function() {
-  const password = this.value;
-  const score = checkPasswordStrength(password);
-  bar1.className = 'bar';
-  bar2.className = 'bar';
-  bar3.className = 'bar';
-  if (password.length === 0) {
-    strengthText.textContent = 'Enter a strong password';
-    strengthText.className = 'password-strength-text';
-    return;
-  }
-  if (score <= 1) {
-    bar1.className = 'bar weak';
-    strengthText.textContent = 'Weak — add uppercase, numbers, or symbols';
-    strengthText.className = 'password-strength-text weak';
-  } else if (score === 2) {
-    bar1.className = 'bar medium';
-    bar2.className = 'bar medium';
-    strengthText.textContent = 'Medium — add more variety';
-    strengthText.className = 'password-strength-text medium';
-  } else {
-    bar1.className = 'bar strong';
-    bar2.className = 'bar strong';
-    bar3.className = 'bar strong';
-    strengthText.textContent = 'Strong password!';
-    strengthText.className = 'password-strength-text strong';
-  }
-});
-
-form.addEventListener('submit', async function(e) {
+document.getElementById('signupForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   
-  const name = fullNameInput.value.trim();
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
-  const confirmPassword = confirmPasswordInput.value;
+  const name = document.getElementById('fullName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
 
-  errorMsg.classList.remove('show');
-  successMsg.classList.remove('show');
+  document.getElementById('errorMsg').classList.remove('show');
+  document.getElementById('successMsg').classList.remove('show');
+
+  const errorMsg = document.getElementById('errorMsg');
+  const signupBtn = document.getElementById('signupBtn');
 
   if (!name || name.length < 2) {
     errorMsg.textContent = '⚠️ Please enter your full name.';
     errorMsg.classList.add('show');
     return;
   }
-  if (!email || !email.includes('@')) {
+  if (!validateEmail(email)) {
     errorMsg.textContent = '⚠️ Please enter a valid email address.';
     errorMsg.classList.add('show');
     return;
   }
-  if (password.length < 8) {
-    errorMsg.textContent = '⚠️ Password must be at least 8 characters.';
+  if (!validatePassword(password)) {
+    errorMsg.textContent = '⚠️ Password must be exactly 8 characters with safe characters only.';
     errorMsg.classList.add('show');
     return;
   }
@@ -211,16 +166,23 @@ form.addEventListener('submit', async function(e) {
   signupBtn.innerHTML = '<span class="loading-spinner"></span> Creating...';
 
   try {
-    const connected = await waitForSupabase();
-    if (!connected) {
-      throw new Error('Database not connected. Please refresh.');
-    }
+    initSupabase();
+    if (!supabaseConnected) throw new Error('Database not connected');
 
     const result = await signUpUser(email, password, { full_name: name });
 
     if (result && result.user) {
-      successMsg.textContent = `✅ Account created successfully! Welcome ${name}! Redirecting...`;
-      successMsg.classList.add('show');
+      const userData = {
+        id: result.user.id,
+        email: result.user.email,
+        name: name,
+        created_at: result.user.created_at,
+        _sig: btoa(result.user.id + result.user.email + 'pixlnex_secret_salt')
+      };
+      localStorage.setItem('pixlnex_user_secure', JSON.stringify(userData));
+      
+      document.getElementById('successMsg').textContent = `✅ Account created successfully! Welcome ${name}! Redirecting...`;
+      document.getElementById('successMsg').classList.add('show');
       setTimeout(() => { window.location.href = 'index.html'; }, 2000);
     } else {
       errorMsg.textContent = '⚠️ ' + (result?.error || 'Something went wrong. Please try again.');
@@ -235,6 +197,8 @@ form.addEventListener('submit', async function(e) {
     signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
   }
 });
+
+initSupabase();
 </script>
 </body>
 </html>
