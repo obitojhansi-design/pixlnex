@@ -152,6 +152,24 @@
     .payment-modal .payment-actions .btn-pay.cancel { background: #eef2f6; color: #1e293b; }
     .payment-modal .payment-actions .btn-pay.cancel:hover { background: #e2e8f0; }
 
+    /* ─── OFFER CHOICE MODAL ─── */
+    .offer-choice-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 99998; align-items: center; justify-content: center; padding: 1.5rem; }
+    .offer-choice-modal.active { display: flex; }
+    .offer-choice-modal .modal-content { background: white; border-radius: 2rem; max-width: 500px; width: 100%; padding: 2.5rem; animation: slideUp 0.3s ease; }
+    .offer-choice-modal .modal-header { text-align: center; margin-bottom: 1.5rem; }
+    .offer-choice-modal .modal-header h2 { font-size: 1.8rem; font-weight: 700; color: #0f2b4b; }
+    .offer-choice-modal .modal-header p { color: #64748b; }
+    .offer-choice-modal .choice-buttons { display: flex; flex-direction: column; gap: 1rem; }
+    .offer-choice-modal .choice-btn { padding: 1.5rem; border-radius: 1.5rem; border: 2px solid #e2e8f0; background: white; cursor: pointer; transition: 0.3s; text-align: left; display: flex; align-items: center; gap: 1.2rem; }
+    .offer-choice-modal .choice-btn:hover { border-color: #2563eb; transform: scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
+    .offer-choice-modal .choice-btn .icon { font-size: 2.5rem; width: 60px; text-align: center; }
+    .offer-choice-modal .choice-btn .info h4 { font-size: 1.1rem; font-weight: 600; color: #0f2b4b; }
+    .offer-choice-modal .choice-btn .info p { font-size: 0.85rem; color: #64748b; margin: 0; }
+    .offer-choice-modal .choice-btn .arrow { margin-left: auto; color: #94a3b8; font-size: 1.2rem; }
+    .offer-choice-modal .choice-btn:hover .arrow { color: #2563eb; }
+    .offer-choice-modal .close-choice { margin-top: 1.5rem; width: 100%; padding: 0.7rem; border-radius: 60px; border: none; background: #eef2f6; color: #1e293b; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.95rem; }
+    .offer-choice-modal .close-choice:hover { background: #e2e8f0; }
+
     .footer { margin-top: 4rem; border-top: 1px solid #e2e8f0; padding: 2rem 0 1rem 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: #475569; font-size: 0.9rem; }
     .footer i { color: #2563eb; margin: 0 0.2rem; }
     .toast { position: fixed; bottom: 90px; right: 24px; background: #0f2b4b; color: white; padding: 1rem 1.8rem; border-radius: 60px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); font-weight: 600; display: flex; align-items: center; gap: 0.7rem; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 10000; max-width: 90%; }
@@ -179,6 +197,8 @@
       .payment-modal .payment-actions { flex-direction: column; }
       .payment-modal .payment-actions .btn-pay { width: 100%; }
       .toast { bottom: 80px; right: 16px; max-width: 85%; padding: 0.8rem 1.2rem; font-size: 0.9rem; }
+      .offer-choice-modal .modal-content { padding: 1.5rem; }
+      .offer-choice-modal .choice-btn { padding: 1rem; }
     }
   </style>
 </head>
@@ -197,6 +217,35 @@
   </header>
 
   <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Added!</span></div>
+
+  <!-- OFFER CHOICE MODAL -->
+  <div class="offer-choice-modal" id="offerChoiceModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🎉 Choose Your Free Website</h2>
+        <p>You claimed the first customer free offer! Choose how you want your website:</p>
+      </div>
+      <div class="choice-buttons">
+        <button class="choice-btn" id="choicePremade">
+          <div class="icon">🛍️</div>
+          <div class="info">
+            <h4>Pre-made Website</h4>
+            <p>Choose from our ready-made packages</p>
+          </div>
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+        </button>
+        <button class="choice-btn" id="choiceCustom">
+          <div class="icon">✏️</div>
+          <div class="info">
+            <h4>Custom Website</h4>
+            <p>Tell me what you need and I'll build it</p>
+          </div>
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+        </button>
+      </div>
+      <button class="close-choice" id="closeChoiceModal">Cancel</button>
+    </div>
+  </div>
 
   <div class="offer-banner" id="offerBanner1">
     <div class="offer-text">
@@ -367,10 +416,8 @@ function formatPKR(amount) {
 async function getCurrentUser() {
   if (!supabaseConnected || !supabaseClient) return null;
   try {
-    // Check session first
     const { data: sessionData } = await supabaseClient.auth.getSession();
     if (!sessionData.session) {
-      // Check localStorage fallback
       const storedUser = localStorage.getItem('pixlnex_user');
       if (storedUser) {
         try {
@@ -385,10 +432,8 @@ async function getCurrentUser() {
       }
       return null;
     }
-    
     const { data, error } = await supabaseClient.auth.getUser();
     if (error) throw error;
-    
     if (data.user) {
       localStorage.setItem('pixlnex_user', JSON.stringify({
         id: data.user.id,
@@ -397,7 +442,6 @@ async function getCurrentUser() {
         created_at: data.user.created_at
       }));
     }
-    
     return data.user;
   } catch(e) { 
     console.error('Get user error:', e);
@@ -411,23 +455,6 @@ async function signOutUser() {
   }
   localStorage.removeItem('pixlnex_user');
   window.location.href = 'login.html';
-}
-
-async function signUpUser(email, password, userData) {
-  if (!supabaseConnected || !supabaseClient) throw new Error('Supabase not connected');
-  const { data, error } = await supabaseClient.auth.signUp({
-    email, password,
-    options: { data: { full_name: userData.full_name || userData.name } }
-  });
-  if (error) throw error;
-  return data;
-}
-
-async function signInUser(email, password) {
-  if (!supabaseConnected || !supabaseClient) throw new Error('Supabase not connected');
-  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-  if (error) throw error;
-  return data;
 }
 
 async function getProducts() {
@@ -518,6 +545,7 @@ function waitForSupabase() {
   let currentUser = null;
   let pendingOrder = null;
   let selectedPayment = 'jazzcash';
+  let claimedFreeOffer = false;
 
   const productGrid = document.getElementById('productGrid');
   const cartItemsContainer = document.getElementById('cartItemsContainer');
@@ -531,6 +559,7 @@ function waitForSupabase() {
   const paymentProductName = document.getElementById('paymentProductName');
   const paymentAmount = document.getElementById('paymentAmount');
   const paymentType = document.getElementById('paymentType');
+  const offerChoiceModal = document.getElementById('offerChoiceModal');
 
   const claimOfferBtn1 = document.getElementById('claimOfferBtn1');
   const offerCount1 = document.getElementById('offerCount1');
@@ -630,7 +659,6 @@ function waitForSupabase() {
     container._autoSlideInterval = autoSlideInterval;
   }
 
-  // ─── FIXED: UPDATE AUTH UI ───
   async function updateAuthUI() {
     try {
       currentUser = await getCurrentUser();
@@ -644,9 +672,8 @@ function waitForSupabase() {
       const name = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
       authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
       authBtn.className = 'auth-btn logout';
-      // FIX: Just set href to profile, remove onclick handler
       authBtn.href = 'profile.html';
-      authBtn.onclick = null; // Remove any onclick handler
+      authBtn.onclick = null;
     } else {
       authBtn.innerHTML = '<i class="fas fa-user"></i> Login';
       authBtn.className = 'auth-btn';
@@ -658,6 +685,8 @@ function waitForSupabase() {
   async function loadOfferStatus() {
     try {
       if (!supabaseConnected) return;
+      
+      // Portfolio offer (₨ 300)
       const data1 = await getOfferStatus('free_portfolio');
       if (data1) {
         const claimedArray = data1.claimed_by ? data1.claimed_by.split(',').filter(Boolean) : [];
@@ -676,6 +705,8 @@ function waitForSupabase() {
           claimOfferBtn1.textContent = 'Claim ₨ 300';
         }
       }
+      
+      // Free website offer
       const data2 = await getOfferStatus('first_order_free');
       if (data2) {
         const claimedArray = data2.claimed_by ? data2.claimed_by.split(',').filter(Boolean) : [];
@@ -686,17 +717,20 @@ function waitForSupabase() {
         if (currentUser && claimedArray.includes(currentUser.email)) {
           claimOfferBtn2.disabled = true;
           claimOfferBtn2.textContent = '✅ Claimed';
+          claimedFreeOffer = true;
         } else if (count >= limit) {
           claimOfferBtn2.disabled = true;
           claimOfferBtn2.textContent = '🎉 Claimed!';
         } else {
           claimOfferBtn2.disabled = false;
           claimOfferBtn2.textContent = 'Claim FREE';
+          claimedFreeOffer = false;
         }
       }
     } catch(e) { console.error('Offer error:', e); }
   }
 
+  // ─── OFFER 1: Portfolio ₨ 300 ───
   claimOfferBtn1.addEventListener('click', async function() {
     if (!supabaseConnected) { showToast('⚠️ System not ready'); return; }
     const user = await getCurrentUser();
@@ -710,12 +744,18 @@ function waitForSupabase() {
     try {
       await claimOffer('free_portfolio', email);
       showToast('🎉 Portfolio in ₨ 300 claimed!');
-      claimOfferBtn1.disabled = true;
-      claimOfferBtn1.textContent = '✅ Claimed';
+      this.disabled = true;
+      this.textContent = '✅ Claimed';
       loadOfferStatus();
+      
+      // Redirect to shop with filter for portfolio at ₨ 300
+      setTimeout(() => {
+        window.location.href = 'shop.html?offer=portfolio&price=300';
+      }, 1000);
     } catch(e) { showToast('⚠️ ' + e.message); }
   });
 
+  // ─── OFFER 2: Free Website ───
   claimOfferBtn2.addEventListener('click', async function() {
     if (!supabaseConnected) { showToast('⚠️ System not ready'); return; }
     const user = await getCurrentUser();
@@ -728,11 +768,47 @@ function waitForSupabase() {
     }
     try {
       await claimOffer('first_order_free', email);
-      showToast('⭐ Completely Free Website claimed!');
-      claimOfferBtn2.disabled = true;
-      claimOfferBtn2.textContent = '✅ Claimed';
+      showToast('⭐ Free Website claimed!');
+      this.disabled = true;
+      this.textContent = '✅ Claimed';
+      claimedFreeOffer = true;
       loadOfferStatus();
+      
+      // Show choice modal
+      setTimeout(() => {
+        offerChoiceModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }, 600);
     } catch(e) { showToast('⚠️ ' + e.message); }
+  });
+
+  // ─── OFFER CHOICE MODAL ───
+  document.getElementById('closeChoiceModal').addEventListener('click', function() {
+    offerChoiceModal.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+
+  // Premade choice - redirect to shop
+  document.getElementById('choicePremade').addEventListener('click', function() {
+    offerChoiceModal.classList.remove('active');
+    document.body.style.overflow = '';
+    window.location.href = 'shop.html?offer=free';
+  });
+
+  // Custom choice - scroll to custom order form
+  document.getElementById('choiceCustom').addEventListener('click', function() {
+    offerChoiceModal.classList.remove('active');
+    document.body.style.overflow = '';
+    document.getElementById('customOrder').scrollIntoView({ behavior: 'smooth' });
+    showToast('✏️ Fill out the custom order form below!');
+  });
+
+  // Close modal on outside click
+  offerChoiceModal.addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.remove('active');
+      document.body.style.overflow = '';
+    }
   });
 
   window.selectPayment = function(method) {
@@ -817,7 +893,9 @@ function waitForSupabase() {
       productGrid.innerHTML = '<div style="text-align:center;padding:2rem;color:#94a3b8;">No products available.</div>';
       return;
     }
-    products.forEach((p, index) => {
+    // Show only first 4 products on homepage
+    const displayProducts = products.slice(0, 4);
+    displayProducts.forEach((p, index) => {
       const card = document.createElement('div');
       card.className = 'product-card';
       const images = getProductImages(p);
