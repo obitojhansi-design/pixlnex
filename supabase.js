@@ -1,5 +1,7 @@
 // ============================================
 // PIXLNEX - SECURE DATABASE LAYER
+// ALL DATA STORED IN SUPABASE
+// localStorage ONLY for SESSION MANAGEMENT
 // ============================================
 
 // ─── SUPABASE CONFIGURATION ───
@@ -293,6 +295,8 @@ function waitForSupabase(timeout = 5000) {
 
 /**
  * Get current user with session validation
+ * DATA SOURCE: Supabase Auth + Supabase Users Table
+ * localStorage: ONLY for session caching (not primary data store)
  */
 async function getCurrentUser() {
     if (!supabaseConnected || !supabaseClient) {
@@ -308,7 +312,7 @@ async function getCurrentUser() {
             return null;
         }
         
-        // Check session first
+        // PRIMARY: Check Supabase session first
         const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
         
         if (sessionError) {
@@ -317,7 +321,8 @@ async function getCurrentUser() {
         }
         
         if (!sessionData.session) {
-            // Check secure localStorage fallback
+            // FALLBACK: Check localStorage for session cache
+            // This is ONLY for user experience (so they don't have to login again)
             const storedUser = localStorage.getItem('pixlnex_user_secure');
             if (storedUser) {
                 try {
@@ -325,21 +330,24 @@ async function getCurrentUser() {
                     // Verify the stored data is not tampered
                     const expectedSig = btoa(userData.id + userData.email + 'pixlnex_secret_salt');
                     if (userData._sig === expectedSig) {
+                        // Return cached user data but mark as needing refresh
                         return {
                             id: userData.id,
                             email: userData.email,
                             user_metadata: { full_name: userData.name },
-                            created_at: userData.created_at
+                            created_at: userData.created_at,
+                            _cached: true // Flag to indicate this is from cache
                         };
                     }
                 } catch(e) {
                     console.warn('Stored user data invalid');
+                    localStorage.removeItem('pixlnex_user_secure');
                 }
             }
             return null;
         }
         
-        // Get user from session
+        // PRIMARY: Get user from Supabase
         const { data, error } = await supabaseClient.auth.getUser();
         
         if (error) {
@@ -348,13 +356,15 @@ async function getCurrentUser() {
         }
         
         if (data.user) {
-            // Store user data securely with signature
+            // Cache user data in localStorage for faster subsequent loads
+            // This is a CACHE, not the primary data source
             const userData = {
                 id: data.user.id,
                 email: data.user.email,
                 name: data.user.user_metadata?.full_name || data.user.email?.split('@')[0] || 'User',
                 created_at: data.user.created_at,
-                _sig: btoa(data.user.id + data.user.email + 'pixlnex_secret_salt')
+                _sig: btoa(data.user.id + data.user.email + 'pixlnex_secret_salt'),
+                _cached: false
             };
             localStorage.setItem('pixlnex_user_secure', JSON.stringify(userData));
             
@@ -376,6 +386,7 @@ async function getCurrentUser() {
 
 /**
  * Sign in user with security checks
+ * DATA SOURCE: Supabase Auth
  */
 async function signInUser(email, password) {
     if (!supabaseConnected || !supabaseClient) {
@@ -401,6 +412,7 @@ async function signInUser(email, password) {
     const sanitizedEmail = sanitizeInput(email.trim());
     
     try {
+        // PRIMARY: Authenticate with Supabase
         const { data, error } = await supabaseClient.auth.signInWithPassword({
             email: sanitizedEmail,
             password: password // Password is already validated
@@ -409,12 +421,14 @@ async function signInUser(email, password) {
         if (error) throw error;
         
         if (data.user) {
+            // Cache user data in localStorage (CACHE ONLY)
             const userData = {
                 id: data.user.id,
                 email: data.user.email,
                 name: data.user.user_metadata?.full_name || data.user.email?.split('@')[0],
                 created_at: data.user.created_at,
-                _sig: btoa(data.user.id + data.user.email + 'pixlnex_secret_salt')
+                _sig: btoa(data.user.id + data.user.email + 'pixlnex_secret_salt'),
+                _cached: false
             };
             localStorage.setItem('pixlnex_user_secure', JSON.stringify(userData));
             
@@ -433,6 +447,7 @@ async function signInUser(email, password) {
 
 /**
  * Sign up user with security checks
+ * DATA SOURCE: Supabase Auth + Supabase Users Table
  */
 async function signUpUser(email, password, userData) {
     if (!supabaseConnected || !supabaseClient) {
@@ -452,7 +467,7 @@ async function signUpUser(email, password, userData) {
     const sanitizedUserData = sanitizeObject(userData);
     const sanitizedEmail = sanitizeInput(email.trim());
     
-    // Check if email already exists (prevent duplicate signups)
+    // PRIMARY: Check if email already exists in Supabase
     const { data: existingUser, error: checkError } = await supabaseClient
         .from('users')
         .select('email')
@@ -464,6 +479,7 @@ async function signUpUser(email, password, userData) {
     }
     
     try {
+        // PRIMARY: Create user in Supabase Auth
         const { data, error } = await supabaseClient.auth.signUp({
             email: sanitizedEmail,
             password: password, // Password is already validated
@@ -476,7 +492,7 @@ async function signUpUser(email, password, userData) {
         
         if (error) throw error;
         
-        // Create user record in users table
+        // PRIMARY: Create user record in users table
         if (data.user) {
             try {
                 await supabaseClient
@@ -492,12 +508,14 @@ async function signUpUser(email, password, userData) {
                 // Don't throw - user is already created in auth
             }
             
+            // Cache user data in localStorage (CACHE ONLY)
             const userDataSecure = {
                 id: data.user.id,
                 email: data.user.email,
                 name: sanitizedUserData.full_name || sanitizedUserData.name || 'User',
                 created_at: data.user.created_at,
-                _sig: btoa(data.user.id + data.user.email + 'pixlnex_secret_salt')
+                _sig: btoa(data.user.id + data.user.email + 'pixlnex_secret_salt'),
+                _cached: false
             };
             localStorage.setItem('pixlnex_user_secure', JSON.stringify(userDataSecure));
             localStorage.setItem('pixlnex_csrf_token', generateCSRFToken());
@@ -518,16 +536,16 @@ async function signUpUser(email, password, userData) {
 async function signOutUser() {
     try {
         if (supabaseConnected && supabaseClient) {
+            // PRIMARY: Sign out from Supabase
             await supabaseClient.auth.signOut();
         }
     } catch (e) {
         console.error('Sign out error:', e);
     }
     
-    // Clear secure storage
+    // Clear localStorage cache
     localStorage.removeItem('pixlnex_user_secure');
     localStorage.removeItem('pixlnex_csrf_token');
-    localStorage.removeItem('supabase.auth.token');
     
     currentUser = null;
     
@@ -536,9 +554,10 @@ async function signOutUser() {
 }
 
 // ─── PRODUCT FUNCTIONS ───
+// DATA SOURCE: Supabase Products Table (100% database)
 
 /**
- * Get all products with security
+ * Get all products from Supabase
  */
 async function getProducts() {
     if (!supabaseConnected || !supabaseClient) {
@@ -554,6 +573,7 @@ async function getProducts() {
     }
     
     try {
+        // PRIMARY: Fetch from Supabase
         const { data, error } = await supabaseClient
             .from('products')
             .select('*')
@@ -561,7 +581,7 @@ async function getProducts() {
         
         if (error) throw error;
         
-        // Sanitize all product data
+        // Sanitize all product data before returning
         return (data || []).map(product => sanitizeObject(product));
     } catch (e) {
         console.error('Products error:', e);
@@ -570,13 +590,14 @@ async function getProducts() {
 }
 
 /**
- * Get a single product by ID
+ * Get a single product by ID from Supabase
  */
 async function getProductById(productId) {
     if (!supabaseConnected || !supabaseClient) return null;
     if (!productId) return null;
     
     try {
+        // PRIMARY: Fetch from Supabase
         const { data, error } = await supabaseClient
             .from('products')
             .select('*')
@@ -592,7 +613,7 @@ async function getProductById(productId) {
 }
 
 /**
- * Create a new product (admin only)
+ * Create a new product in Supabase (admin only)
  */
 async function createProduct(productData) {
     if (!supabaseConnected || !supabaseClient) {
@@ -609,6 +630,7 @@ async function createProduct(productData) {
     delete sanitizedData.csrfToken;
     
     try {
+        // PRIMARY: Insert into Supabase
         const { data, error } = await supabaseClient
             .from('products')
             .insert([{
@@ -632,7 +654,7 @@ async function createProduct(productData) {
 }
 
 /**
- * Update a product (admin only)
+ * Update a product in Supabase (admin only)
  */
 async function updateProduct(productId, productData) {
     if (!supabaseConnected || !supabaseClient) {
@@ -650,6 +672,7 @@ async function updateProduct(productId, productData) {
     delete sanitizedData.id;
     
     try {
+        // PRIMARY: Update in Supabase
         const { data, error } = await supabaseClient
             .from('products')
             .update({
@@ -668,7 +691,7 @@ async function updateProduct(productId, productData) {
 }
 
 /**
- * Delete a product (admin only)
+ * Delete a product from Supabase (admin only)
  */
 async function deleteProduct(productId, csrfToken) {
     if (!supabaseConnected || !supabaseClient) {
@@ -681,6 +704,7 @@ async function deleteProduct(productId, csrfToken) {
     }
     
     try {
+        // PRIMARY: Delete from Supabase
         const { error } = await supabaseClient
             .from('products')
             .delete()
@@ -695,15 +719,17 @@ async function deleteProduct(productId, csrfToken) {
 }
 
 // ─── OFFER FUNCTIONS ───
+// DATA SOURCE: Supabase Offers Table (100% database)
 
 /**
- * Get offer status
+ * Get offer status from Supabase
  */
 async function getOfferStatus(offerType) {
     if (!supabaseConnected || !supabaseClient) return null;
     if (!offerType) return null;
     
     try {
+        // PRIMARY: Fetch from Supabase
         const { data, error } = await supabaseClient
             .from('offers')
             .select('*')
@@ -719,7 +745,7 @@ async function getOfferStatus(offerType) {
 }
 
 /**
- * Claim an offer with security
+ * Claim an offer - updates Supabase
  */
 async function claimOffer(offerType, email, csrfToken) {
     if (!supabaseConnected || !supabaseClient) {
@@ -745,7 +771,7 @@ async function claimOffer(offerType, email, csrfToken) {
     }
     
     try {
-        // Get offer data
+        // PRIMARY: Get offer data from Supabase
         const { data, error } = await supabaseClient
             .from('offers')
             .select('*')
@@ -776,6 +802,7 @@ async function claimOffer(offerType, email, csrfToken) {
         // Add email to claimed list
         claimedArray.push(sanitizedEmail);
         
+        // PRIMARY: Update offer in Supabase
         const { error: updateError } = await supabaseClient
             .from('offers')
             .update({
@@ -794,9 +821,10 @@ async function claimOffer(offerType, email, csrfToken) {
 }
 
 // ─── ORDER FUNCTIONS ───
+// DATA SOURCE: Supabase Orders Table (100% database)
 
 /**
- * Create a new order with security
+ * Create a new order in Supabase
  */
 async function createOrder(orderData) {
     if (!supabaseConnected || !supabaseClient) {
@@ -821,6 +849,7 @@ async function createOrder(orderData) {
     const orderId = '#ORD-' + Date.now().toString().slice(-6) + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
     
     try {
+        // PRIMARY: Insert into Supabase
         const { data, error } = await supabaseClient
             .from('orders')
             .insert([{
@@ -849,7 +878,7 @@ async function createOrder(orderData) {
 }
 
 /**
- * Get orders for a user
+ * Get orders for a user from Supabase
  */
 async function getUserOrders(email) {
     if (!supabaseConnected || !supabaseClient) return [];
@@ -858,6 +887,7 @@ async function getUserOrders(email) {
     const sanitizedEmail = sanitizeInput(email.trim());
     
     try {
+        // PRIMARY: Fetch from Supabase
         const { data, error } = await supabaseClient
             .from('orders')
             .select('*')
@@ -873,12 +903,13 @@ async function getUserOrders(email) {
 }
 
 /**
- * Get all orders (admin only)
+ * Get all orders from Supabase (admin only)
  */
 async function getAllOrders() {
     if (!supabaseConnected || !supabaseClient) return [];
     
     try {
+        // PRIMARY: Fetch from Supabase
         const { data, error } = await supabaseClient
             .from('orders')
             .select('*')
@@ -893,7 +924,7 @@ async function getAllOrders() {
 }
 
 /**
- * Update order status (admin only)
+ * Update order status in Supabase (admin only)
  */
 async function updateOrderStatus(orderId, status, csrfToken) {
     if (!supabaseConnected || !supabaseClient) {
@@ -912,6 +943,7 @@ async function updateOrderStatus(orderId, status, csrfToken) {
     }
     
     try {
+        // PRIMARY: Update in Supabase
         const { data, error } = await supabaseClient
             .from('orders')
             .update({
@@ -930,14 +962,16 @@ async function updateOrderStatus(orderId, status, csrfToken) {
 }
 
 // ─── USER FUNCTIONS ───
+// DATA SOURCE: Supabase Users Table (100% database)
 
 /**
- * Get all users (admin only)
+ * Get all users from Supabase (admin only)
  */
 async function getUsers() {
     if (!supabaseConnected || !supabaseClient) return [];
     
     try {
+        // PRIMARY: Fetch from Supabase
         const { data, error } = await supabaseClient
             .from('users')
             .select('*')
@@ -952,13 +986,14 @@ async function getUsers() {
 }
 
 /**
- * Get user by ID
+ * Get user by ID from Supabase
  */
 async function getUserById(userId) {
     if (!supabaseConnected || !supabaseClient) return null;
     if (!userId) return null;
     
     try {
+        // PRIMARY: Fetch from Supabase
         const { data, error } = await supabaseClient
             .from('users')
             .select('*')
@@ -997,30 +1032,30 @@ const PixlnexDB = {
     // Helpers
     formatPKR,
     
-    // Auth
+    // Auth (Supabase Auth + localStorage cache)
     getCurrentUser,
     signInUser,
     signUpUser,
     signOutUser,
     
-    // Products
+    // Products (100% Supabase Database)
     getProducts,
     getProductById,
     createProduct,
     updateProduct,
     deleteProduct,
     
-    // Offers
+    // Offers (100% Supabase Database)
     getOfferStatus,
     claimOffer,
     
-    // Orders
+    // Orders (100% Supabase Database)
     createOrder,
     getUserOrders,
     getAllOrders,
     updateOrderStatus,
     
-    // Users
+    // Users (100% Supabase Database)
     getUsers,
     getUserById,
     
