@@ -2,21 +2,28 @@
 // PIXLNEX - CENTRAL SUPABASE CONFIGURATION
 // ============================================
 
+// ─── SUPABASE CREDENTIALS ───
 const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
+const SUPABASE_BUCKET = 'product-images';
 
+// ─── STATE ───
 let supabaseClient = null;
 let supabaseConnected = false;
+let isInitialized = false;
 
-console.log('🚀 Supabase JS loading...');
+console.log('🚀 supabase.js loading...');
 
+// ─── INIT ───
 function initSupabase() {
+  if (isInitialized) return supabaseClient;
+  
   try {
     if (typeof supabase !== 'undefined') {
       supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       supabaseConnected = true;
+      isInitialized = true;
       console.log('✅ Supabase connected successfully');
-      console.log('📍 URL:', SUPABASE_URL);
       return supabaseClient;
     } else {
       console.error('❌ Supabase SDK not loaded');
@@ -24,12 +31,13 @@ function initSupabase() {
       return null;
     }
   } catch (e) {
-    console.error('❌ Supabase connection error:', e);
+    console.error('❌ Supabase error:', e);
     supabaseConnected = false;
     return null;
   }
 }
 
+// ─── HELPER ───
 function formatPKR(amount) {
   return '₨ ' + (amount || 0).toLocaleString('en-PK');
 }
@@ -51,7 +59,6 @@ async function signOutUser() {
   if (supabaseConnected && supabaseClient) {
     try { await supabaseClient.auth.signOut(); } catch (e) { console.error(e); }
   }
-  localStorage.removeItem('pixlnex_user');
   window.location.href = 'index.html';
 }
 
@@ -70,6 +77,23 @@ async function signUpUser(email, password, userData) {
       }
     });
     if (error) throw error;
+    
+    // Create user record in users table
+    if (data.user) {
+      try {
+        await supabaseClient
+          .from('users')
+          .insert([{
+            id: data.user.id,
+            name: userData.full_name || userData.name,
+            email: email,
+            created_at: new Date().toISOString()
+          }]);
+      } catch (e) {
+        console.warn('User record error:', e);
+      }
+    }
+    
     return data;
   } catch (e) {
     console.error('Signup error:', e);
@@ -208,7 +232,7 @@ async function createOrder(orderData) {
   }
 }
 
-// ─── USER FUNCTIONS ───
+// ─── USERS ───
 async function getUsers() {
   if (!supabaseConnected || !supabaseClient) return [];
   try {
@@ -225,10 +249,11 @@ async function getUsers() {
 }
 
 // ─── EXPOSE ───
-window.Pixlnex = {
+const Pixlnex = {
   initSupabase,
   supabaseClient,
   supabaseConnected,
+  isInitialized,
   formatPKR,
   getCurrentUser,
   signOutUser,
@@ -243,11 +268,23 @@ window.Pixlnex = {
   SUPABASE_ANON_KEY
 };
 
-console.log('📦 Pixlnex loaded!');
+window.Pixlnex = Pixlnex;
 
-// Auto-init
+console.log('📦 Pixlnex object created and exposed globally');
+
+// ─── AUTO-INIT ───
+// Try to connect immediately
+setTimeout(() => {
+  if (!isInitialized) {
+    initSupabase();
+  }
+}, 100);
+
+// Also init on DOM ready
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
-  initSupabase();
+  if (!isInitialized) initSupabase();
 } else {
-  document.addEventListener('DOMContentLoaded', initSupabase);
+  document.addEventListener('DOMContentLoaded', function() {
+    if (!isInitialized) initSupabase();
+  });
 }

@@ -23,7 +23,6 @@
     .signup-btn:disabled { opacity: 0.6; cursor: not-allowed; }
     .signup-footer { text-align: center; margin-top: 1.5rem; color: #64748b; font-size: 0.9rem; }
     .signup-footer a { color: #2563eb; text-decoration: none; font-weight: 600; }
-    .signup-footer a:hover { text-decoration: underline; }
     .error-msg { background: #fee2e2; color: #b91c1c; padding: 0.7rem 1rem; border-radius: 40px; font-size: 0.9rem; text-align: center; margin-bottom: 1rem; display: none; }
     .error-msg.show { display: block; }
     .success-msg { background: #dcfce7; color: #166534; padding: 0.7rem 1rem; border-radius: 40px; font-size: 0.9rem; text-align: center; margin-bottom: 1rem; display: none; }
@@ -74,10 +73,27 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js?v=999"></script>
+<script src="supabase.js?v=18"></script>
 <script>
   (function() {
-    const PX = window.Pixlnex;
+    function waitForPixlnex() {
+      return new Promise((resolve) => {
+        let attempts = 0;
+        const check = () => {
+          if (window.Pixlnex && window.Pixlnex.supabaseConnected) {
+            resolve(window.Pixlnex);
+            return;
+          }
+          attempts++;
+          if (attempts > 50) {
+            resolve(null);
+            return;
+          }
+          setTimeout(check, 200);
+        };
+        check();
+      });
+    }
 
     const form = document.getElementById('signupForm');
     const fullNameInput = document.getElementById('fullName');
@@ -132,6 +148,7 @@
 
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
+      
       const name = fullNameInput.value.trim();
       const email = emailInput.value.trim();
       const password = passwordInput.value;
@@ -164,18 +181,29 @@
       signupBtn.disabled = true;
       signupBtn.innerHTML = '<span class="loading-spinner"></span> Creating...';
 
-      const result = await PX.signUpUser(email, password, { full_name: name });
+      try {
+        const PX = await waitForPixlnex();
+        if (!PX) {
+          throw new Error('Database not connected. Please refresh.');
+        }
 
-      signupBtn.disabled = false;
-      signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+        const result = await PX.signUpUser(email, password, { full_name: name });
 
-      if (result.success) {
-        successMsg.textContent = `✅ Account created successfully! Welcome ${name}! Redirecting...`;
-        successMsg.classList.add('show');
-        setTimeout(() => { window.location.href = 'index.html'; }, 1500);
-      } else {
-        errorMsg.textContent = `⚠️ ${result.error || 'Something went wrong. Please try again.'}`;
+        if (result && result.user) {
+          successMsg.textContent = `✅ Account created successfully! Welcome ${name}! Redirecting...`;
+          successMsg.classList.add('show');
+          setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+        } else {
+          errorMsg.textContent = '⚠️ ' + (result?.error || 'Something went wrong. Please try again.');
+          errorMsg.classList.add('show');
+          signupBtn.disabled = false;
+          signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+        }
+      } catch (e) {
+        errorMsg.textContent = '⚠️ ' + (e.message || 'Something went wrong. Please try again.');
         errorMsg.classList.add('show');
+        signupBtn.disabled = false;
+        signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
       }
     });
   })();
