@@ -55,7 +55,7 @@
     .order-status.delivered { background: #dcfce7; color: #166534; }
     .order-status.shipped { background: #fef9c3; color: #854d0e; }
     .order-status.processing { background: #e0f2fe; color: #0369a1; }
-    .order-item .order-price { font-weight: 700; color: #0f2b4b; }
+    .order-item .order-price { font-weight: 700; color: #0f2b4f; }
     .no-orders { color: #94a3b8; text-align: center; padding: 1.5rem 0; font-style: italic; }
 
     .logout-btn { background: #fee2e2; color: #b91c1c; border: none; border-radius: 40px; padding: 0.6rem 1.8rem; font-weight: 600; cursor: pointer; transition: 0.15s; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; }
@@ -171,21 +171,64 @@ function formatPKR(amount) {
   return '₨ ' + (amount || 0).toLocaleString('en-PK');
 }
 
+// FIXED: Better session handling with getSession()
 async function getCurrentUser() {
-  if (!supabaseConnected || !supabaseClient) return null;
+  if (!supabaseConnected || !supabaseClient) {
+    console.log('⚠️ Supabase not connected');
+    return null;
+  }
   try {
-    // Try to get session first
+    // First check if we have a session
     const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
-    if (sessionError) throw sessionError;
     
-    if (!sessionData.session) {
-      console.log('No active session');
+    if (sessionError) {
+      console.error('Session error:', sessionError);
       return null;
     }
     
+    if (!sessionData.session) {
+      console.log('🔴 No active session found');
+      // Check if we have user in localStorage as fallback
+      const storedUser = localStorage.getItem('pixlnex_user');
+      if (storedUser) {
+        try {
+          const userData = JSON.parse(storedUser);
+          console.log('📦 Using stored user data:', userData);
+          // Return a user-like object from stored data
+          return {
+            id: userData.id || 'stored',
+            email: userData.email,
+            user_metadata: { full_name: userData.name || userData.email?.split('@')[0] },
+            created_at: userData.created_at || new Date().toISOString()
+          };
+        } catch(e) {
+          console.warn('Stored user parse error:', e);
+        }
+      }
+      return null;
+    }
+    
+    // We have a session, get the user
     const { data, error } = await supabaseClient.auth.getUser();
-    if (error) throw error;
-    return data.user;
+    if (error) {
+      console.error('Get user error:', error);
+      return null;
+    }
+    
+    if (data.user) {
+      // Store user data in localStorage for persistence
+      const userData = {
+        id: data.user.id,
+        email: data.user.email,
+        name: data.user.user_metadata?.full_name || data.user.email?.split('@')[0],
+        created_at: data.user.created_at
+      };
+      localStorage.setItem('pixlnex_user', JSON.stringify(userData));
+      console.log('✅ User authenticated:', data.user.email);
+      return data.user;
+    }
+    
+    return null;
   } catch(e) {
     console.error('Get user error:', e);
     return null;
@@ -194,15 +237,22 @@ async function getCurrentUser() {
 
 async function signOutUser() {
   if (supabaseConnected && supabaseClient) {
-    try { await supabaseClient.auth.signOut(); } catch(e) {}
+    try { 
+      await supabaseClient.auth.signOut(); 
+      localStorage.removeItem('pixlnex_user');
+    } catch(e) { console.error(e); }
   }
-  window.location.href = 'index.html';
+  window.location.href = 'login.html';
 }
 
 async function getUserOrders(email) {
   if (!supabaseConnected || !supabaseClient) return [];
   try {
-    const { data, error } = await supabaseClient.from('orders').select('*').eq('customer_email', email).order('created_at', { ascending: false });
+    const { data, error } = await supabaseClient
+      .from('orders')
+      .select('*')
+      .eq('customer_email', email)
+      .order('created_at', { ascending: false });
     if (error) throw error;
     return data || [];
   } catch(e) { 
@@ -238,19 +288,17 @@ function waitForSupabase() {
     return;
   }
 
-  // Try to get user with multiple attempts
+  // Get user with improved session handling
   let user = null;
-  let attempts = 0;
-  while (!user && attempts < 5) {
+  try {
     user = await getCurrentUser();
-    if (!user) {
-      attempts++;
-      await new Promise(resolve => setTimeout(resolve, 500));
-    }
+  } catch(e) {
+    console.error('Error getting user:', e);
   }
 
+  // If no user, redirect to login
   if (!user) {
-    console.log('No user found, redirecting to login');
+    console.log('🔴 No user found, redirecting to login');
     window.location.href = 'login.html';
     return;
   }
@@ -274,6 +322,11 @@ function waitForSupabase() {
   authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
   authBtn.className = 'auth-btn logout';
   authBtn.href = 'profile.html';
+  // Prevent default navigation to avoid logout
+  authBtn.onclick = function(e) {
+    e.preventDefault();
+    // Stay on profile page
+  };
 
   // ─── LOGOUT ───
   document.getElementById('logoutBtn').addEventListener('click', function() {
@@ -299,7 +352,14 @@ function waitForSupabase() {
         const div = document.createElement('div');
         div.className = 'order-item';
         const statusClass = order.status || 'processing';
-        const statusLabels = { 'delivered': 'Delivered ✅', 'shipped': 'Shipped 📦', 'processing': 'Processing ⏳' };
+        const statusLabels = { 
+          'delivered': 'Delivered ✅', 
+          'shipped': 'Shipped 📦', 
+          'processing': 'Processing ⏳',
+          'working': 'Working 🔨',
+          'demo_ready': 'Demo Ready 🎯',
+          'completed': 'Completed ✅'
+        };
         div.innerHTML = `
           <div class="order-info">
             <span class="order-name">${order.name}</span>
