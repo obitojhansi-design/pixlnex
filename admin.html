@@ -595,37 +595,53 @@
       });
     });
 
+    // FIXED: Edit product handler - simpler and more reliable
     document.querySelectorAll('.edit-product').forEach(btn => {
       btn.addEventListener('click', function() {
         const idx = parseInt(this.dataset.index);
         const p = products[idx];
         if (!p) return;
-        const newDemo = prompt(`Edit demo URL for "${p.name}":`, p.demo_url || '');
-        if (newDemo !== null) {
-          // Only update if the column exists in the product object
-          // If the product doesn't have demo_url, we need to add it
-          const updateData = { updated_at: new Date().toISOString() };
-          // Try to set demo_url - if column doesn't exist, Supabase will ignore it
-          // But we need to handle the case where the column doesn't exist yet
-          updateData.demo_url = newDemo.trim() || '';
-          
-          supabaseClient.from('products').update(updateData).eq('id', p.id)
-            .then(({ error }) => {
-              if (error) { 
-                console.error('Update error:', error);
-                // If error is about column not existing, show helpful message
-                if (error.message && error.message.includes('column "demo_url" does not exist')) {
-                  showToast('⚠️ Please add "demo_url" column to products table in Supabase first.');
-                } else {
-                  showToast('⚠️ Error updating demo: ' + error.message);
-                }
-              } else {
-                p.demo_url = newDemo.trim() || '';
-                renderProductsList(products);
-                showToast(`✅ Demo URL updated`);
-              }
-            });
+        
+        // Show prompt with current demo URL
+        const currentDemo = p.demo_url || '';
+        const newDemo = prompt(`Enter demo URL for "${p.name}":`, currentDemo);
+        
+        if (newDemo === null) return; // User cancelled
+        
+        const demoValue = newDemo.trim();
+        
+        // Create update object - only include fields we know exist
+        const updateData = {
+          updated_at: new Date().toISOString()
+        };
+        
+        // Add demo_url only if the column exists in the product object
+        // If the product object has demo_url property (even if empty), we can update it
+        if ('demo_url' in p) {
+          updateData.demo_url = demoValue;
+        } else {
+          // If the product doesn't have demo_url property, try to add it anyway
+          // Supabase will handle it if the column exists
+          updateData.demo_url = demoValue;
         }
+        
+        supabaseClient.from('products').update(updateData).eq('id', p.id)
+          .then(({ data, error }) => {
+            if (error) {
+              console.error('Update error:', error);
+              // Show the actual error message
+              showToast('⚠️ Error: ' + error.message);
+              return;
+            }
+            // Update the local product data
+            p.demo_url = demoValue;
+            renderProductsList(products);
+            showToast(`✅ Demo URL updated for "${p.name}"`);
+          })
+          .catch(err => {
+            console.error('Update failed:', err);
+            showToast('⚠️ Update failed: ' + err.message);
+          });
       });
     });
   }
@@ -660,10 +676,13 @@
       };
 
       const productData = {
-        name, description: desc,
+        name, 
+        description: desc,
         price: 0,
-        category: category, category_label: categoryLabels[category] || 'Custom',
-        features, image_urls: [],
+        category: category, 
+        category_label: categoryLabels[category] || 'Custom',
+        features, 
+        image_urls: [],
         created_at: new Date().toISOString()
       };
 
