@@ -5,8 +5,8 @@
 // ============================================
 
 // ─── SUPABASE CONFIGURATION ───
-const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
+const SUPABASE_URL = 'https://skdthncgjwtlydtgtjze.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_k1DV8-nVcr4o5LE8s_wbLA_O7BPQFpy';
 const SUPABASE_BUCKET = 'product-images';
 
 // ─── STATE ───
