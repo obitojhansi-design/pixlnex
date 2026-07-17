@@ -1,4 +1,3 @@
-<!-- shop.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pixlnex · Shop</title>
   <link rel="icon" href="logo.png" type="image/png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
     body { background: #f0f4f8; color: #0b1a2e; line-height: 1.5; }
@@ -164,7 +163,7 @@
     .payment-modal .payment-actions .btn-pay.cancel { background: #eef2f6; color: #1e293b; }
     .payment-modal .payment-actions .btn-pay.cancel:hover { background: #e2e8f0; }
 
-    .demo-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99997; align-items: center; justify-content: center; padding: 2rem; }
+    .demo-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 99997; align-items: center; justify-content: center; padding: 2rem; }
     .demo-overlay.active { display: flex; }
     .demo-overlay .demo-content { position: relative; width: 100%; max-width: 1200px; height: 85vh; background: white; border-radius: 1.5rem; overflow: hidden; }
     .demo-overlay .demo-content iframe { width: 100%; height: 100%; border: none; }
@@ -202,7 +201,7 @@
     <div class="nav-links">
       <a href="index.html">Home</a>
       <a href="shop.html" class="active">Webs</a>
-      <a href="one-time.html" class="active">✨ One Time</a>
+      <a href="one-time.html">✨ One Time</a>
       <a href="index.html#about">About</a>
       <a href="profile.html" id="authBtn" class="auth-btn"><i class="fas fa-user"></i> Login</a>
       <a href="shop.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCounter">0</span></a>
@@ -312,7 +311,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ============================================
-// PIXLNEX - SECURE SHOP WITH DEMOS
+// PIXLNEX - SECURE SHOP WITH DEMOS (FIXED)
 // ============================================
 
 const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
@@ -324,7 +323,13 @@ let supabaseConnected = false;
 function initSupabase() {
   try {
     if (typeof supabase !== 'undefined') {
-      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      });
       supabaseConnected = true;
       console.log('✅ Supabase connected (Shop)');
       return true;
@@ -519,7 +524,10 @@ function handleKeyDown(e) {
 
 // ─── DEMO OVERLAY ───
 function openDemo(url) {
-    if (!url) return;
+    if (!url || url === 'null' || url === 'undefined' || url.trim() === '') {
+        showToast('⚠️ No demo URL available for this product');
+        return;
+    }
     const overlay = document.getElementById('demoOverlay');
     const iframe = document.getElementById('demoIframe');
     iframe.src = url;
@@ -885,6 +893,15 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
     }
   }
 
+  // ─── CHECK IF DEMO URL IS VALID ───
+  function hasValidDemo(product) {
+    return product.demo_url && 
+           product.demo_url.trim() !== '' && 
+           product.demo_url !== 'null' && 
+           product.demo_url !== 'undefined' &&
+           product.demo_url.startsWith('http');
+  }
+
   async function renderProducts() {
     productGrid.innerHTML = '';
     if (!filteredProducts || filteredProducts.length === 0) {
@@ -900,7 +917,9 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
       const carouselHtml = createCarousel(images, p.name, p.id || index);
       const featuresHtml = (p.features || []).map(f => `<li><i class="fas fa-circle-check"></i> ${f}</li>`).join('');
       const categoryLabel = p.category_label || p.category || '';
-      const hasDemo = p.demo_url && p.demo_url.trim() !== '';
+      
+      // Check if demo URL exists and is valid
+      const hasDemo = hasValidDemo(p);
       
       card.innerHTML = `
         <div class="product-img">${carouselHtml}</div>
@@ -1055,6 +1074,7 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
   try {
     products = await getProducts();
     console.log('✅ Products loaded:', products.length);
+    console.log('📊 Products with demo URLs:', products.filter(p => p.demo_url && p.demo_url.trim() !== '').length);
   } catch(e) {
     showToast('⚠️ Error loading products');
     return;
