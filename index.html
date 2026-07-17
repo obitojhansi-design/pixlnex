@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,29 +10,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
-    body { background: #f8fafc; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
+    body { background: #f0f4f8; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
     .app { max-width: 1300px; margin: 0 auto; padding: 1.5rem 2rem; flex: 1; width: 100%; }
 
+    /* --- WHATSAPP FLOAT --- */
     .whatsapp-float { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; align-items: center; gap: 12px; background: #25D366; color: white; padding: 12px 20px 12px 16px; border-radius: 50px; box-shadow: 0 4px 20px rgba(37,211,102,0.4); text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: 0.3s; }
     .whatsapp-float:hover { transform: scale(1.05); }
     .whatsapp-float i { font-size: 1.8rem; }
     @media (max-width:600px) { .whatsapp-float .wa-text { display: none; } }
 
-    .offer-banner { background: linear-gradient(135deg, #f59e0b, #d97706, #f59e0b); background-size: 200% 200%; animation: gradientMove 3s ease infinite; color: white; padding: 1rem 1.5rem; border-radius: 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3); z-index: 100; position: relative; }
-    .offer-banner.purple { background: linear-gradient(135deg, #7c3aed, #6d28d9, #7c3aed); }
-    @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-    .offer-banner .offer-text { display: flex; align-items: center; gap: 1rem; }
-    .offer-banner .offer-text i { font-size: 2rem; }
-    .offer-banner .offer-text h3 { font-size: 1.2rem; font-weight: 700; }
-    .offer-banner .offer-text p { opacity: 0.9; font-size: 0.9rem; }
-    .offer-banner .offer-count { background: rgba(255,255,255,0.2); padding: 0.3rem 1.2rem; border-radius: 40px; font-weight: 600; border: 1px solid rgba(255,255,255,0.2); }
-    .offer-banner .offer-btn { background: white; color: #d97706; border: none; padding: 0.5rem 1.5rem; border-radius: 40px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-    .offer-banner .offer-btn:hover { transform: scale(1.05); }
-    .offer-banner .offer-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-    .offer-banner .offer-tag { background: rgba(255,255,255,0.15); padding: 0.2rem 0.8rem; border-radius: 30px; font-size: 0.7rem; border: 1px solid rgba(255,255,255,0.2); }
-    .offer-banner .offer-price-tag { background: rgba(255,255,255,0.2); padding: 0.2rem 0.8rem; border-radius: 30px; font-size: 0.8rem; font-weight: 700; }
-    .offer-banner.purple .offer-btn { color: #6d28d9; }
-
+    /* --- NAV --- */
     .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; padding: 0.75rem 0 1.5rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem; }
     .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; text-decoration: none; }
     .logo img { height: 35px; width: auto; }
@@ -46,6 +34,7 @@
     .cart-icon { font-size: 1.4rem; background: #eef2f6; padding: 0.5rem 0.9rem; border-radius: 40px; display: flex; align-items: center; gap: 0.4rem; text-decoration: none; color: #0b1a2e; }
     .cart-count { background: #2563eb; color: white; font-size: 0.75rem; font-weight: 600; padding: 0.15rem 0.55rem; border-radius: 30px; margin-left: 0.2rem; }
 
+    /* --- HERO --- */
     .hero { background: linear-gradient(145deg, #ffffff, #f1f6fe); padding: 3rem 3.2rem; border-radius: 2.5rem; margin-bottom: 2.8rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; box-shadow: 0 8px 20px rgba(0,20,40,0.04); }
     .hero-text h1 { font-size: 2.8rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
     .hero-text h1 span { background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -56,13 +45,15 @@
     .hero-badge { background: white; padding: 0.6rem 1.5rem; border-radius: 60px; display: inline-flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
     .hero-badge i { color: #2563eb; }
 
+    /* --- SECTION TITLE --- */
     .section-title { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin: 2.8rem 0 1.8rem 0; }
     .section-title h2 { font-size: 1.9rem; font-weight: 650; }
     .section-title a { color: #2563eb; text-decoration: none; font-weight: 500; cursor: pointer; }
 
-    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
-    .product-card { background: white; border-radius: 1.8rem; padding: 1.8rem 1.8rem 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02); transition: all 0.25s ease; border: 1px solid #edf2f7; display: flex; flex-direction: column; }
-    .product-card:hover { transform: translateY(-6px); box-shadow: 0 18px 30px -8px rgba(0,20,40,0.08); border-color: #d9e2ef; }
+    /* --- PRODUCT GRID --- */
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+    .product-card { background: white; border-radius: 1.8rem; padding: 1.8rem 1.8rem 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02); transition: all 0.3s ease; border: 1px solid #edf2f7; display: flex; flex-direction: column; }
+    .product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -8px rgba(0,20,40,0.1); border-color: #d9e2ef; }
 
     .product-img { position: relative; background: #f1f6fc; border-radius: 1.5rem; aspect-ratio: 1/1; overflow: hidden; margin-bottom: 1.2rem; cursor: pointer; }
     .product-img .carousel-container { width: 100%; height: 100%; position: relative; overflow: hidden; }
@@ -84,14 +75,17 @@
     .product-features li { list-style: none; margin-bottom: 0.2rem; }
     .product-features li i { color: #22c55e; margin-right: 0.4rem; font-size: 0.7rem; }
     .category-badge { font-size: 0.75rem; color: #2563eb; background: #2563eb10; padding: 0.2rem 0.8rem; border-radius: 30px; display: inline-block; margin-bottom: 0.5rem; border: 1px solid #2563eb20; }
+    .demo-badge { font-size: 0.65rem; background: #f59e0b10; color: #d97706; padding: 0.15rem 0.6rem; border-radius: 30px; border: 1px solid #f59e0b20; display: inline-block; margin-left: 0.3rem; }
     .product-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 0.6rem; flex-wrap: wrap; gap: 0.5rem; }
-    .price { font-weight: 700; font-size: 1.4rem; color: #0b1a2e; }
     .btn-group { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .btn-add { background: #eef2f6; border: none; border-radius: 40px; padding: 0.5rem 1.2rem; font-weight: 600; color: #0f2b4b; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; transition: 0.15s; font-size: 0.85rem; }
-    .btn-add:hover { background: #2563eb; color: white; }
+    .btn-add:hover { background: #2563eb; color: white; transform: scale(1.02); }
     .btn-order { background: #0f2b4b; border: none; border-radius: 40px; padding: 0.5rem 1.2rem; font-weight: 600; color: white; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; transition: 0.15s; font-size: 0.85rem; }
     .btn-order:hover { background: #1a3a5e; transform: scale(1.02); }
+    .btn-demo { background: #f59e0b10; border: 1px solid #f59e0b30; border-radius: 40px; padding: 0.5rem 1.2rem; font-weight: 600; color: #d97706; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; transition: 0.15s; font-size: 0.85rem; text-decoration: none; }
+    .btn-demo:hover { background: #f59e0b20; transform: scale(1.02); }
 
+    /* --- CUSTOM ORDER --- */
     .custom-section { background: white; border-radius: 2rem; padding: 2.5rem 3rem; margin: 3rem 0; border: 1px solid #e9eef3; }
     .custom-section h2 { font-size: 1.8rem; margin-bottom: 0.5rem; }
     .custom-section .sub { color: #64748b; margin-bottom: 1.5rem; }
@@ -104,13 +98,13 @@
     .submit-order-btn { background: #0f2b4b; color: white; border: none; padding: 0.85rem 2.5rem; border-radius: 60px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.7rem; margin-top: 0.5rem; }
     .submit-order-btn:hover { background: #1a3a5e; transform: scale(1.02); }
 
+    /* --- CART --- */
     .cart-panel { margin-top: 3.5rem; background: white; border-radius: 2rem; padding: 1.8rem 2.2rem; border: 1px solid #e9eef3; }
     .cart-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
     .cart-header h3 { font-size: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 0.6rem; }
     .cart-items { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; max-height: 220px; overflow-y: auto; padding-right: 0.5rem; }
     .cart-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 0.7rem 1.2rem; border-radius: 60px; border: 1px solid #eef2f6; }
     .cart-item span:first-child { font-weight: 500; }
-    .cart-item .item-price { font-weight: 600; color: #0f2b4b; }
     .cart-item .remove-item { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1.1rem; transition: 0.15s; padding: 0.25rem; min-width: 44px; min-height: 44px; }
     .cart-item .remove-item:hover { color: #b91c1c; }
     .cart-total { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.3rem; padding-top: 1rem; border-top: 2px dashed #dce3ec; }
@@ -119,10 +113,54 @@
     .checkout-btn:hover { background: #1a3a5e; }
     .checkout-btn:disabled { opacity: 0.4; pointer-events: none; }
 
+    /* --- FOOTER --- */
+    .footer { margin-top: 4rem; border-top: 1px solid #e2e8f0; padding: 2rem 0 1rem 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: #475569; font-size: 0.9rem; }
+    .footer i { color: #2563eb; margin: 0 0.2rem; }
+
+    /* --- TOAST --- */
+    .toast { position: fixed; bottom: 90px; right: 24px; background: #0f2b4b; color: white; padding: 1rem 1.8rem; border-radius: 60px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); font-weight: 600; display: flex; align-items: center; gap: 0.7rem; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 10000; max-width: 90%; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast i { color: #22c55e; font-size: 1.2rem; }
+
+    /* --- IMAGE MODAL --- */
+    .image-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 999999; align-items: center; justify-content: center; padding: 2rem; cursor: default; }
+    .image-modal.active { display: flex; }
+    .image-modal .modal-content { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+    .image-modal img { max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 0.5rem; transition: opacity 0.3s ease; }
+    .image-modal .close-img-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 3rem; cursor: pointer; background: none; border: none; z-index: 999999; opacity: 0.8; transition: opacity 0.2s; }
+    .image-modal .close-img-modal:hover { opacity: 1; }
+    .image-modal .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); color: white; border: none; width: 60px; height: 60px; border-radius: 50%; font-size: 2rem; cursor: pointer; z-index: 999999; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); }
+    .image-modal .nav-arrow:hover { background: rgba(255,255,255,0.3); transform: translateY(-50%) scale(1.1); }
+    .image-modal .nav-arrow.prev { left: 30px; }
+    .image-modal .nav-arrow.next { right: 30px; }
+    .image-modal .image-counter { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); color: white; background: rgba(0,0,0,0.6); padding: 0.5rem 1.2rem; border-radius: 30px; font-size: 0.9rem; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); z-index: 999999; }
+    .image-modal .thumbnails { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 999999; max-width: 80%; overflow-x: auto; padding: 0.5rem; background: rgba(0,0,0,0.4); border-radius: 12px; backdrop-filter: blur(4px); }
+    .image-modal .thumbnails img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s ease; max-width: 50px; max-height: 50px; }
+    .image-modal .thumbnails img:hover { border-color: rgba(255,255,255,0.5); transform: scale(1.05); }
+    .image-modal .thumbnails img.active-thumb { border-color: #2563eb; box-shadow: 0 0 15px rgba(37,99,235,0.5); }
+
+    /* --- QUESTIONS MODAL --- */
+    .questions-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 99998; align-items: center; justify-content: center; padding: 1.5rem; }
+    .questions-modal.active { display: flex; }
+    .questions-modal .modal-content { background: white; border-radius: 2rem; max-width: 600px; width: 100%; padding: 2.5rem; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
+    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .questions-modal .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .questions-modal .modal-header h2 { font-size: 1.5rem; font-weight: 700; }
+    .questions-modal .modal-header .close-modal { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #94a3b8; transition: 0.2s; padding: 0.25rem; min-width: 44px; min-height: 44px; }
+    .questions-modal .modal-header .close-modal:hover { color: #0b1a2e; }
+    .questions-modal .form-group { margin-bottom: 1.2rem; }
+    .questions-modal .form-group label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: #1e293b; }
+    .questions-modal .form-group input, .questions-modal .form-group select, .questions-modal .form-group textarea { width: 100%; padding: 0.7rem 1.2rem; border-radius: 60px; border: 1px solid #e2e8f0; font-size: 0.95rem; background: #f8fafc; transition: 0.2s; }
+    .questions-modal .form-group input:focus, .questions-modal .form-group select:focus, .questions-modal .form-group textarea:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: transparent; background: white; }
+    .questions-modal .form-group textarea { border-radius: 1rem; resize: vertical; min-height: 60px; }
+    .questions-modal .submit-order-btn { width: 100%; padding: 0.85rem; border-radius: 60px; border: none; background: #0f2b4b; color: white; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.7rem; margin-top: 1rem; }
+    .questions-modal .submit-order-btn:hover { background: #1a3a5e; transform: scale(1.01); }
+    .questions-modal .submit-order-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* --- PAYMENT MODAL --- */
     .payment-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 99999; align-items: center; justify-content: center; padding: 1.5rem; }
     .payment-modal.active { display: flex; }
     .payment-modal .modal-content { background: white; border-radius: 2rem; max-width: 520px; width: 100%; padding: 2.5rem; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
-    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .payment-modal .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
     .payment-modal .modal-header h2 { font-size: 1.5rem; font-weight: 700; }
     .payment-modal .modal-header .close-modal { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #94a3b8; transition: 0.2s; padding: 0.25rem; min-width: 44px; min-height: 44px; }
@@ -155,57 +193,16 @@
     .payment-modal .payment-actions .btn-pay.cancel { background: #eef2f6; color: #1e293b; }
     .payment-modal .payment-actions .btn-pay.cancel:hover { background: #e2e8f0; }
 
-    .footer { margin-top: 4rem; border-top: 1px solid #e2e8f0; padding: 2rem 0 1rem 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: #475569; font-size: 0.9rem; }
-    .footer i { color: #2563eb; margin: 0 0.2rem; }
-    .toast { position: fixed; bottom: 90px; right: 24px; background: #0f2b4b; color: white; padding: 1rem 1.8rem; border-radius: 60px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); font-weight: 600; display: flex; align-items: center; gap: 0.7rem; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 10000; max-width: 90%; }
-    .toast.show { transform: translateY(0); opacity: 1; }
-    .toast i { color: #22c55e; font-size: 1.2rem; }
+    /* --- DEMO OVERLAY --- */
+    .demo-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99997; align-items: center; justify-content: center; padding: 2rem; }
+    .demo-overlay.active { display: flex; }
+    .demo-overlay .demo-content { position: relative; width: 100%; max-width: 1200px; height: 85vh; background: white; border-radius: 1.5rem; overflow: hidden; }
+    .demo-overlay .demo-content iframe { width: 100%; height: 100%; border: none; }
+    .demo-overlay .demo-close { position: absolute; top: 16px; right: 20px; color: white; font-size: 2rem; cursor: pointer; background: rgba(0,0,0,0.7); border: none; width: 48px; height: 48px; border-radius: 50%; z-index: 10; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+    .demo-overlay .demo-close:hover { background: rgba(0,0,0,0.9); transform: scale(1.1); }
+    .demo-overlay .demo-label { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); color: white; background: rgba(0,0,0,0.6); padding: 0.3rem 1.2rem; border-radius: 30px; font-size: 0.8rem; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); z-index: 10; }
 
-    .page-section { display: block; }
     .page-section.hidden { display: none; }
-
-    /* ─── ENHANCED IMAGE MODAL ─── */
-    .image-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 999999; align-items: center; justify-content: center; padding: 2rem; cursor: default; }
-    .image-modal.active { display: flex; }
-    .image-modal .modal-content { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-    .image-modal img { max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 0.5rem; transition: opacity 0.3s ease; }
-    .image-modal .close-img-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 3rem; cursor: pointer; background: none; border: none; z-index: 999999; opacity: 0.8; transition: opacity 0.2s; }
-    .image-modal .close-img-modal:hover { opacity: 1; }
-    .image-modal .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); color: white; border: none; width: 60px; height: 60px; border-radius: 50%; font-size: 2rem; cursor: pointer; z-index: 999999; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); }
-    .image-modal .nav-arrow:hover { background: rgba(255,255,255,0.3); transform: translateY(-50%) scale(1.1); }
-    .image-modal .nav-arrow.prev { left: 30px; }
-    .image-modal .nav-arrow.next { right: 30px; }
-    .image-modal .image-counter { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); color: white; background: rgba(0,0,0,0.6); padding: 0.5rem 1.2rem; border-radius: 30px; font-size: 0.9rem; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); z-index: 999999; }
-    .image-modal .thumbnails { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 999999; max-width: 80%; overflow-x: auto; padding: 0.5rem; background: rgba(0,0,0,0.4); border-radius: 12px; backdrop-filter: blur(4px); }
-    .image-modal .thumbnails img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s ease; max-width: 50px; max-height: 50px; }
-    .image-modal .thumbnails img:hover { border-color: rgba(255,255,255,0.5); transform: scale(1.05); }
-    .image-modal .thumbnails img.active-thumb { border-color: #2563eb; box-shadow: 0 0 15px rgba(37,99,235,0.5); }
-
-    /* ─── ORDER QUESTIONS MODAL ─── */
-    .questions-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 99998; align-items: center; justify-content: center; padding: 1.5rem; }
-    .questions-modal.active { display: flex; }
-    .questions-modal .modal-content { background: white; border-radius: 2rem; max-width: 600px; width: 100%; padding: 2.5rem; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
-    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    .questions-modal .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-    .questions-modal .modal-header h2 { font-size: 1.5rem; font-weight: 700; }
-    .questions-modal .modal-header .close-modal { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #94a3b8; transition: 0.2s; padding: 0.25rem; min-width: 44px; min-height: 44px; }
-    .questions-modal .modal-header .close-modal:hover { color: #0b1a2e; }
-    .questions-modal .form-group { margin-bottom: 1.2rem; }
-    .questions-modal .form-group label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: #1e293b; }
-    .questions-modal .form-group input, .questions-modal .form-group select, .questions-modal .form-group textarea { width: 100%; padding: 0.7rem 1.2rem; border-radius: 60px; border: 1px solid #e2e8f0; font-size: 0.95rem; background: #f8fafc; transition: 0.2s; }
-    .questions-modal .form-group input:focus, .questions-modal .form-group select:focus, .questions-modal .form-group textarea:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: transparent; background: white; }
-    .questions-modal .form-group textarea { border-radius: 1rem; resize: vertical; min-height: 60px; }
-    .questions-modal .form-group .feature-checkbox { display: flex; align-items: center; gap: 0.8rem; padding: 0.5rem 0; border-bottom: 1px solid #f1f5f9; }
-    .questions-modal .form-group .feature-checkbox:last-child { border-bottom: none; }
-    .questions-modal .form-group .feature-checkbox input[type="checkbox"] { width: 20px; height: 20px; accent-color: #2563eb; cursor: pointer; }
-    .questions-modal .form-group .feature-checkbox label { font-weight: 400; cursor: pointer; flex: 1; }
-    .questions-modal .form-group .feature-checkbox .feature-price { font-weight: 600; color: #2563eb; font-size: 0.85rem; }
-    .questions-modal .price-breakdown { background: #f1f6fe; border-radius: 1rem; padding: 1rem 1.2rem; margin: 1rem 0; border-left: 3px solid #2563eb; }
-    .questions-modal .price-breakdown .row { display: flex; justify-content: space-between; padding: 0.3rem 0; font-size: 0.9rem; }
-    .questions-modal .price-breakdown .row.total { font-weight: 700; font-size: 1.1rem; border-top: 2px solid #dce3ec; padding-top: 0.5rem; margin-top: 0.3rem; }
-    .questions-modal .submit-order-btn { width: 100%; padding: 0.85rem; border-radius: 60px; border: none; background: #0f2b4b; color: white; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.7rem; margin-top: 1rem; }
-    .questions-modal .submit-order-btn:hover { background: #1a3a5e; transform: scale(1.01); }
-    .questions-modal .submit-order-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
     @media (max-width:700px) {
       .app { padding: 1rem; }
@@ -219,7 +216,7 @@
       .custom-grid .full { grid-column: 1; }
       .product-bottom { flex-direction: column; align-items: stretch; }
       .btn-group { justify-content: stretch; }
-      .btn-add, .btn-order { flex: 1; justify-content: center; }
+      .btn-add, .btn-order, .btn-demo { flex: 1; justify-content: center; }
       .product-img .carousel-btn { width: 28px; height: 28px; font-size: 0.7rem; }
       .payment-modal .modal-content { padding: 1.5rem; }
       .payment-modal .payment-actions { flex-direction: column; }
@@ -230,6 +227,8 @@
       .image-modal .nav-arrow.next { right: 10px; }
       .image-modal .thumbnails img { width: 35px; height: 35px; max-width: 35px; max-height: 35px; }
       .questions-modal .modal-content { padding: 1.5rem; }
+      .demo-overlay .demo-content { height: 60vh; }
+      .demo-overlay { padding: 1rem; }
     }
   </style>
 </head>
@@ -241,6 +240,7 @@
     <nav class="nav-links">
       <a href="index.html" class="active">Home</a>
       <a href="shop.html">Webs</a>
+      <a href="one-time.html">✨ One Time</a>
       <a href="#" id="navAbout">About</a>
       <a href="profile.html" id="authBtn" class="auth-btn"><i class="fas fa-user"></i> Login</a>
       <a href="shop.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCounter">0</span></a>
@@ -249,7 +249,7 @@
 
   <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Added!</span></div>
 
-  <!-- ─── ENHANCED IMAGE MODAL ─── -->
+  <!-- IMAGE MODAL -->
   <div class="image-modal" id="imageModal">
     <div class="modal-content">
       <button class="close-img-modal" onclick="closeImageModal()">&times;</button>
@@ -261,7 +261,7 @@
     </div>
   </div>
 
-  <!-- ─── ORDER QUESTIONS MODAL ─── -->
+  <!-- QUESTIONS MODAL -->
   <div class="questions-modal" id="questionsModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -270,39 +270,17 @@
       </div>
       <form id="questionsForm">
         <div id="questionsContainer"></div>
-        <div class="price-breakdown" id="priceBreakdown">
-          <div class="row"><span>Base Price</span><span id="basePriceDisplay">₨ 0</span></div>
-          <div class="row" id="featuresTotalRow" style="display:none;"><span>Features Added</span><span id="featuresTotalDisplay">₨ 0</span></div>
-          <div class="row total"><span>Total</span><span id="totalPriceDisplay">₨ 0</span></div>
-        </div>
-        <button type="submit" class="submit-order-btn" id="submitQuestionsBtn"><i class="fas fa-check-circle"></i> Confirm & Proceed to Payment</button>
+        <button type="submit" class="submit-order-btn" id="submitQuestionsBtn"><i class="fas fa-check-circle"></i> Confirm & Proceed</button>
       </form>
     </div>
   </div>
 
-  <div class="offer-banner" id="offerBanner1">
-    <div class="offer-text">
-      <i class="fas fa-gift"></i>
-      <div><h3>🎉 Special Portfolio Offer!</h3><p>First <strong>10 customers</strong> get Portfolio Website in <strong>only ₨ 300</strong> <span id="offerCountDisplay1">(0/10 claimed)</span></p></div>
-    </div>
-    <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
-      <span class="offer-price-tag">✨ ₨ 300 Only</span>
-      <span class="offer-tag">🎯 Portfolio</span>
-      <span class="offer-count" id="offerCount1">0/10</span>
-      <button class="offer-btn" id="claimOfferBtn1">Claim Offer</button>
-    </div>
-  </div>
-
-  <div class="offer-banner purple" id="offerBanner2">
-    <div class="offer-text">
-      <i class="fas fa-star"></i>
-      <div><h3>⭐ First Order Completely FREE!</h3><p><strong>Only 1 customer</strong> gets a completely FREE website! <span id="offerCountDisplay2">(0/1 claimed)</span></p></div>
-    </div>
-    <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
-      <span class="offer-price-tag">🎁 FREE</span>
-      <span class="offer-tag">🌟 Any Website</span>
-      <span class="offer-count" id="offerCount2">0/1</span>
-      <button class="offer-btn" id="claimOfferBtn2">Claim Offer</button>
+  <!-- DEMO OVERLAY -->
+  <div class="demo-overlay" id="demoOverlay">
+    <div class="demo-content">
+      <button class="demo-close" onclick="closeDemo()">&times;</button>
+      <div class="demo-label">▶️ Live Demo Preview</div>
+      <iframe id="demoIframe" src="" allow="fullscreen"></iframe>
     </div>
   </div>
 
@@ -387,7 +365,7 @@
     <div class="order-summary"><div class="label">Product</div><div class="value" id="paymentProductName">Loading...</div></div>
     <div class="payment-details">
       <div class="detail-row"><span class="label">Amount</span><span class="value" id="paymentAmount">₨ 0</span></div>
-      <div class="detail-row"><span class="label">Type</span><span class="value" id="paymentType">Pre-made Web</span></div>
+      <div class="detail-row"><span class="label">Type</span><span class="value" id="paymentType">Custom Web</span></div>
     </div>
     <p style="font-size:0.9rem;color:#64748b;margin-bottom:0.5rem;">Select payment method:</p>
     <div class="payment-methods">
@@ -406,7 +384,7 @@
       <p style="font-weight:600;margin-bottom:0.5rem;color:#0f2b4b;">📌 Send payment to:</p>
       <div class="bank-row"><span class="label">JazzCash</span><span class="value">0300 8748246</span></div>
       <div class="bank-row"><span class="label">EasyPaisa</span><span class="value">0300 6948246</span></div>
-      <div class="bank-row"><span class="label">Account Holder</span><span class="value">Muhammad Mazhar Javed</span></div>
+      <div class="bank-row"><span class="label">Account Holder</span><span class="value">Muhammad Mazhar Javedu</span></div>
     </div>
     <div class="payment-note"><i class="fas fa-info-circle"></i> After payment, send screenshot on WhatsApp. Then click "Confirm Payment" below.</div>
     <div class="payment-actions">
@@ -419,10 +397,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ============================================
-// PIXLNEX - COMPLETE WITH QUESTIONS FOR ALL
+// PIXLNEX - COMPLETE WITH DEMOS
 // ============================================
 
-// ─── SUPABASE CONFIG ───
 const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
 
@@ -494,51 +471,19 @@ async function getProducts() {
   } catch(e) { return []; }
 }
 
-async function getOfferStatus(offerType) {
-  if (!supabaseConnected || !supabaseClient) return null;
-  try {
-    const { data, error } = await supabaseClient.from('offers').select('*').eq('offer_type', offerType).single();
-    if (error) throw error;
-    return data;
-  } catch(e) { return null; }
-}
-
-async function claimOffer(offerType, email) {
-  if (!supabaseConnected || !supabaseClient) throw new Error('Supabase not connected');
-  const { data, error } = await supabaseClient.from('offers').select('*').eq('offer_type', offerType).single();
-  if (error) throw error;
-  if (!data || data.is_active === false) throw new Error('Offer not active');
-  const claimedArray = data.claimed_by ? data.claimed_by.split(',').filter(Boolean) : [];
-  if (claimedArray.includes(email)) throw new Error('Already claimed');
-  
-  const adminEmails = ['faisalyousafyousaf3@gmail.com', 'noor@gmail.com'];
-  const isAdmin = adminEmails.includes(email.toLowerCase());
-  
-  if (!isAdmin && claimedArray.length >= data.total_limit) {
-    throw new Error('Fully claimed');
-  }
-  
-  claimedArray.push(email);
-  const { error: updateError } = await supabaseClient.from('offers').update({
-    claimed_by: claimedArray.join(','),
-    claimed_at: new Date().toISOString()
-  }).eq('offer_type', offerType);
-  if (updateError) throw updateError;
-  return { success: true };
-}
-
 async function createOrder(orderData) {
   if (!supabaseConnected || !supabaseClient) throw new Error('Supabase not connected');
   const { data, error } = await supabaseClient.from('orders').insert([{
     order_id: '#ORD-' + Date.now().toString().slice(-6),
     name: orderData.name,
-    price: orderData.price,
+    price: orderData.price || 0,
     customer_email: orderData.customer_email,
     customer_name: orderData.customer_name,
     payment_method: orderData.payment_method || 'jazzcash',
     payment_status: orderData.payment_status || 'pending',
     status: orderData.status || 'processing',
     is_custom: orderData.is_custom || false,
+    is_demo: orderData.is_demo || false,
     custom_details: orderData.custom_details || '',
     custom_type: orderData.custom_type || '',
     custom_budget: orderData.custom_budget || '',
@@ -562,7 +507,7 @@ function waitForSupabase() {
   });
 }
 
-// ─── ENHANCED IMAGE FULLSCREEN ───
+// ─── IMAGE MODAL ───
 let currentImageIndex = 0;
 let currentImageUrls = [];
 
@@ -657,154 +602,81 @@ function handleKeyDown(e) {
     }
 }
 
-// ─── ORDER QUESTIONS ───
-let selectedProduct = null;
-let currentQuestionsPrice = 0;
-let currentBasePrice = 0;
-let featureTotal = 0;
+// ─── DEMO OVERLAY ───
+function openDemo(url) {
+    if (!url) return;
+    const overlay = document.getElementById('demoOverlay');
+    const iframe = document.getElementById('demoIframe');
+    iframe.src = url;
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
 
-// ─── QUESTION TEMPLATES BY WEBSITE TYPE ───
+function closeDemo() {
+    const overlay = document.getElementById('demoOverlay');
+    const iframe = document.getElementById('demoIframe');
+    iframe.src = '';
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// ─── QUESTIONS MODAL ───
+let selectedProduct = null;
+
 const questionTemplates = {
   'portfolio': {
     title: '📸 Portfolio Website Questions',
-    basePrice: 5000,
     fields: [
       { id: 'business_name', label: 'Your Name / Brand Name', type: 'text', required: true },
       { id: 'goal', label: 'What is the main goal of your portfolio?', type: 'select', options: ['Showcase my work', 'Get freelance clients', 'Apply for jobs', 'Personal branding'], required: true },
       { id: 'projects', label: 'How many projects will you display?', type: 'select', options: ['1-5', '6-10', '11-20', '20+'], required: true },
       { id: 'design_style', label: 'What design style do you prefer?', type: 'select', options: ['Minimalist', 'Creative', 'Professional', 'Modern', 'Bold'], required: true },
-      { id: 'color_scheme', label: 'Any specific color scheme?', type: 'text', required: false },
-      { id: 'content', label: 'Do you have content ready (text, images, videos)?', type: 'select', options: ['Yes, fully ready', 'Somewhat ready', 'Need help creating'], required: true }
-    ],
-    features: [
-      { id: 'gallery', label: 'Image Gallery', price: 500, type: 'simple' },
-      { id: 'video_portfolio', label: 'Video Portfolio', price: 800, type: 'complex' },
-      { id: 'testimonials', label: 'Client Testimonials', price: 500, type: 'simple' },
-      { id: 'blog', label: 'Blog Section', price: 800, type: 'complex' },
-      { id: 'contact_form', label: 'Advanced Contact Form', price: 500, type: 'simple' },
-      { id: 'seo_optimized', label: 'SEO Optimized', price: 800, type: 'complex' }
+      { id: 'content', label: 'Do you have content ready?', type: 'select', options: ['Yes, fully ready', 'Somewhat ready', 'Need help creating'], required: true }
     ]
   },
   'business': {
     title: '🏢 Business Website Questions',
-    basePrice: 5000,
     fields: [
       { id: 'business_name', label: 'Business Name', type: 'text', required: true },
       { id: 'industry', label: 'What industry are you in?', type: 'text', required: true },
-      { id: 'goal', label: 'What is the main goal of your business website?', type: 'select', options: ['Lead generation', 'Brand awareness', 'Online sales', 'Customer support', 'Showcase services'], required: true },
-      { id: 'pages', label: 'How many pages do you need?', type: 'select', options: ['1-3', '4-6', '7-10', '10+'], required: true },
-      { id: 'design_style', label: 'What design style do you prefer?', type: 'select', options: ['Professional', 'Modern', 'Corporate', 'Creative', 'Minimalist'], required: true },
-      { id: 'color_scheme', label: 'Any specific color scheme?', type: 'text', required: false },
-      { id: 'content', label: 'Do you have content ready (text, images, videos)?', type: 'select', options: ['Yes, fully ready', 'Somewhat ready', 'Need help creating'], required: true }
-    ],
-    features: [
-      { id: 'about_us', label: 'About Us Page', price: 500, type: 'simple' },
-      { id: 'services', label: 'Services Page', price: 500, type: 'simple' },
-      { id: 'team', label: 'Team Page', price: 800, type: 'complex' },
-      { id: 'testimonials', label: 'Client Testimonials', price: 500, type: 'simple' },
-      { id: 'blog', label: 'Blog Section', price: 800, type: 'complex' },
-      { id: 'contact_form', label: 'Advanced Contact Form', price: 500, type: 'simple' },
-      { id: 'seo_optimized', label: 'SEO Optimized', price: 800, type: 'complex' },
-      { id: 'appointment', label: 'Appointment Booking', price: 800, type: 'complex' }
+      { id: 'goal', label: 'What is the main goal?', type: 'select', options: ['Lead generation', 'Brand awareness', 'Online sales', 'Customer support'], required: true },
+      { id: 'pages', label: 'How many pages?', type: 'select', options: ['1-3', '4-6', '7-10', '10+'], required: true },
+      { id: 'design_style', label: 'Design style?', type: 'select', options: ['Professional', 'Modern', 'Corporate', 'Creative'], required: true }
     ]
   },
   'ecommerce': {
     title: '🛒 E-commerce Website Questions',
-    basePrice: 7000,
     fields: [
       { id: 'business_name', label: 'Store Name', type: 'text', required: true },
-      { id: 'product_type', label: 'What type of products will you sell?', type: 'text', required: true },
-      { id: 'products', label: 'How many products will you have initially?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'], required: true },
-      { id: 'payment', label: 'Which payment methods do you want?', type: 'select', options: ['JazzCash', 'EasyPaisa', 'Both', 'Other'], required: true },
-      { id: 'delivery', label: 'Do you offer delivery?', type: 'select', options: ['Yes, nationwide', 'Yes, local', 'No, pickup only'], required: true },
-      { id: 'design_style', label: 'What design style do you prefer?', type: 'select', options: ['Modern', 'Professional', 'Creative', 'Minimalist'], required: true }
-    ],
-    features: [
-      { id: 'product_categories', label: 'Product Categories', price: 500, type: 'simple' },
-      { id: 'wishlist', label: 'Wishlist Feature', price: 500, type: 'simple' },
-      { id: 'order_tracking', label: 'Order Tracking', price: 800, type: 'complex' },
-      { id: 'reviews', label: 'Product Reviews', price: 500, type: 'simple' },
-      { id: 'discount_codes', label: 'Discount Codes', price: 800, type: 'complex' },
-      { id: 'mobile_app', label: 'Mobile App Integration', price: 800, type: 'complex' },
-      { id: 'seo_optimized', label: 'SEO Optimized', price: 800, type: 'complex' }
-    ]
-  },
-  'blog': {
-    title: '📝 Blog/Magazine Website Questions',
-    basePrice: 4000,
-    fields: [
-      { id: 'blog_name', label: 'Blog Name', type: 'text', required: true },
-      { id: 'niche', label: 'What is your blog niche?', type: 'text', required: true },
-      { id: 'posts', label: 'How many posts will you have initially?', type: 'select', options: ['1-5', '6-10', '11-20', '20+'], required: true },
-      { id: 'content_type', label: 'What type of content will you publish?', type: 'select', options: ['Articles only', 'Articles with images', 'Articles with video', 'Mixed media'], required: true },
-      { id: 'design_style', label: 'What design style do you prefer?', type: 'select', options: ['Clean & Minimalist', 'Modern', 'Creative', 'Newspaper style'], required: true },
-      { id: 'color_scheme', label: 'Any specific color scheme?', type: 'text', required: false }
-    ],
-    features: [
-      { id: 'categories', label: 'Category Pages', price: 500, type: 'simple' },
-      { id: 'author_profiles', label: 'Author Profiles', price: 500, type: 'simple' },
-      { id: 'comments', label: 'Comment System', price: 500, type: 'simple' },
-      { id: 'newsletter', label: 'Newsletter Integration', price: 800, type: 'complex' },
-      { id: 'seo_optimized', label: 'SEO Optimized', price: 800, type: 'complex' },
-      { id: 'social_share', label: 'Social Media Share Buttons', price: 500, type: 'simple' }
+      { id: 'product_type', label: 'What type of products?', type: 'text', required: true },
+      { id: 'products', label: 'How many products initially?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'], required: true },
+      { id: 'payment', label: 'Payment methods?', type: 'select', options: ['JazzCash', 'EasyPaisa', 'Both', 'Other'], required: true }
     ]
   },
   'chat': {
     title: '💬 Encrypted Chat App Questions',
-    basePrice: 2000,
     fields: [
       { id: 'app_name', label: 'App Name', type: 'text', required: true },
-      { id: 'users', label: 'How many users will use this app?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'], required: true },
-      { id: 'purpose', label: 'What is the main purpose of this chat app?', type: 'select', options: ['Personal communication', 'Business team chat', 'Customer support', 'Social community'], required: true },
-      { id: 'features_needed', label: 'Which features do you need?', type: 'select', options: ['Basic text chat', 'Group chat', 'File sharing', 'Video calls', 'All features'], required: true }
-    ],
-    features: [
-      { id: 'encryption', label: 'End-to-End Encryption', price: 800, type: 'complex' },
-      { id: 'voice_calls', label: 'Voice Calling', price: 800, type: 'complex' },
-      { id: 'file_transfer', label: 'File Transfer', price: 500, type: 'simple' },
-      { id: 'group_chat', label: 'Group Chat', price: 500, type: 'simple' },
-      { id: 'status_updates', label: 'Status/Story Updates', price: 500, type: 'simple' },
-      { id: 'push_notifications', label: 'Push Notifications', price: 800, type: 'complex' }
+      { id: 'users', label: 'How many users?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'], required: true },
+      { id: 'purpose', label: 'Main purpose?', type: 'select', options: ['Personal communication', 'Business team chat', 'Customer support'], required: true }
     ]
   },
   'landing': {
     title: '🎯 Landing Page Questions',
-    basePrice: 3000,
     fields: [
       { id: 'business_name', label: 'Business/Product Name', type: 'text', required: true },
-      { id: 'goal', label: 'What is the main goal of this landing page?', type: 'select', options: ['Lead capture', 'Product launch', 'Event registration', 'Sales', 'Service promotion'], required: true },
-      { id: 'target_audience', label: 'Who is your target audience?', type: 'text', required: true },
-      { id: 'design_style', label: 'What design style do you prefer?', type: 'select', options: ['Minimalist', 'Bold', 'Professional', 'Creative', 'Modern'], required: true },
-      { id: 'color_scheme', label: 'Any specific color scheme?', type: 'text', required: false }
-    ],
-    features: [
-      { id: 'cta_buttons', label: 'Multiple CTA Buttons', price: 500, type: 'simple' },
-      { id: 'form', label: 'Lead Capture Form', price: 500, type: 'simple' },
-      { id: 'testimonials', label: 'Testimonials Section', price: 500, type: 'simple' },
-      { id: 'video', label: 'Video Integration', price: 800, type: 'complex' },
-      { id: 'analytics', label: 'Analytics Integration', price: 800, type: 'complex' },
-      { id: 'seo_optimized', label: 'SEO Optimized', price: 800, type: 'complex' }
+      { id: 'goal', label: 'Main goal?', type: 'select', options: ['Lead capture', 'Product launch', 'Event registration', 'Sales'], required: true },
+      { id: 'target_audience', label: 'Target audience?', type: 'text', required: true }
     ]
   },
   'custom': {
     title: '💡 Custom Website Questions',
-    basePrice: 5000,
     fields: [
       { id: 'project_name', label: 'Project Name', type: 'text', required: true },
       { id: 'idea', label: 'Tell me about your idea', type: 'textarea', required: true },
-      { id: 'goal', label: 'What is the main goal?', type: 'text', required: true },
-      { id: 'target_audience', label: 'Who is your target audience?', type: 'text', required: true },
-      { id: 'design_style', label: 'What design style do you prefer?', type: 'select', options: ['Minimalist', 'Modern', 'Professional', 'Creative', 'Bold', 'Custom'], required: true },
-      { id: 'color_scheme', label: 'Any specific color scheme?', type: 'text', required: false },
+      { id: 'goal', label: 'Main goal?', type: 'text', required: true },
+      { id: 'target_audience', label: 'Target audience?', type: 'text', required: true },
       { id: 'features_needed', label: 'Features needed (comma separated)', type: 'textarea', required: true }
-    ],
-    features: [
-      { id: 'authentication', label: 'User Authentication', price: 800, type: 'complex' },
-      { id: 'dashboard', label: 'User Dashboard', price: 800, type: 'complex' },
-      { id: 'payments', label: 'Payment Integration', price: 800, type: 'complex' },
-      { id: 'custom_forms', label: 'Custom Forms', price: 500, type: 'simple' },
-      { id: 'seo_optimized', label: 'SEO Optimized', price: 800, type: 'complex' },
-      { id: 'mobile_responsive', label: 'Mobile Responsive', price: 500, type: 'simple' }
     ]
   }
 };
@@ -817,20 +689,10 @@ function getQuestionsForProduct(product) {
 function openQuestionsModal(product) {
   selectedProduct = product;
   const template = getQuestionsForProduct(product);
-  
-  // For chat products, fixed price is 2000
-  if (product.category === 'chat') {
-    currentBasePrice = 2000;
-  } else {
-    currentBasePrice = template.basePrice || 5000;
-  }
-  
   document.getElementById('questionsTitle').textContent = template.title;
   
   const container = document.getElementById('questionsContainer');
   let html = '';
-  
-  // Generate fields
   template.fields.forEach(field => {
     html += `<div class="form-group">`;
     html += `<label for="q_${field.id}">${field.label} ${field.required ? '*' : ''}</label>`;
@@ -848,29 +710,7 @@ function openQuestionsModal(product) {
     }
     html += `</div>`;
   });
-  
-  // Generate features with checkboxes
-  if (template.features && template.features.length > 0) {
-    html += `<div class="form-group">`;
-    html += `<label>Select Additional Features (check to add):</label>`;
-    template.features.forEach(feature => {
-      const isSimple = feature.type === 'simple';
-      const priceDisplay = isSimple ? `+₨ ${feature.price}` : `+₨ ${feature.price} (Complex)`;
-      html += `
-        <div class="feature-checkbox">
-          <input type="checkbox" id="feat_${feature.id}" value="${feature.price}" data-type="${feature.type}" onchange="updatePriceBreakdown()" />
-          <label for="feat_${feature.id}">${feature.label}</label>
-          <span class="feature-price">${priceDisplay}</span>
-        </div>
-      `;
-    });
-    html += `</div>`;
-  }
-  
   container.innerHTML = html;
-  featureTotal = 0;
-  updatePriceBreakdown();
-  
   document.getElementById('questionsModal').classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -881,36 +721,8 @@ function closeQuestionsModal() {
   selectedProduct = null;
 }
 
-function updatePriceBreakdown() {
-  const basePrice = currentBasePrice;
-  let totalFeatures = 0;
-  
-  // Calculate feature costs
-  document.querySelectorAll('#questionsContainer input[type="checkbox"]:checked').forEach(cb => {
-    const price = parseInt(cb.value) || 0;
-    totalFeatures += price;
-  });
-  
-  featureTotal = totalFeatures;
-  const total = basePrice + totalFeatures;
-  currentQuestionsPrice = total;
-  
-  document.getElementById('basePriceDisplay').textContent = formatPKR(basePrice);
-  
-  if (totalFeatures > 0) {
-    document.getElementById('featuresTotalRow').style.display = 'flex';
-    document.getElementById('featuresTotalDisplay').textContent = formatPKR(totalFeatures);
-  } else {
-    document.getElementById('featuresTotalRow').style.display = 'none';
-  }
-  
-  document.getElementById('totalPriceDisplay').textContent = formatPKR(total);
-}
-
-// ─── HANDLE ORDER FORM SUBMIT ───
 document.getElementById('questionsForm').addEventListener('submit', async function(e) {
   e.preventDefault();
-  
   const user = await getCurrentUser();
   if (!user) {
     showToast('🔐 Please login first');
@@ -923,7 +735,6 @@ document.getElementById('questionsForm').addEventListener('submit', async functi
   submitBtn.innerHTML = '<span class="loading-spinner"></span> Processing...';
   
   try {
-    // Gather all answers
     const answers = {};
     const fields = document.querySelectorAll('#questionsContainer input, #questionsContainer select, #questionsContainer textarea');
     fields.forEach(el => {
@@ -932,65 +743,36 @@ document.getElementById('questionsForm').addEventListener('submit', async functi
       }
     });
     
-    // Get selected features
-    const selectedFeatures = [];
-    document.querySelectorAll('#questionsContainer input[type="checkbox"]:checked').forEach(cb => {
-      const label = cb.parentElement.querySelector('label')?.textContent || cb.id.replace('feat_', '');
-      selectedFeatures.push(label);
-    });
-    
     const template = getQuestionsForProduct(selectedProduct);
-    const productName = selectedProduct.name || 'Custom Website';
-    const totalPrice = currentQuestionsPrice;
-    
-    // Build custom details with ALL answers
-    let customDetails = `Product: ${selectedProduct.name}\n`;
-    customDetails += `Category: ${selectedProduct.category_label || selectedProduct.category || 'General'}\n`;
-    customDetails += `Base Price: ${formatPKR(currentBasePrice)}\n`;
-    customDetails += `Final Price: ${formatPKR(totalPrice)}\n\n`;
-    customDetails += '=== Questions & Answers ===\n';
-    
+    let customDetails = 'Questions & Answers:\n';
     Object.keys(answers).forEach(key => {
       const field = template.fields.find(f => f.id === key);
-      if (field && answers[key]) {
+      if (field) {
         customDetails += `${field.label}: ${answers[key]}\n`;
-      } else if (answers[key]) {
-        customDetails += `${key}: ${answers[key]}\n`;
       }
     });
     
-    if (selectedFeatures.length > 0) {
-      customDetails += '\n=== Selected Features ===\n';
-      selectedFeatures.forEach(f => {
-        customDetails += `- ${f}\n`;
-      });
-    }
-    
     const orderData = {
-      name: `${productName}`,
-      price: totalPrice,
+      name: `${selectedProduct.name}`,
+      price: 0,
       customer_email: user.email,
       customer_name: user.user_metadata?.full_name || user.email,
       custom_details: customDetails,
-      custom_type: selectedProduct.category_label || selectedProduct.category || 'General',
-      custom_budget: totalPrice.toString(),
+      custom_type: selectedProduct.category_label || selectedProduct.category || 'Custom',
+      custom_budget: '0',
       isCustom: true,
+      is_demo: false,
       status: 'processing'
     };
     
-    // Close questions modal
     closeQuestionsModal();
-    
-    // Open payment modal
     openPaymentModal(orderData, true);
-    
   } catch (e) {
     console.error('Order error:', e);
     showToast('⚠️ Error processing order: ' + e.message);
   }
-  
   submitBtn.disabled = false;
-  submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirm & Proceed to Payment';
+  submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirm & Proceed';
 });
 
 // ─── PAYMENT MODAL ───
@@ -1007,7 +789,7 @@ window.selectPayment = function(method) {
 function openPaymentModal(orderData, isCustom) {
   pendingOrder = orderData;
   document.getElementById('paymentProductName').textContent = orderData.name || 'Web Package';
-  document.getElementById('paymentAmount').textContent = formatPKR(orderData.price);
+  document.getElementById('paymentAmount').textContent = formatPKR(orderData.price || 0);
   document.getElementById('paymentType').textContent = isCustom ? 'Custom Web' : 'Pre-made Web';
   document.getElementById('paymentModal').classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -1038,7 +820,7 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
   try {
     const orderData = {
       name: pendingOrder.name,
-      price: pendingOrder.price,
+      price: pendingOrder.price || 0,
       customer_email: pendingOrder.customer_email || user.email,
       customer_name: pendingOrder.customer_name || user.user_metadata?.full_name || user.email,
       payment_method: selectedPayment,
@@ -1047,11 +829,12 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
       custom_details: pendingOrder.custom_details || '',
       custom_type: pendingOrder.custom_type || '',
       custom_budget: pendingOrder.custom_budget || '',
-      is_custom: pendingOrder.isCustom || false
+      is_custom: pendingOrder.isCustom || false,
+      is_demo: pendingOrder.is_demo || false
     };
     const result = await createOrder(orderData);
     console.log('✅ Order created:', result);
-    let msg = `✅ Order Confirmed!\n\nOrder: ${pendingOrder.name}\nAmount: ${formatPKR(pendingOrder.price)}\nMethod: ${selectedPayment === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}\n\n📌 Send payment screenshot on WhatsApp: 0332-7649422`;
+    let msg = `✅ Order Confirmed!\n\nOrder: ${pendingOrder.name}\nMethod: ${selectedPayment === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}\n\n📌 Send payment screenshot on WhatsApp: 0332-7649422`;
     alert(msg);
     closePaymentModalFn();
     showToast('🎉 Order confirmed!');
@@ -1063,7 +846,7 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
   this.innerHTML = '<i class="fas fa-check"></i> Confirm Payment';
 });
 
-// ─── APP ───
+// ─── MAIN APP ───
 (async function() {
   console.log('🚀 Starting Pixlnex...');
   
@@ -1077,8 +860,6 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
   let products = [];
   let cart = JSON.parse(localStorage.getItem('pixlnex_cart')) || [];
   let currentUser = null;
-  let pendingOrder = null;
-  let selectedPayment = 'jazzcash';
 
   const productGrid = document.getElementById('productGrid');
   const cartItemsContainer = document.getElementById('cartItemsContainer');
@@ -1088,17 +869,6 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
   const authBtn = document.getElementById('authBtn');
   const toast = document.getElementById('toast');
   const toastMsg = document.getElementById('toastMsg');
-  const paymentModal = document.getElementById('paymentModal');
-  const paymentProductName = document.getElementById('paymentProductName');
-  const paymentAmount = document.getElementById('paymentAmount');
-  const paymentType = document.getElementById('paymentType');
-
-  const claimOfferBtn1 = document.getElementById('claimOfferBtn1');
-  const offerCount1 = document.getElementById('offerCount1');
-  const offerCountDisplay1 = document.getElementById('offerCountDisplay1');
-  const claimOfferBtn2 = document.getElementById('claimOfferBtn2');
-  const offerCount2 = document.getElementById('offerCount2');
-  const offerCountDisplay2 = document.getElementById('offerCountDisplay2');
 
   let toastTimer;
 
@@ -1212,164 +982,6 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
     }
   }
 
-  async function loadOfferStatus() {
-    try {
-      if (!supabaseConnected) return;
-      
-      const data1 = await getOfferStatus('free_portfolio');
-      if (data1) {
-        const claimedArray = data1.claimed_by ? data1.claimed_by.split(',').filter(Boolean) : [];
-        const count = claimedArray.length;
-        const limit = data1.total_limit || 10;
-        offerCount1.textContent = `${count}/${limit}`;
-        offerCountDisplay1.textContent = `(${count}/${limit} claimed)`;
-        
-        const adminEmails = ['faisalyousafyousaf3@gmail.com', 'noor@gmail.com'];
-        const isAdmin = currentUser && adminEmails.includes(currentUser.email.toLowerCase());
-        
-        if (currentUser && claimedArray.includes(currentUser.email)) {
-          claimOfferBtn1.disabled = true;
-          claimOfferBtn1.textContent = '✅ Claimed';
-        } else if (!isAdmin && count >= limit) {
-          claimOfferBtn1.disabled = true;
-          claimOfferBtn1.textContent = '🎉 All Claimed!';
-        } else {
-          claimOfferBtn1.disabled = false;
-          claimOfferBtn1.textContent = isAdmin ? 'Claim ₨ 300 (Admin)' : 'Claim ₨ 300';
-        }
-      }
-      
-      const data2 = await getOfferStatus('first_order_free');
-      if (data2) {
-        const claimedArray = data2.claimed_by ? data2.claimed_by.split(',').filter(Boolean) : [];
-        const count = claimedArray.length;
-        const limit = data2.total_limit || 1;
-        offerCount2.textContent = `${count}/${limit}`;
-        offerCountDisplay2.textContent = `(${count}/${limit} claimed)`;
-        
-        const adminEmails = ['faisalyousafyousaf3@gmail.com', 'noor@gmail.com'];
-        const isAdmin = currentUser && adminEmails.includes(currentUser.email.toLowerCase());
-        
-        if (currentUser && claimedArray.includes(currentUser.email)) {
-          claimOfferBtn2.disabled = true;
-          claimOfferBtn2.textContent = '✅ Claimed';
-        } else if (!isAdmin && count >= limit) {
-          claimOfferBtn2.disabled = true;
-          claimOfferBtn2.textContent = '🎉 Claimed!';
-        } else {
-          claimOfferBtn2.disabled = false;
-          claimOfferBtn2.textContent = isAdmin ? 'Claim FREE (Admin)' : 'Claim FREE';
-        }
-      }
-    } catch(e) { console.error('Offer error:', e); }
-  }
-
-  claimOfferBtn1.addEventListener('click', async function() {
-    if (!supabaseConnected) { showToast('⚠️ System not ready'); return; }
-    const user = await getCurrentUser();
-    if (!user) { showToast('🔐 Please login first'); setTimeout(() => window.location.href = 'login.html', 800); return; }
-    const email = user.email;
-    try {
-      await claimOffer('free_portfolio', email);
-      showToast('🎉 Portfolio in ₨ 300 claimed!');
-      this.disabled = true;
-      this.textContent = '✅ Claimed';
-      loadOfferStatus();
-      setTimeout(() => {
-        window.location.href = 'shop.html?offer=portfolio&price=300';
-      }, 1000);
-    } catch(e) { showToast('⚠️ ' + e.message); }
-  });
-
-  claimOfferBtn2.addEventListener('click', async function() {
-    if (!supabaseConnected) { showToast('⚠️ System not ready'); return; }
-    const user = await getCurrentUser();
-    if (!user) { showToast('🔐 Please login first'); setTimeout(() => window.location.href = 'login.html', 800); return; }
-    const email = user.email;
-    try {
-      await claimOffer('first_order_free', email);
-      showToast('⭐ Free Website claimed!');
-      this.disabled = true;
-      this.textContent = '✅ Claimed';
-      loadOfferStatus();
-      setTimeout(() => {
-        window.location.href = 'shop.html?offer=free';
-      }, 1000);
-    } catch(e) { showToast('⚠️ ' + e.message); }
-  });
-
-  window.selectPayment = function(method) {
-    selectedPayment = method;
-    document.querySelectorAll('.payment-methods .method').forEach(el => {
-      el.classList.toggle('selected', el.dataset.method === method);
-    });
-  };
-
-  function openPaymentModal(orderData, isCustom) {
-    pendingOrder = orderData;
-    paymentProductName.textContent = orderData.name || 'Web Package';
-    paymentAmount.textContent = formatPKR(orderData.price);
-    paymentType.textContent = isCustom ? 'Custom Web' : 'Pre-made Web';
-    paymentModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closePaymentModalFn() {
-    paymentModal.classList.remove('active');
-    document.body.style.overflow = '';
-    pendingOrder = null;
-  }
-
-  document.getElementById('closePaymentModal').addEventListener('click', closePaymentModalFn);
-  document.getElementById('cancelPaymentBtn').addEventListener('click', closePaymentModalFn);
-  paymentModal.addEventListener('click', function(e) {
-    if (e.target === this) closePaymentModalFn();
-  });
-
-  document.getElementById('confirmPaymentBtn').addEventListener('click', async function() {
-    if (!pendingOrder) return;
-    const user = await getCurrentUser();
-    if (!user) {
-      showToast('🔐 Please login first');
-      setTimeout(() => window.location.href = 'login.html', 800);
-      return;
-    }
-    this.disabled = true;
-    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-    try {
-      const orderData = {
-        name: pendingOrder.name,
-        price: pendingOrder.price,
-        customer_email: pendingOrder.customer_email || user.email,
-        customer_name: pendingOrder.customer_name || user.user_metadata?.full_name || user.email,
-        payment_method: selectedPayment,
-        payment_status: 'paid',
-        status: pendingOrder.isCustom ? 'demo_ready' : 'completed',
-        custom_details: pendingOrder.custom_details || '',
-        custom_type: pendingOrder.custom_type || '',
-        custom_budget: pendingOrder.custom_budget || '',
-        is_custom: pendingOrder.isCustom || false
-      };
-      const result = await createOrder(orderData);
-      console.log('✅ Order created:', result);
-      let msg = `✅ Order Confirmed!\n\nOrder: ${pendingOrder.name}\nAmount: ${formatPKR(pendingOrder.price)}\nMethod: ${selectedPayment === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}\n\n📌 Send payment screenshot on WhatsApp: 0332-7649422`;
-      alert(msg);
-      if (!pendingOrder.isCustom) {
-        cart = [];
-        localStorage.setItem('pixlnex_cart', JSON.stringify(cart));
-        updateCartUI();
-      }
-      closePaymentModalFn();
-      showToast('🎉 Order confirmed!');
-    } catch(e) {
-      console.error('Order error:', e);
-      alert('⚠️ Error processing order. Please try again.');
-    }
-    this.disabled = false;
-    this.innerHTML = '<i class="fas fa-check"></i> Confirm Payment';
-  });
-
-  // ─── RENDER FEATURED PRODUCTS ───
   async function renderFeaturedProducts() {
     try {
       if (!supabaseConnected) { showToast('⚠️ System not ready'); return; }
@@ -1383,19 +995,12 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
       return;
     }
     
-    // Define categories to show
     const categories = ['portfolio', 'business', 'ecommerce', 'chat'];
     const featuredProducts = [];
-    
-    // Get one product from each category
     categories.forEach(cat => {
       const product = products.find(p => p.category === cat || p.category_label?.toLowerCase() === cat);
-      if (product) {
-        featuredProducts.push(product);
-      }
+      if (product) featuredProducts.push(product);
     });
-    
-    // If we have less than 4 products, fill with other products
     if (featuredProducts.length < 4) {
       const remaining = products.filter(p => !featuredProducts.includes(p));
       while (featuredProducts.length < 4 && remaining.length > 0) {
@@ -1410,21 +1015,18 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
       const carouselHtml = createCarousel(images, p.name, p.id || index);
       const featuresHtml = (p.features || []).map(f => `<li><i class="fas fa-circle-check"></i> ${f}</li>`).join('');
       const categoryLabel = p.category_label || p.category || '';
-      
-      let displayPrice = p.price;
-      if (p.category === 'chat') {
-        displayPrice = 2000;
-      }
+      const hasDemo = p.demo_url && p.demo_url.trim() !== '';
       
       card.innerHTML = `
         <div class="product-img">${carouselHtml}</div>
-        <h3>${p.name}</h3>
+        <h3>${p.name} ${hasDemo ? '<span class="demo-badge">▶️ Demo</span>' : ''}</h3>
         ${categoryLabel ? `<span class="category-badge">${categoryLabel}</span>` : ''}
         <div class="product-desc">${p.description || p.desc || ''}</div>
         <ul class="product-features">${featuresHtml}</ul>
         <div class="product-bottom">
-          <span class="price">${formatPKR(displayPrice)}</span>
+          <span style="font-size:0.9rem;color:#64748b;">Custom Pricing</span>
           <div class="btn-group">
+            ${hasDemo ? `<button class="btn-demo" data-demo="${p.demo_url}"><i class="fas fa-play"></i> Live Demo</button>` : ''}
             <button class="btn-add" data-id="${p.id || index}"><i class="fas fa-plus"></i> Add</button>
             <button class="btn-order" data-id="${p.id || index}"><i class="fas fa-bolt"></i> Order Now</button>
           </div>
@@ -1432,7 +1034,7 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
       `;
       productGrid.appendChild(card);
       
-      // Image click handler
+      // Image click
       const imgContainer = card.querySelector('.product-img');
       if (imgContainer) {
         imgContainer.addEventListener('click', function(e) {
@@ -1441,25 +1043,27 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
             e.stopPropagation();
             const carousel = this.querySelector('.carousel-container');
             let allImages = [];
-            
             if (carousel) {
               const track = carousel.querySelector('.carousel-track');
               if (track) {
-                const images = track.querySelectorAll('img');
-                images.forEach(imgEl => {
-                  if (imgEl.src) {
-                    allImages.push(imgEl.src);
-                  }
+                track.querySelectorAll('img').forEach(imgEl => {
+                  if (imgEl.src) allImages.push(imgEl.src);
                 });
               }
             }
-            
-            if (allImages.length === 0) {
-              allImages = [img.src];
-            }
-            
+            if (allImages.length === 0) allImages = [img.src];
             openImageModal(img.src, allImages);
           }
+        });
+      }
+      
+      // Demo button
+      const demoBtn = card.querySelector('.btn-demo');
+      if (demoBtn) {
+        demoBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const url = this.dataset.demo;
+          if (url) openDemo(url);
         });
       }
       
@@ -1469,7 +1073,6 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
       }
     });
     
-    // ─── ORDER NOW BUTTON - OPENS QUESTIONS FOR ALL PRODUCTS ───
     document.querySelectorAll('.btn-order').forEach(btn => btn.addEventListener('click', function() {
       const productId = this.dataset.id;
       const product = products.find(p => (p.id || p.id) == productId);
@@ -1479,7 +1082,6 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
           setTimeout(() => window.location.href = 'login.html', 800);
           return;
         }
-        // Open questions modal for ALL products
         openQuestionsModal(product);
       }
     }));
@@ -1488,12 +1090,7 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
       const productId = this.dataset.id;
       const product = products.find(p => (p.id || p.id) == productId);
       if (product) { 
-        let price = product.price;
-        if (product.category === 'chat') {
-          price = 2000;
-        }
-        const cartItem = { ...product, displayPrice: price };
-        addToCart(cartItem); 
+        addToCart(product); 
         showToast(`${product.name} added to cart!`); 
       }
     }));
@@ -1502,8 +1099,7 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
   function addToCart(product) {
     const existing = cart.find(item => item.id === product.id);
     if (existing) { existing.quantity += 1; } else { 
-      const price = product.displayPrice !== undefined ? product.displayPrice : product.price;
-      cart.push({ ...product, quantity: 1, displayPrice: price }); 
+      cart.push({ ...product, quantity: 1, displayPrice: 0 }); 
     }
     localStorage.setItem('pixlnex_cart', JSON.stringify(cart));
     updateCartUI();
@@ -1529,10 +1125,9 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
       cart.forEach(item => {
         const div = document.createElement('div');
         div.className = 'cart-item';
-        const price = item.displayPrice !== undefined ? item.displayPrice : item.price;
         div.innerHTML = `
           <span>${item.name} <span style="opacity:0.7;font-weight:400;">×${item.quantity}</span></span>
-          <span class="item-price">${formatPKR(price * item.quantity)}</span>
+          <span style="font-size:0.85rem;color:#64748b;">Custom Pricing</span>
           <button class="remove-item" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
         `;
         cartItemsContainer.appendChild(div);
@@ -1541,11 +1136,7 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
         removeFromCart(parseInt(this.dataset.id));
       }));
     }
-    const total = cart.reduce((sum, item) => {
-      const price = item.displayPrice !== undefined ? item.displayPrice : item.price;
-      return sum + (price * item.quantity);
-    }, 0);
-    cartTotalPrice.textContent = formatPKR(total);
+    cartTotalPrice.textContent = 'Custom Pricing';
     checkoutBtn.disabled = cart.length === 0;
   }
 
@@ -1553,17 +1144,14 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
     if (cart.length === 0) return;
     const user = await getCurrentUser();
     if (!user) { showToast('🔐 Please login first to checkout'); setTimeout(() => window.location.href = 'login.html', 800); return; }
-    const total = cart.reduce((sum, item) => {
-      const price = item.displayPrice !== undefined ? item.displayPrice : item.price;
-      return sum + (price * item.quantity);
-    }, 0);
     const items = cart.map(item => item.name).join(', ');
     const orderData = {
       name: `Cart: ${items}`,
-      price: total,
+      price: 0,
       customer_email: user.email,
       customer_name: user.user_metadata?.full_name || user.email,
-      isCustom: false
+      isCustom: false,
+      is_demo: false
     };
     openPaymentModal(orderData, false);
   });
@@ -1658,7 +1246,6 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
       return;
     }
     
-    // Gather question answers
     const questionAnswers = {};
     const questionContainer = document.getElementById('questionContainer');
     const inputs = questionContainer.querySelectorAll('input, select, textarea');
@@ -1675,9 +1262,8 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
       'chat': 'Chat App', 'landing': 'Landing Page',
       'other': 'Other'
     };
-    const budgetAmount = parseInt(budget) || 5000;
+    const budgetAmount = parseInt(budget) || 0;
     
-    // Build custom details with all answers
     let customDetails = `Type: ${typeLabels[type] || type}\n`;
     customDetails += `Budget: ₨ ${budgetAmount}\n`;
     customDetails += `Additional Details: ${details || 'None'}\n\n`;
@@ -1696,7 +1282,8 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
       custom_details: customDetails,
       custom_type: typeLabels[type] || type,
       custom_budget: budget,
-      isCustom: true
+      isCustom: true,
+      is_demo: false
     };
     openPaymentModal(orderData, true);
     this.reset();
@@ -1705,14 +1292,12 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
 
   document.getElementById('navAbout').addEventListener('click', function(e) {
     e.preventDefault();
-    alert('📖 About Pixlnex\n\nWe are a one-person web development service. I build custom websites tailored to your needs.\n\n✅ One person, one website at a time\n✅ Custom designs\n✅ Affordable prices\n✅ 1-on-1 service');
+    alert('📖 About Pixlnex\n\nWe are a one-person web development service. I build custom websites tailored to your needs.\n\n✅ One person, one website at a time\n✅ Custom designs\n✅ 1-on-1 service\n✅ Live demos available');
   });
 
-  // ─── START ───
   await updateAuthUI();
   await renderFeaturedProducts();
   updateCartUI();
-  await loadOfferStatus();
   renderQuestions('portfolio');
   console.log('✅ Pixlnex initialized successfully!');
 })();

@@ -1,3 +1,4 @@
+<!-- admin.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,8 +12,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
-    body { background: #f8fafc; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
+    body { background: #f0f4f8; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
     .app { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; flex: 1; width: 100%; }
+    
+    /* --- NAV --- */
     .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; padding: 0.75rem 0 1.5rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem; }
     .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; text-decoration: none; }
     .logo img { height: 35px; width: auto; }
@@ -27,6 +30,7 @@
     .cart-icon { font-size: 1.4rem; background: #eef2f6; padding: 0.5rem 0.9rem; border-radius: 40px; display: flex; align-items: center; gap: 0.4rem; text-decoration: none; color: #0b1a2e; }
     .cart-count { background: #2563eb; color: white; font-size: 0.75rem; font-weight: 600; padding: 0.15rem 0.55rem; border-radius: 30px; margin-left: 0.2rem; }
 
+    /* --- ADMIN HEADER --- */
     .admin-header { background: linear-gradient(145deg, #0f2b4b, #1a3a5e); padding: 2.5rem 2.8rem; border-radius: 2.5rem; margin-bottom: 2.8rem; color: white; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; }
     .admin-header h1 { font-size: 2.2rem; font-weight: 700; }
     .admin-header p { opacity: 0.8; margin-top: 0.3rem; }
@@ -36,8 +40,10 @@
     .supabase-status.connected { background: #dcfce7; color: #166534; }
     .supabase-status.disconnected { background: #fee2e2; color: #b91c1c; }
 
+    /* --- STATS --- */
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
-    .stat-card { background: white; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #e9eef3; }
+    .stat-card { background: white; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #e9eef3; transition: transform 0.2s; }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.05); }
     .stat-card .stat-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 0.8rem; }
     .stat-card .stat-icon.blue { background: #2563eb10; color: #2563eb; }
     .stat-card .stat-icon.green { background: #22c55e10; color: #22c55e; }
@@ -46,12 +52,15 @@
     .stat-card .stat-number { font-size: 2rem; font-weight: 700; color: #0b1a2e; }
     .stat-card .stat-label { color: #64748b; font-size: 0.9rem; }
 
+    /* --- GRID --- */
     .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-    .admin-card { background: white; border-radius: 2rem; padding: 1.8rem 2.2rem; border: 1px solid #e9eef3; }
+    .admin-card { background: white; border-radius: 2rem; padding: 1.8rem 2.2rem; border: 1px solid #e9eef3; transition: box-shadow 0.2s; }
+    .admin-card:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.04); }
     .admin-card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
     .admin-card h3 i { color: #2563eb; }
     .admin-card h3 .badge-count { background: #eef2f6; padding: 0.1rem 0.7rem; border-radius: 40px; font-size: 0.75rem; color: #64748b; font-weight: 500; }
 
+    /* --- ORDERS --- */
     .admin-order-item { display: flex; flex-direction: column; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
     .admin-order-item:last-child { border-bottom: none; }
     .admin-order-item .order-row { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; }
@@ -62,7 +71,6 @@
     .admin-order-item .order-custom-details .detail-row { display: flex; padding: 0.15rem 0; font-size: 0.85rem; }
     .admin-order-item .order-custom-details .detail-row .label { font-weight: 600; color: #2563eb; min-width: 140px; }
     .admin-order-item .order-custom-details .detail-row .value { color: #1e293b; word-break: break-word; }
-    .admin-order-item .order-custom-details .detail-row .value pre { background: #f8fafc; padding: 0.5rem; border-radius: 0.3rem; white-space: pre-wrap; font-size: 0.8rem; margin: 0; }
     .admin-order-item .order-status-select { padding: 0.2rem 0.8rem; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.75rem; font-weight: 600; background: white; cursor: pointer; transition: 0.2s; }
     .admin-order-item .order-status-select:focus { outline: none; border-color: #2563eb; }
     .admin-order-item .order-status-select.status-processing { background: #e0f2fe; color: #0369a1; border-color: #b8d4f0; }
@@ -70,13 +78,14 @@
     .admin-order-item .order-status-select.status-demo_ready { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
     .admin-order-item .order-status-select.status-completed { background: #dcfce7; color: #166534; border-color: #86efac; }
     .admin-order-item .order-status-select.status-delivered { background: #e0e7ff; color: #3730a3; border-color: #a5b4fc; }
-    .admin-order-item .order-price { font-weight: 700; color: #0f2b4b; font-size: 0.95rem; }
     .payment-badge { font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 30px; display: inline-block; }
     .payment-badge.paid { background: #22c55e20; color: #166534; border: 1px solid #22c55e30; }
     .payment-badge.pending { background: #fef9c3; color: #854d0e; border: 1px solid #fcd34d; }
     .payment-badge.free { background: #e0e7ff; color: #3730a3; border: 1px solid #a5b4fc; }
     .custom-badge { font-size: 0.65rem; background: #7c3aed10; color: #7c3aed; padding: 0.15rem 0.5rem; border-radius: 30px; border: 1px solid #7c3aed20; display: inline-block; }
+    .demo-badge { font-size: 0.65rem; background: #f59e0b10; color: #d97706; padding: 0.15rem 0.5rem; border-radius: 30px; border: 1px solid #f59e0b20; display: inline-block; }
 
+    /* --- PRODUCTS --- */
     .admin-product-item { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
     .admin-product-item:last-child { border-bottom: none; }
     .admin-product-item .product-info { display: flex; align-items: center; gap: 1rem; flex: 1; }
@@ -84,12 +93,12 @@
     .admin-product-item .product-thumb-placeholder { width: 48px; height: 48px; border-radius: 10px; background: #f1f6fc; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.2rem; border: 1px solid #e9eef3; }
     .admin-product-item .product-name { font-weight: 600; font-size: 0.95rem; }
     .admin-product-item .product-category { font-size: 0.75rem; color: #64748b; background: #eef2f6; padding: 0.15rem 0.6rem; border-radius: 30px; }
-    .admin-product-item .product-price { font-weight: 600; color: #0f2b4b; font-size: 0.95rem; }
     .admin-product-item .product-actions { display: flex; gap: 0.5rem; align-items: center; }
     .admin-product-item .product-actions button { background: none; border: none; color: #94a3b8; cursor: pointer; transition: 0.15s; font-size: 0.9rem; padding: 0.2rem 0.5rem; border-radius: 20px; }
     .admin-product-item .product-actions button:hover { background: #eef2f6; color: #0f2b4b; }
     .admin-product-item .product-actions button.delete:hover { background: #fee2e2; color: #b91c1c; }
 
+    /* --- ADD PRODUCT FORM --- */
     .add-product-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
     .add-product-form input, .add-product-form select, .add-product-form textarea { padding: 0.6rem 1rem; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.9rem; background: #f8fafc; transition: 0.2s; width: 100%; }
     .add-product-form input:focus, .add-product-form select:focus, .add-product-form textarea:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: transparent; background: white; }
@@ -99,11 +108,15 @@
     .add-product-form .image-upload-area:hover { border-color: #2563eb; background: #f1f6fe; }
     .add-product-form .image-upload-area .preview-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; justify-content: center; }
     .add-product-form .image-upload-area .preview-grid img { width: 60px; height: 60px; object-fit: cover; border-radius: 0.5rem; border: 1px solid #e2e8f0; }
-    .add-product-form .image-upload-area .preview-grid .remove-img { position: relative; cursor: pointer; color: #ef4444; font-size: 0.8rem; }
     .add-product-btn { background: #0f2b4b; color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
     .add-product-btn:hover { background: #1a3a5e; transform: scale(1.02); }
     .add-product-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+    /* --- DEMO URL INPUT --- */
+    .demo-url-input { display: flex; gap: 0.5rem; align-items: center; }
+    .demo-url-input input { flex: 1; }
+
+    /* --- LOGIN --- */
     .login-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,43,75,0.95); display: flex; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(8px); transition: opacity 0.4s ease; }
     .login-overlay.hidden { opacity: 0; pointer-events: none; }
     .login-box { background: white; border-radius: 2.5rem; padding: 3rem 2.8rem; max-width: 420px; width: 100%; box-shadow: 0 25px 60px rgba(0,0,0,0.3); animation: slideUp 0.5s ease; }
@@ -136,24 +149,19 @@
     .toast.show { transform: translateY(0); opacity: 1; }
     .toast i { color: #22c55e; font-size: 1.2rem; }
 
-    .expand-btn { background: none; border: none; color: #2563eb; cursor: pointer; font-size: 0.8rem; padding: 0.2rem 0.5rem; }
-    .expand-btn:hover { text-decoration: underline; }
-    .order-details-collapsed .order-custom-details { display: none; }
-    .order-details-expanded .order-custom-details { display: block; }
-
     @media (max-width:900px) { .admin-grid { grid-template-columns: 1fr; } .admin-header { flex-direction: column; align-items: flex-start; gap: 1rem; } .stats-grid { grid-template-columns: 1fr 1fr; } .add-product-form { grid-template-columns: 1fr; } .add-product-form .full { grid-column: 1; } .login-box { padding: 2rem 1.5rem; margin: 1rem; } }
-    @media (max-width:700px) { .app { padding: 1rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .admin-header { padding: 1.5rem; } .admin-header h1 { font-size: 1.6rem; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; } .stat-card { padding: 1rem; } .stat-card .stat-number { font-size: 1.5rem; } .admin-card { padding: 1.2rem 1.5rem; } .admin-order-item .order-row { flex-direction: column; align-items: stretch; } .admin-order-item .order-custom-details .detail-row { flex-direction: column; } .admin-order-item .order-custom-details .detail-row .label { min-width: auto; } }
+    @media (max-width:700px) { .app { padding: 1rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .admin-header { padding: 1.5rem; } .admin-header h1 { font-size: 1.6rem; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; } .stat-card { padding: 1rem; } .stat-card .stat-number { font-size: 1.5rem; } .admin-card { padding: 1.2rem 1.5rem; } }
   </style>
 </head>
 <body>
 
   <div class="app">
-
     <header class="navbar">
       <a href="index.html" class="logo"><img src="logo.png" alt="Pixlnex" /><span>Pixlnex</span></a>
       <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="shop.html">Webs</a>
+        <a href="one-time.html">✨ One Time</a>
         <a href="#" class="active auth-btn" id="authBtn"><i class="fas fa-user-shield"></i> Admin</a>
         <a href="shop.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCounter">0</span></a>
       </div>
@@ -161,7 +169,7 @@
 
     <div id="adminContent">
       <div class="admin-header">
-        <div><h1><i class="fas fa-user-shield"></i> Admin Panel</h1><p>Manage all orders, products, and customers.</p></div>
+        <div><h1><i class="fas fa-user-shield"></i> Admin Panel</h1><p>Manage all orders, products, and demos.</p></div>
         <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
           <span class="supabase-status" id="supabaseStatus">⏳ Connecting...</span>
           <div class="admin-badge" id="adminBadge" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</div>
@@ -170,19 +178,17 @@
 
       <div class="stats-grid" id="statsGrid">
         <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-shopping-bag"></i></div><div class="stat-number" id="totalOrders">0</div><div class="stat-label">Total Orders</div></div>
-        <div class="stat-card"><div class="stat-icon green"><i class="fas fa-check-circle"></i></div><div class="stat-number" id="totalRevenue">₨ 0</div><div class="stat-label">Total Revenue</div></div>
         <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-users"></i></div><div class="stat-number" id="totalCustomers">0</div><div class="stat-label">Customers</div></div>
         <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-hourglass-half"></i></div><div class="stat-number" id="pendingOrders">0</div><div class="stat-label">Pending Orders</div></div>
+        <div class="stat-card"><div class="stat-icon green"><i class="fas fa-play-circle"></i></div><div class="stat-number" id="totalDemos">0</div><div class="stat-label">Live Demos</div></div>
       </div>
 
       <div class="admin-grid">
-        <!-- Orders -->
         <div class="admin-card">
           <h3><i class="fas fa-list"></i> All Orders <span class="badge-count" id="orderCountBadge">0</span></h3>
           <div id="orderList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">Loading orders...</div></div>
         </div>
 
-        <!-- Products -->
         <div class="admin-card">
           <h3><i class="fas fa-cube"></i> Products <span class="badge-count" id="productCountBadge">0</span></h3>
           <div id="productList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">Loading products...</div></div>
@@ -190,7 +196,6 @@
           <div class="add-product-form" id="addProductForm">
             <input type="text" id="newProductName" placeholder="Product name" required />
             <input type="text" id="newProductDesc" placeholder="Description" required />
-            <input type="number" id="newProductPrice" placeholder="Price (PKR)" required />
             <select id="newProductCategory">
               <option value="portfolio">Portfolio</option>
               <option value="business">Business</option>
@@ -202,6 +207,10 @@
             </select>
             <div class="full">
               <input type="text" id="newProductFeatures" placeholder="Features (comma separated)" />
+            </div>
+            <div class="full demo-url-input">
+              <input type="url" id="newProductDemoUrl" placeholder="Live Demo URL (e.g., https://demo.example.com)" />
+              <span style="font-size:0.75rem;color:#64748b;">Optional</span>
             </div>
             <div class="full">
               <div class="image-upload-area" id="imageUploadArea">
@@ -246,10 +255,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     // ============================================
-    // PIXLNEX - ADMIN WITH ORDER DETAILS
+    // PIXLNEX - ADMIN PANEL (UPDATED)
     // ============================================
 
-    // ─── SUPABASE CONFIG ───
     const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
     const STORAGE_BUCKET = 'product-images';
@@ -258,13 +266,11 @@
     let supabaseConnected = false;
     let selectedImages = [];
 
-    // ─── ADMIN USERS ───
     const ADMIN_USERS = [
       { email: 'faisalyousafyousaf3@gmail.com', name: 'Faisal' },
       { email: 'noor@gmail.com', name: 'Noor' }
     ];
 
-    // ─── INIT ───
     function initSupabase() {
       try {
         if (typeof supabase !== 'undefined') {
@@ -291,7 +297,6 @@
       return '₨ ' + (amount || 0).toLocaleString('en-PK');
     }
 
-    // ─── ADMIN AUTH ───
     function checkAdminSession() {
       const session = localStorage.getItem('pixlnex_admin_session');
       if (session === 'true') {
@@ -309,13 +314,8 @@
     function loginAdmin(email, password) {
       const trimmedEmail = email.trim();
       const trimmedPassword = password.trim();
-
       const adminUser = ADMIN_USERS.find(u => u.email.toLowerCase() === trimmedEmail.toLowerCase());
-
-      if (!adminUser) {
-        return false;
-      }
-
+      if (!adminUser) return false;
       if (trimmedPassword.length > 0) {
         const name = adminUser.name;
         localStorage.setItem('pixlnex_admin_session', 'true');
@@ -343,18 +343,14 @@
       const password = document.getElementById('adminPassword').value;
       const errorMsg = document.getElementById('loginError');
       const loginBtn = document.getElementById('loginBtn');
-
       errorMsg.classList.remove('show');
-
       if (!email || !password) {
         errorMsg.textContent = '⚠️ Please enter both email and password.';
         errorMsg.classList.add('show');
         return;
       }
-
       loginBtn.disabled = true;
       loginBtn.innerHTML = '<span class="loading-spinner"></span> Verifying...';
-
       setTimeout(() => {
         if (loginAdmin(email, password)) {
           loginBtn.disabled = false;
@@ -371,7 +367,6 @@
       }, 600);
     });
 
-    // ─── TOAST ───
     let toastTimer;
     function showToast(msg) {
       const toast = document.getElementById('toast');
@@ -382,40 +377,25 @@
       toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // ─── IMAGE UPLOAD HANDLING ───
     const imageInput = document.getElementById('imageInput');
     const imageUploadArea = document.getElementById('imageUploadArea');
     const imagePreviewGrid = document.getElementById('imagePreviewGrid');
 
-    imageUploadArea.addEventListener('click', function() {
-      imageInput.click();
-    });
+    imageUploadArea.addEventListener('click', function() { imageInput.click(); });
 
     imageInput.addEventListener('change', function(e) {
       const files = Array.from(e.target.files);
-      
       files.forEach(file => {
-        if (!file.type.startsWith('image/')) {
-          showToast('⚠️ Please select image files only');
-          return;
-        }
-        if (file.size > 5 * 1024 * 1024) {
-          showToast('⚠️ Image size must be less than 5MB');
-          return;
-        }
-        
+        if (!file.type.startsWith('image/')) { showToast('⚠️ Please select image files only'); return; }
+        if (file.size > 5 * 1024 * 1024) { showToast('⚠️ Image size must be less than 5MB'); return; }
         const img = new Image();
         img.onload = function() {
-          if (this.width < 100 || this.height < 100) {
-            showToast('⚠️ Image must be at least 100x100 pixels');
-            return;
-          }
+          if (this.width < 100 || this.height < 100) { showToast('⚠️ Image must be at least 100x100 pixels'); return; }
           selectedImages.push(file);
           displayImagePreview(file);
         };
         img.src = URL.createObjectURL(file);
       });
-      
       this.value = '';
     });
 
@@ -425,7 +405,6 @@
         const div = document.createElement('div');
         div.style.position = 'relative';
         div.style.display = 'inline-block';
-        
         const img = document.createElement('img');
         img.src = e.target.result;
         img.style.width = '60px';
@@ -433,7 +412,6 @@
         img.style.objectFit = 'cover';
         img.style.borderRadius = '0.5rem';
         img.style.border = '1px solid #e2e8f0';
-        
         const removeBtn = document.createElement('button');
         removeBtn.innerHTML = '×';
         removeBtn.style.position = 'absolute';
@@ -450,19 +428,13 @@
         removeBtn.style.display = 'flex';
         removeBtn.style.alignItems = 'center';
         removeBtn.style.justifyContent = 'center';
-        
         removeBtn.onclick = function(e) {
           e.stopPropagation();
           const index = selectedImages.indexOf(file);
-          if (index > -1) {
-            selectedImages.splice(index, 1);
-          }
+          if (index > -1) selectedImages.splice(index, 1);
           div.remove();
-          if (selectedImages.length === 0) {
-            imagePreviewGrid.innerHTML = '';
-          }
+          if (selectedImages.length === 0) imagePreviewGrid.innerHTML = '';
         };
-        
         div.appendChild(img);
         div.appendChild(removeBtn);
         imagePreviewGrid.appendChild(div);
@@ -470,130 +442,84 @@
       reader.readAsDataURL(file);
     }
 
-    // ─── UPLOAD IMAGES TO SUPABASE ───
     async function uploadImages(productId) {
       const uploadedUrls = [];
-      
       for (const file of selectedImages) {
         try {
           const fileExt = file.name.split('.').pop();
           const fileName = `${productId}/${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-          
-          const { data, error } = await supabaseClient
-            .storage
-            .from(STORAGE_BUCKET)
-            .upload(fileName, file, {
-              cacheControl: '3600',
-              upsert: false
-            });
-          
+          const { data, error } = await supabaseClient.storage.from(STORAGE_BUCKET).upload(fileName, file, { cacheControl: '3600', upsert: false });
           if (error) throw error;
-          
-          const { data: { publicUrl } } = supabaseClient
-            .storage
-            .from(STORAGE_BUCKET)
-            .getPublicUrl(fileName);
-          
+          const { data: { publicUrl } } = supabaseClient.storage.from(STORAGE_BUCKET).getPublicUrl(fileName);
           uploadedUrls.push(publicUrl);
         } catch (e) {
           console.error('Upload error:', e);
           throw new Error(`Failed to upload ${file.name}: ${e.message}`);
         }
       }
-      
       return uploadedUrls;
     }
 
-    // ─── LOAD ADMIN DATA ───
     async function loadAdminData() {
-      if (!supabaseConnected || !supabaseClient) {
-        showToast('⚠️ Supabase not connected');
-        return;
-      }
-
+      if (!supabaseConnected || !supabaseClient) { showToast('⚠️ Supabase not connected'); return; }
       try {
-        console.log('📦 Loading admin data...');
-
-        const { data: ordersData, error: ordersError } = await supabaseClient
-          .from('orders')
-          .select('*')
-          .order('created_at', { ascending: false });
-
+        const { data: ordersData, error: ordersError } = await supabaseClient.from('orders').select('*').order('created_at', { ascending: false });
         if (ordersError) throw ordersError;
         const orders = ordersData || [];
-        console.log('✅ All orders loaded:', orders.length);
 
-        const { data: productsData, error: productsError } = await supabaseClient
-          .from('products')
-          .select('*')
-          .order('created_at', { ascending: true });
-
+        const { data: productsData, error: productsError } = await supabaseClient.from('products').select('*').order('created_at', { ascending: true });
         if (productsError) throw productsError;
         const products = productsData || [];
 
         const totalOrders = orders.length;
-        const totalRevenue = orders.reduce((sum, o) => sum + (o.price || 0), 0);
         const customers = new Set(orders.map(o => o.customer_email || '')).size;
         const pending = orders.filter(o => o.status === 'processing' || o.status === 'demo_ready' || o.status === 'working').length;
+        const totalDemos = products.filter(p => p.demo_url && p.demo_url.trim() !== '').length;
 
         document.getElementById('totalOrders').textContent = totalOrders;
-        document.getElementById('totalRevenue').textContent = formatPKR(totalRevenue);
         document.getElementById('totalCustomers').textContent = customers || 0;
         document.getElementById('pendingOrders').textContent = pending;
+        document.getElementById('totalDemos').textContent = totalDemos;
 
         renderOrders(orders);
         renderProductsList(products);
-
       } catch (e) {
         console.error('❌ Error loading admin data:', e);
         showToast('⚠️ Error loading data: ' + e.message);
       }
     }
 
-    // ─── RENDER ORDERS WITH DETAILS ───
     function renderOrders(orders) {
       const orderList = document.getElementById('orderList');
       const orderCountBadge = document.getElementById('orderCountBadge');
-
       if (!orders || orders.length === 0) {
         orderList.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1rem 0;">No orders yet.</div>';
         orderCountBadge.textContent = '0';
         return;
       }
-
       orderCountBadge.textContent = orders.length;
       orderList.innerHTML = '';
-
       orders.slice(0, 20).forEach((order, index) => {
         const div = document.createElement('div');
         div.className = 'admin-order-item';
         const statusClass = order.status || 'processing';
         const isCustom = order.is_custom || false;
-        const paymentMethod = order.payment_method || 'jazzcash';
-        const isFree = order.price === 0;
         const paymentStatus = order.payment_status || 'pending';
+        const isDemo = order.is_demo || false;
 
         let paymentBadgeHtml = '';
-        if (isFree) {
-          paymentBadgeHtml = '<span class="payment-badge free">🎁 Free Offer</span>';
-        } else if (paymentStatus === 'paid') {
-          paymentBadgeHtml = `<span class="payment-badge paid">✅ Paid via ${paymentMethod === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}</span>`;
+        if (paymentStatus === 'paid') {
+          paymentBadgeHtml = `<span class="payment-badge paid">✅ Paid</span>`;
         } else {
-          paymentBadgeHtml = '<span class="payment-badge pending">⏳ Pending Payment</span>';
+          paymentBadgeHtml = '<span class="payment-badge pending">⏳ Pending</span>';
         }
 
-        // ─── PARSE CUSTOM DETAILS ───
         let customDetailsHtml = '';
         if (order.custom_details) {
           const details = order.custom_details;
-          
-          // Check if it contains structured data (Questions & Answers format)
           if (details.includes('=== Questions & Answers ===') || details.includes('Questions & Answers:')) {
             const sections = details.split(/\n===+|\n---+/);
             const mainDetails = sections[0] || details;
-            const qaSection = sections[1] || '';
-            
-            // Parse main details
             const lines = mainDetails.split('\n').filter(line => line.trim());
             let parsedLines = [];
             lines.forEach(line => {
@@ -602,77 +528,16 @@
                 parsedLines.push({ label: key.trim(), value: val.join(':').trim() });
               }
             });
-            
-            // Parse Q&A
-            const qaLines = qaSection.split('\n').filter(line => line.trim() && line.includes(':'));
-            const qaParsed = qaLines.map(line => {
-              const [key, ...val] = line.split(':');
-              return { label: key.trim(), value: val.join(':').trim() };
-            });
-            
-            // Build HTML
             let detailHtml = '<div class="order-custom-details">';
-            
-            // Main details
             parsedLines.forEach(item => {
               if (item.value && item.value !== 'None') {
-                detailHtml += `
-                  <div class="detail-row">
-                    <span class="label">${item.label}:</span>
-                    <span class="value">${item.value}</span>
-                  </div>
-                `;
-              }
-            });
-            
-            // Q&A section
-            if (qaParsed.length > 0) {
-              detailHtml += `<div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px dashed #dce3ec;">`;
-              detailHtml += `<div style="font-weight:600;color:#2563eb;margin-bottom:0.3rem;">📋 Questions & Answers</div>`;
-              qaParsed.forEach(item => {
-                if (item.value) {
-                  detailHtml += `
-                    <div class="detail-row">
-                      <span class="label">${item.label}:</span>
-                      <span class="value">${item.value}</span>
-                    </div>
-                  `;
-                }
-              });
-              detailHtml += `</div>`;
-            }
-            
-            detailHtml += '</div>';
-            customDetailsHtml = detailHtml;
-          } 
-          // Check if it's a simple custom details (pre-made order with notes)
-          else if (details.includes('Product:') || details.includes('Type:')) {
-            const lines = details.split('\n').filter(line => line.trim());
-            let detailHtml = '<div class="order-custom-details">';
-            lines.forEach(line => {
-              if (line.includes(':')) {
-                const [key, ...val] = line.split(':');
-                detailHtml += `
-                  <div class="detail-row">
-                    <span class="label">${key.trim()}:</span>
-                    <span class="value">${val.join(':').trim()}</span>
-                  </div>
-                `;
+                detailHtml += `<div class="detail-row"><span class="label">${item.label}:</span><span class="value">${item.value}</span></div>`;
               }
             });
             detailHtml += '</div>';
             customDetailsHtml = detailHtml;
-          }
-          // Raw text fallback
-          else {
-            customDetailsHtml = `
-              <div class="order-custom-details">
-                <div class="detail-row">
-                  <span class="label">Details:</span>
-                  <span class="value"><pre>${details}</pre></span>
-                </div>
-              </div>
-            `;
+          } else {
+            customDetailsHtml = `<div class="order-custom-details"><div class="detail-row"><span class="label">Details:</span><span class="value"><pre>${details}</pre></span></div></div>`;
           }
         }
 
@@ -682,6 +547,7 @@
               <span class="order-name">
                 ${order.name}
                 ${isCustom ? '<span class="custom-badge">🎨 Custom</span>' : ''}
+                ${isDemo ? '<span class="demo-badge">▶️ Demo</span>' : ''}
                 ${paymentBadgeHtml}
               </span>
               <span class="order-meta">
@@ -700,7 +566,6 @@
                 <option value="completed" ${statusClass === 'completed' ? 'selected' : ''}>✅ Completed</option>
                 <option value="delivered" ${statusClass === 'delivered' ? 'selected' : ''}>📦 Delivered</option>
               </select>
-              <span class="order-price">${formatPKR(order.price)}</span>
             </div>
           </div>
         `;
@@ -731,40 +596,34 @@
       });
     }
 
-    // ─── RENDER PRODUCTS ───
     function renderProductsList(products) {
       const productList = document.getElementById('productList');
       const productCountBadge = document.getElementById('productCountBadge');
-
       if (!products || products.length === 0) {
         productList.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1rem 0;">No products.</div>';
         productCountBadge.textContent = '0';
         return;
       }
-
       productCountBadge.textContent = products.length;
       productList.innerHTML = '';
-
       products.forEach((p, index) => {
         const div = document.createElement('div');
         div.className = 'admin-product-item';
-
         const firstImage = p.image_urls && p.image_urls.length > 0 ?
           `<img class="product-thumb" src="${p.image_urls[0]}" alt="${p.name}" />` :
           `<div class="product-thumb-placeholder"><i class="fas ${p.icon || 'fa-cube'}"></i></div>`;
-
         const categoryLabel = p.category_label || p.category || 'Custom';
-
+        const hasDemo = p.demo_url && p.demo_url.trim() !== '';
         div.innerHTML = `
           <div class="product-info">
             ${firstImage}
             <div>
               <span class="product-name">${p.name}</span>
               <span class="product-category">${categoryLabel}</span>
+              ${hasDemo ? '<span class="product-category" style="background:#f59e0b20;color:#d97706;">▶️ Demo</span>' : ''}
             </div>
           </div>
           <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-            <span class="product-price">${formatPKR(p.price)}</span>
             <span style="font-size:0.7rem;color:#94a3b8;">${p.image_urls ? p.image_urls.length : 0} 📸</span>
             <div class="product-actions">
               <button class="edit-product" data-index="${index}"><i class="fas fa-edit"></i></button>
@@ -785,9 +644,7 @@
               if (product.image_urls && product.image_urls.length > 0) {
                 for (const url of product.image_urls) {
                   const path = url.split('/').pop();
-                  if (path) {
-                    await supabaseClient.storage.from(STORAGE_BUCKET).remove([path]);
-                  }
+                  if (path) await supabaseClient.storage.from(STORAGE_BUCKET).remove([path]);
                 }
               }
               await supabaseClient.from('products').delete().eq('id', product.id);
@@ -804,15 +661,14 @@
           const idx = parseInt(this.dataset.index);
           const p = products[idx];
           if (!p) return;
-          const newPrice = prompt(`Edit price for "${p.name}" (PKR):`, p.price);
-          if (newPrice !== null && !isNaN(newPrice) && parseInt(newPrice) > 0) {
-            const updatedPrice = parseInt(newPrice);
-            supabaseClient.from('products').update({ price: updatedPrice, updated_at: new Date().toISOString() }).eq('id', p.id)
+          const newDemo = prompt(`Edit demo URL for "${p.name}":`, p.demo_url || '');
+          if (newDemo !== null) {
+            supabaseClient.from('products').update({ demo_url: newDemo.trim() || '', updated_at: new Date().toISOString() }).eq('id', p.id)
               .then(({ error }) => {
-                if (error) { showToast('⚠️ Error updating price'); } else {
-                  p.price = updatedPrice;
+                if (error) { showToast('⚠️ Error updating demo'); } else {
+                  p.demo_url = newDemo.trim() || '';
                   renderProductsList(products);
-                  showToast(`✅ Price updated to ${formatPKR(updatedPrice)}`);
+                  showToast(`✅ Demo URL updated`);
                 }
               });
           }
@@ -820,19 +676,17 @@
       });
     }
 
-    // ─── ADD PRODUCT ───
     document.getElementById('addProductBtn').addEventListener('click', async function() {
       const name = document.getElementById('newProductName').value.trim();
       const desc = document.getElementById('newProductDesc').value.trim();
-      const price = parseInt(document.getElementById('newProductPrice').value);
       const category = document.getElementById('newProductCategory').value;
       const featuresRaw = document.getElementById('newProductFeatures').value.trim();
+      const demoUrl = document.getElementById('newProductDemoUrl').value.trim();
 
-      if (!name || !desc || isNaN(price) || price <= 0) {
-        showToast('⚠️ Please fill in all fields correctly');
+      if (!name || !desc) {
+        showToast('⚠️ Please fill in name and description');
         return;
       }
-
       if (selectedImages.length === 0) {
         showToast('⚠️ Please upload at least one product image');
         return;
@@ -852,22 +706,20 @@
         };
 
         const { data, error } = await supabaseClient.from('products').insert([{
-          name, description: desc, price,
+          name, description: desc,
+          price: 0,
           category: category, category_label: categoryLabels[category] || 'Custom',
           features, image_urls: [],
+          demo_url: demoUrl || '',
           created_at: new Date().toISOString()
         }]).select();
 
         if (error) throw error;
-
         const product = data[0];
-        
+
         if (selectedImages.length > 0) {
           const uploadedUrls = await uploadImages(product.id);
-          const { error: updateError } = await supabaseClient
-            .from('products')
-            .update({ image_urls: uploadedUrls })
-            .eq('id', product.id);
+          const { error: updateError } = await supabaseClient.from('products').update({ image_urls: uploadedUrls }).eq('id', product.id);
           if (updateError) throw updateError;
         }
 
@@ -876,8 +728,8 @@
 
         document.getElementById('newProductName').value = '';
         document.getElementById('newProductDesc').value = '';
-        document.getElementById('newProductPrice').value = '';
         document.getElementById('newProductFeatures').value = '';
+        document.getElementById('newProductDemoUrl').value = '';
         selectedImages = [];
         imagePreviewGrid.innerHTML = '';
 
@@ -890,10 +742,8 @@
       this.innerHTML = '<i class="fas fa-plus"></i> Add Package';
     });
 
-    // ─── INIT ───
     function init() {
       initSupabase();
-
       const adminName = localStorage.getItem('pixlnex_admin_name');
       if (checkAdminSession()) {
         document.getElementById('authBtn').textContent = `👑 ${adminName || 'Admin'}`;
@@ -904,7 +754,6 @@
         document.getElementById('authBtn').textContent = '🔒 Admin';
         document.getElementById('authBtn').className = 'auth-btn';
       }
-
       const cart = JSON.parse(localStorage.getItem('pixlnex_cart') || '[]');
       document.getElementById('cartCounter').textContent = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
     }

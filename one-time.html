@@ -1,0 +1,534 @@
+<!-- one-time.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixlnex · One Time Use</title>
+  <link rel="icon" href="logo.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    body { background: #f0f4f8; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
+    .app { max-width: 1300px; margin: 0 auto; padding: 1.5rem 2rem; flex: 1; width: 100%; }
+
+    .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; padding: 0.75rem 0 1.5rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem; }
+    .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; text-decoration: none; }
+    .logo img { height: 35px; width: auto; }
+    .logo i { color: #2563eb; font-size: 2rem; }
+    .nav-links { display: flex; align-items: center; gap: 2rem; font-weight: 500; flex-wrap: wrap; }
+    .nav-links a { text-decoration: none; color: #1e293b; font-size: 1rem; transition: color 0.2s; cursor: pointer; }
+    .nav-links a:hover, .nav-links a.active { color: #2563eb; }
+    .auth-btn { background: #0f2b4b; color: white !important; padding: 0.5rem 1.2rem; border-radius: 40px; font-weight: 600; transition: 0.2s; }
+    .auth-btn:hover { background: #1a3a5e; }
+    .auth-btn.logout { background: #eef2f6; color: #1e293b !important; }
+    .auth-btn.logout:hover { background: #fee2e2; color: #b91c1c !important; }
+    .cart-icon { font-size: 1.4rem; background: #eef2f6; padding: 0.5rem 0.9rem; border-radius: 40px; display: flex; align-items: center; gap: 0.4rem; text-decoration: none; color: #0b1a2e; }
+    .cart-count { background: #2563eb; color: white; font-size: 0.75rem; font-weight: 600; padding: 0.15rem 0.55rem; border-radius: 30px; margin-left: 0.2rem; }
+
+    .page-header { background: linear-gradient(145deg, #7c3aed, #6d28d9); padding: 2.5rem 3rem; border-radius: 2.5rem; margin-bottom: 2.8rem; color: white; }
+    .page-header h1 { font-size: 2.8rem; font-weight: 700; }
+    .page-header p { opacity: 0.9; font-size: 1.1rem; max-width: 600px; margin-top: 0.3rem; }
+    .page-header .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 0.2rem 1rem; border-radius: 40px; font-size: 0.8rem; margin-top: 0.5rem; border: 1px solid rgba(255,255,255,0.15); }
+
+    .one-time-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+    .one-time-card { background: white; border-radius: 2rem; padding: 2rem; border: 1px solid #e9eef3; transition: all 0.3s ease; cursor: pointer; }
+    .one-time-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px -8px rgba(0,20,40,0.1); }
+    .one-time-card .icon { font-size: 3rem; margin-bottom: 1rem; }
+    .one-time-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .one-time-card p { color: #64748b; font-size: 0.95rem; }
+    .one-time-card .price-tag { display: inline-block; background: #f1f6fe; color: #2563eb; padding: 0.2rem 1rem; border-radius: 40px; font-weight: 600; font-size: 0.85rem; margin-top: 0.8rem; border: 1px solid #2563eb20; }
+    .one-time-card .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
+    .one-time-card .card-footer .btn-use { background: #0f2b4b; color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+    .one-time-card .card-footer .btn-use:hover { background: #1a3a5e; transform: scale(1.02); }
+    .one-time-card .card-footer .share-link { font-size: 0.8rem; color: #94a3b8; cursor: pointer; transition: 0.2s; }
+    .one-time-card .card-footer .share-link:hover { color: #2563eb; }
+
+    .featured-badge { position: absolute; top: 12px; right: 12px; background: #f59e0b; color: white; font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.8rem; border-radius: 30px; }
+
+    /* Modal for creating one-time use */
+    .create-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 99998; align-items: center; justify-content: center; padding: 1.5rem; }
+    .create-modal.active { display: flex; }
+    .create-modal .modal-content { background: white; border-radius: 2rem; max-width: 560px; width: 100%; padding: 2.5rem; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
+    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .create-modal .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .create-modal .modal-header h2 { font-size: 1.5rem; font-weight: 700; }
+    .create-modal .modal-header .close-modal { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #94a3b8; transition: 0.2s; padding: 0.25rem; min-width: 44px; min-height: 44px; }
+    .create-modal .modal-header .close-modal:hover { color: #0b1a2e; }
+    .create-modal .form-group { margin-bottom: 1.2rem; }
+    .create-modal .form-group label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: #1e293b; }
+    .create-modal .form-group input, .create-modal .form-group select, .create-modal .form-group textarea { width: 100%; padding: 0.7rem 1.2rem; border-radius: 60px; border: 1px solid #e2e8f0; font-size: 0.95rem; background: #f8fafc; transition: 0.2s; }
+    .create-modal .form-group input:focus, .create-modal .form-group select:focus, .create-modal .form-group textarea:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: transparent; background: white; }
+    .create-modal .form-group textarea { border-radius: 1rem; resize: vertical; min-height: 80px; }
+    .create-modal .submit-btn { width: 100%; padding: 0.85rem; border-radius: 60px; border: none; background: #0f2b4b; color: white; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.7rem; margin-top: 0.5rem; }
+    .create-modal .submit-btn:hover { background: #1a3a5e; transform: scale(1.01); }
+    .create-modal .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* Preview Modal */
+    .preview-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 99999; align-items: center; justify-content: center; padding: 2rem; }
+    .preview-modal.active { display: flex; }
+    .preview-modal .preview-content { position: relative; width: 100%; max-width: 900px; height: 80vh; background: white; border-radius: 1.5rem; overflow: hidden; }
+    .preview-modal .preview-content iframe { width: 100%; height: 100%; border: none; }
+    .preview-modal .preview-close { position: absolute; top: 16px; right: 20px; color: white; font-size: 2rem; cursor: pointer; background: rgba(0,0,0,0.7); border: none; width: 48px; height: 48px; border-radius: 50%; z-index: 10; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+    .preview-modal .preview-close:hover { background: rgba(0,0,0,0.9); transform: scale(1.1); }
+    .preview-modal .preview-label { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); color: white; background: rgba(0,0,0,0.6); padding: 0.3rem 1.2rem; border-radius: 30px; font-size: 0.8rem; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); z-index: 10; }
+
+    .footer { margin-top: 4rem; border-top: 1px solid #e2e8f0; padding: 2rem 0 1rem 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: #475569; font-size: 0.9rem; }
+    .footer i { color: #2563eb; margin: 0 0.2rem; }
+
+    .toast { position: fixed; bottom: 2rem; right: 2rem; background: #0f2b4b; color: white; padding: 1rem 1.8rem; border-radius: 60px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); font-weight: 600; display: flex; align-items: center; gap: 0.7rem; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 100000; max-width: 90%; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast i { color: #22c55e; font-size: 1.2rem; }
+
+    .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 0.6s ease-in-out infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 700px) {
+      .app { padding: 1rem; }
+      .navbar { flex-direction: column; align-items: stretch; }
+      .nav-links { justify-content: space-between; }
+      .page-header { padding: 1.8rem; }
+      .page-header h1 { font-size: 2rem; }
+      .one-time-grid { grid-template-columns: 1fr; }
+      .preview-modal .preview-content { height: 60vh; }
+      .create-modal .modal-content { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <header class="navbar">
+    <a href="index.html" class="logo"><img src="logo.png" alt="Pixlnex" /><span>Pixlnex</span></a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="shop.html">Webs</a>
+      <a href="one-time.html" class="active">✨ One Time</a>
+      <a href="#" id="navAbout">About</a>
+      <a href="profile.html" id="authBtn" class="auth-btn"><i class="fas fa-user"></i> Login</a>
+      <a href="shop.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCounter">0</span></a>
+    </nav>
+  </header>
+
+  <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Done!</span></div>
+
+  <div class="page-header">
+    <div>
+      <span class="badge">✨ One Time Use</span>
+      <h1>Pranks · Proposals · Wishes</h1>
+      <p>Create a special one-time use website to surprise someone. Send a prank, propose, or wish them in a unique way!</p>
+    </div>
+    <div style="margin-top:1rem;">
+      <button class="btn-primary" onclick="openCreateModal()" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);color:white;padding:0.7rem 1.8rem;border-radius:60px;font-weight:600;cursor:pointer;transition:0.2s;font-size:1rem;">+ Create New</button>
+    </div>
+  </div>
+
+  <div class="one-time-grid" id="oneTimeGrid">
+    <!-- Cards will be rendered here -->
+  </div>
+
+  <!-- Create Modal -->
+  <div class="create-modal" id="createModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>✨ Create One-Time Use</h2>
+        <button class="close-modal" onclick="closeCreateModal()">&times;</button>
+      </div>
+      <form id="createForm">
+        <div class="form-group">
+          <label for="otType">Type</label>
+          <select id="otType" required>
+            <option value="prank">😂 Prank</option>
+            <option value="proposal">💍 Proposal</option>
+            <option value="birthday">🎂 Birthday Wish</option>
+            <option value="custom">🎨 Custom</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="otTitle">Title</label>
+          <input type="text" id="otTitle" placeholder="e.g., Surprise Prank" required />
+        </div>
+        <div class="form-group">
+          <label for="otMessage">Message</label>
+          <textarea id="otMessage" placeholder="Write your message here..." required style="min-height:100px;"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="otRecipient">Recipient Name</label>
+          <input type="text" id="otRecipient" placeholder="e.g., John" required />
+        </div>
+        <div class="form-group">
+          <label for="otSender">Your Name</label>
+          <input type="text" id="otSender" placeholder="e.g., Jane" required />
+        </div>
+        <div class="form-group">
+          <label for="otColor">Theme Color</label>
+          <select id="otColor">
+            <option value="#7c3aed">Purple</option>
+            <option value="#2563eb">Blue</option>
+            <option value="#22c55e">Green</option>
+            <option value="#f59e0b">Orange</option>
+            <option value="#ef4444">Red</option>
+            <option value="#ec4899">Pink</option>
+          </select>
+        </div>
+        <button type="submit" class="submit-btn" id="createSubmitBtn"><i class="fas fa-wand-magic-sparkles"></i> Create & Get Link</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Preview Modal -->
+  <div class="preview-modal" id="previewModal">
+    <div class="preview-content">
+      <button class="preview-close" onclick="closePreview()">&times;</button>
+      <div class="preview-label">✨ Preview</div>
+      <iframe id="previewIframe" src="" allow="fullscreen"></iframe>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span>© 2026 Pixlnex — <i class="fas fa-spider"></i> one person · one website at a time</span>
+    <span><i class="fab fa-twitter"></i> <i class="fab fa-github"></i> <i class="fab fa-linkedin"></i></span>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ============================================
+// PIXLNEX - ONE TIME USE
+// ============================================
+
+const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
+
+let supabaseClient = null;
+let supabaseConnected = false;
+
+function initSupabase() {
+  try {
+    if (typeof supabase !== 'undefined') {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      supabaseConnected = true;
+      console.log('✅ Supabase connected');
+      return true;
+    }
+    return false;
+  } catch(e) {
+    console.error('Supabase error:', e);
+    return false;
+  }
+}
+
+async function getCurrentUser() {
+  if (!supabaseConnected || !supabaseClient) return null;
+  try {
+    const { data: sessionData } = await supabaseClient.auth.getSession();
+    if (!sessionData.session) {
+      const storedUser = localStorage.getItem('pixlnex_user_secure');
+      if (storedUser) {
+        try {
+          const userData = JSON.parse(storedUser);
+          if (userData._sig === btoa(userData.id + userData.email + 'pixlnex_secret_salt')) {
+            return {
+              id: userData.id,
+              email: userData.email,
+              user_metadata: { full_name: userData.name },
+              created_at: userData.created_at
+            };
+          }
+        } catch(e) {}
+      }
+      return null;
+    }
+    const { data, error } = await supabaseClient.auth.getUser();
+    if (error) throw error;
+    if (data.user) {
+      const userData = {
+        id: data.user.id,
+        email: data.user.email,
+        name: data.user.user_metadata?.full_name || data.user.email?.split('@')[0],
+        created_at: data.user.created_at,
+        _sig: btoa(data.user.id + data.user.email + 'pixlnex_secret_salt')
+      };
+      localStorage.setItem('pixlnex_user_secure', JSON.stringify(userData));
+    }
+    return data.user;
+  } catch(e) { return null; }
+}
+
+async function getOneTimeItems() {
+  if (!supabaseConnected || !supabaseClient) return [];
+  try {
+    const { data, error } = await supabaseClient.from('one_time_items').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
+  } catch(e) { return []; }
+}
+
+async function createOneTimeItem(data) {
+  if (!supabaseConnected || !supabaseClient) throw new Error('Supabase not connected');
+  const { data: result, error } = await supabaseClient.from('one_time_items').insert([{
+    title: data.title,
+    type: data.type,
+    message: data.message,
+    recipient: data.recipient,
+    sender: data.sender,
+    color: data.color || '#7c3aed',
+    slug: data.slug,
+    views: 0,
+    user_id: data.user_id,
+    created_at: new Date().toISOString()
+  }]).select();
+  if (error) throw error;
+  return result ? result[0] : null;
+}
+
+function waitForSupabase() {
+  return new Promise((resolve) => {
+    let attempts = 0;
+    const check = () => {
+      if (supabaseConnected && supabaseClient) { resolve(true); return; }
+      attempts++;
+      if (attempts > 30) { resolve(false); return; }
+      setTimeout(check, 300);
+    };
+    if (!supabaseConnected) { initSupabase(); }
+    check();
+  });
+}
+
+// ─── TOAST ───
+let toastTimer;
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  const toastMsg = document.getElementById('toastMsg');
+  toastMsg.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ─── GENERATE SLUG ───
+function generateSlug() {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < 8; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+
+// ─── MODALS ───
+function openCreateModal() {
+  document.getElementById('createModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCreateModal() {
+  document.getElementById('createModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function openPreview(url) {
+  const modal = document.getElementById('previewModal');
+  const iframe = document.getElementById('previewIframe');
+  iframe.src = url;
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePreview() {
+  const modal = document.getElementById('previewModal');
+  const iframe = document.getElementById('previewIframe');
+  iframe.src = '';
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// ─── COPY TO CLIPBOARD ───
+function copyToClipboard(text) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('✅ Link copied to clipboard!');
+    }).catch(() => {
+      fallbackCopy(text);
+    });
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    showToast('✅ Link copied to clipboard!');
+  } catch(e) {
+    showToast('⚠️ Could not copy. Please copy manually.');
+  }
+  document.body.removeChild(textarea);
+}
+
+// ─── RENDER ONE TIME ITEMS ───
+function renderOneTimeItems(items) {
+  const grid = document.getElementById('oneTimeGrid');
+  if (!items || items.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:3rem;color:#94a3b8;background:white;border-radius:2rem;border:1px dashed #e2e8f0;">
+        <i class="fas fa-wand-magic-sparkles" style="font-size:3rem;color:#7c3aed;margin-bottom:1rem;display:block;"></i>
+        <p style="font-size:1.1rem;">No one-time use creations yet.</p>
+        <p style="font-size:0.9rem;margin-top:0.3rem;">Create your first prank, proposal, or wish!</p>
+        <button onclick="openCreateModal()" style="margin-top:1rem;background:#7c3aed;color:white;border:none;padding:0.6rem 1.8rem;border-radius:40px;font-weight:600;cursor:pointer;">✨ Create One</button>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = '';
+  const typeIcons = {
+    'prank': '😂',
+    'proposal': '💍',
+    'birthday': '🎂',
+    'custom': '🎨'
+  };
+  const typeLabels = {
+    'prank': 'Prank',
+    'proposal': 'Proposal',
+    'birthday': 'Birthday Wish',
+    'custom': 'Custom'
+  };
+
+  items.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'one-time-card';
+    const icon = typeIcons[item.type] || '🎨';
+    const typeLabel = typeLabels[item.type] || 'Custom';
+    const fullUrl = `${window.location.origin}/view.html?slug=${item.slug}`;
+
+    card.innerHTML = `
+      <div style="position:relative;">
+        <div class="icon">${icon}</div>
+        <h3>${item.title}</h3>
+        <p>To: ${item.recipient} · From: ${item.sender}</p>
+        <span class="price-tag">${typeLabel} · ${item.views || 0} views</span>
+        <div class="card-footer">
+          <button class="btn-use" onclick="openPreview('${fullUrl}')"><i class="fas fa-eye"></i> Preview</button>
+          <span class="share-link" onclick="copyToClipboard('${fullUrl}')"><i class="fas fa-link"></i> Copy Link</span>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ─── CREATE FORM ───
+document.getElementById('createForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const user = await getCurrentUser();
+  if (!user) {
+    showToast('🔐 Please login first');
+    setTimeout(() => window.location.href = 'login.html', 800);
+    return;
+  }
+
+  const submitBtn = document.getElementById('createSubmitBtn');
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="loading-spinner"></span> Creating...';
+
+  try {
+    const type = document.getElementById('otType').value;
+    const title = document.getElementById('otTitle').value.trim();
+    const message = document.getElementById('otMessage').value.trim();
+    const recipient = document.getElementById('otRecipient').value.trim();
+    const sender = document.getElementById('otSender').value.trim();
+    const color = document.getElementById('otColor').value;
+
+    if (!title || !message || !recipient || !sender) {
+      showToast('⚠️ Please fill in all fields');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Create & Get Link';
+      return;
+    }
+
+    const slug = generateSlug();
+
+    const result = await createOneTimeItem({
+      type,
+      title,
+      message,
+      recipient,
+      sender,
+      color,
+      slug,
+      user_id: user.id
+    });
+
+    if (result) {
+      const fullUrl = `${window.location.origin}/view.html?slug=${slug}`;
+      showToast('✅ Created successfully!');
+      closeCreateModal();
+      this.reset();
+      
+      // Refresh list
+      const items = await getOneTimeItems();
+      renderOneTimeItems(items);
+      
+      // Copy link automatically
+      setTimeout(() => copyToClipboard(fullUrl), 500);
+    } else {
+      showToast('⚠️ Failed to create. Please try again.');
+    }
+  } catch(e) {
+    console.error('Create error:', e);
+    showToast('⚠️ Error: ' + e.message);
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Create & Get Link';
+});
+
+// ─── AUTH UI ───
+async function updateAuthUI() {
+  const user = await getCurrentUser();
+  const authBtn = document.getElementById('authBtn');
+  if (user) {
+    const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+    authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
+    authBtn.className = 'auth-btn logout';
+    authBtn.href = 'profile.html';
+    authBtn.onclick = null;
+  } else {
+    authBtn.innerHTML = '<i class="fas fa-user"></i> Login';
+    authBtn.className = 'auth-btn';
+    authBtn.href = 'login.html';
+    authBtn.onclick = null;
+  }
+}
+
+// ─── INIT ───
+(async function() {
+  console.log('🚀 One Time page loading...');
+  
+  await waitForSupabase();
+  await updateAuthUI();
+
+  const items = await getOneTimeItems();
+  renderOneTimeItems(items);
+
+  // Cart counter
+  const cart = JSON.parse(localStorage.getItem('pixlnex_cart') || '[]');
+  document.getElementById('cartCounter').textContent = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+
+  console.log('✅ One Time page initialized!');
+})();
+
+document.getElementById('navAbout').addEventListener('click', function(e) {
+  e.preventDefault();
+  alert('📖 About One Time Use\n\nCreate special one-time use websites for:\n\n😂 Pranks - Surprise someone with a funny prank page\n💍 Proposals - Create a beautiful proposal page\n🎂 Birthday Wishes - Send a special birthday message\n🎨 Custom - Create anything you want!\n\nEach link works only once and creates a memorable experience.');
+});
+</script>
+</body>
+</html>
