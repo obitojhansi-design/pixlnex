@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Pixlnex · Admin Panel</title>
   <link rel="icon" href="logo.png" type="image/png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -72,7 +74,6 @@
     .payment-badge.paid { background: #22c55e20; color: #166534; border: 1px solid #22c55e30; }
     .payment-badge.pending { background: #fef9c3; color: #854d0e; border: 1px solid #fcd34d; }
     .custom-badge { font-size: 0.65rem; background: #7c3aed10; color: #7c3aed; padding: 0.15rem 0.5rem; border-radius: 30px; border: 1px solid #7c3aed20; display: inline-block; }
-    .demo-badge { font-size: 0.65rem; background: #f59e0b10; color: #d97706; padding: 0.15rem 0.5rem; border-radius: 30px; border: 1px solid #f59e0b20; display: inline-block; }
 
     .admin-product-item { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
     .admin-product-item:last-child { border-bottom: none; }
@@ -236,7 +237,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   // ============================================
-  // PIXLNEX - ADMIN PANEL
+  // PIXLNEX - ADMIN PANEL (FORCE FRESH DATA)
   // ============================================
 
   const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
@@ -304,7 +305,8 @@
     document.getElementById('loginOverlay').classList.remove('hidden');
     document.getElementById('authBtn').textContent = '🔒 Admin';
     document.getElementById('authBtn').className = 'auth-btn';
-    location.reload();
+    // Force reload to clear any cached data
+    location.reload(true);
   }
 
   document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
@@ -424,16 +426,38 @@
     return uploadedUrls;
   }
 
+  // ─── FORCE FRESH DATA - NO CACHE ───
   async function loadAdminData() {
-    if (!supabaseConnected || !supabaseClient) { showToast('⚠️ Supabase not connected'); return; }
+    if (!supabaseConnected || !supabaseClient) { 
+      showToast('⚠️ Supabase not connected'); 
+      return; 
+    }
+    
     try {
-      const { data: ordersData, error: ordersError } = await supabaseClient.from('orders').select('*').order('created_at', { ascending: false });
+      // Clear any cached data in localStorage
+      localStorage.removeItem('pixlnex_products_cache');
+      
+      console.log('🔄 Loading fresh data from Supabase...');
+      
+      // Fetch orders with no cache
+      const { data: ordersData, error: ordersError } = await supabaseClient
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
       if (ordersError) throw ordersError;
       const orders = ordersData || [];
+      console.log('📦 Orders loaded:', orders.length);
 
-      const { data: productsData, error: productsError } = await supabaseClient.from('products').select('*').order('created_at', { ascending: true });
+      // Fetch products with no cache
+      const { data: productsData, error: productsError } = await supabaseClient
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: true });
+      
       if (productsError) throw productsError;
       const products = productsData || [];
+      console.log('📦 Products loaded:', products.length);
 
       const totalOrders = orders.length;
       const customers = new Set(orders.map(o => o.customer_email || '')).size;
@@ -447,6 +471,8 @@
 
       renderOrders(orders);
       renderProductsList(products);
+      
+      console.log('✅ Admin data loaded successfully');
     } catch (e) {
       console.error('❌ Error loading admin data:', e);
       showToast('⚠️ Error loading data: ' + e.message);
@@ -538,13 +564,18 @@
   function renderProductsList(products) {
     const productList = document.getElementById('productList');
     const productCountBadge = document.getElementById('productCountBadge');
+    
+    console.log('🎯 Rendering products. Count:', products.length);
+    
     if (!products || products.length === 0) {
-      productList.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1rem 0;">No products.</div>';
+      productList.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1rem 0;">📦 No products found. Add your first product!</div>';
       productCountBadge.textContent = '0';
       return;
     }
+    
     productCountBadge.textContent = products.length;
     productList.innerHTML = '';
+    
     products.forEach((p, index) => {
       const div = document.createElement('div');
       div.className = 'admin-product-item';
@@ -553,6 +584,7 @@
         `<div class="product-thumb-placeholder"><i class="fas ${p.icon || 'fa-cube'}"></i></div>`;
       const categoryLabel = p.category_label || p.category || 'Custom';
       const hasDemo = p.demo_url && p.demo_url.trim() !== '';
+      
       div.innerHTML = `
         <div class="product-info">
           ${firstImage}
@@ -573,6 +605,7 @@
       productList.appendChild(div);
     });
 
+    // Delete product handler
     document.querySelectorAll('.delete-product').forEach(btn => {
       btn.addEventListener('click', async function() {
         const idx = parseInt(this.dataset.index);
@@ -595,45 +628,31 @@
       });
     });
 
-    // FIXED: Edit product handler - simpler and more reliable
+    // Edit product handler - NOW WITH PROPER demo_url support
     document.querySelectorAll('.edit-product').forEach(btn => {
       btn.addEventListener('click', function() {
         const idx = parseInt(this.dataset.index);
         const p = products[idx];
         if (!p) return;
         
-        // Show prompt with current demo URL
         const currentDemo = p.demo_url || '';
         const newDemo = prompt(`Enter demo URL for "${p.name}":`, currentDemo);
         
-        if (newDemo === null) return; // User cancelled
+        if (newDemo === null) return;
         
         const demoValue = newDemo.trim();
         
-        // Create update object - only include fields we know exist
-        const updateData = {
+        // Update with proper column name
+        supabaseClient.from('products').update({ 
+          demo_url: demoValue,
           updated_at: new Date().toISOString()
-        };
-        
-        // Add demo_url only if the column exists in the product object
-        // If the product object has demo_url property (even if empty), we can update it
-        if ('demo_url' in p) {
-          updateData.demo_url = demoValue;
-        } else {
-          // If the product doesn't have demo_url property, try to add it anyway
-          // Supabase will handle it if the column exists
-          updateData.demo_url = demoValue;
-        }
-        
-        supabaseClient.from('products').update(updateData).eq('id', p.id)
+        }).eq('id', p.id)
           .then(({ data, error }) => {
             if (error) {
               console.error('Update error:', error);
-              // Show the actual error message
               showToast('⚠️ Error: ' + error.message);
               return;
             }
-            // Update the local product data
             p.demo_url = demoValue;
             renderProductsList(products);
             showToast(`✅ Demo URL updated for "${p.name}"`);
@@ -686,7 +705,7 @@
         created_at: new Date().toISOString()
       };
 
-      // Only add demo_url if it has a value
+      // Add demo_url if provided
       if (demoUrl) {
         productData.demo_url = demoUrl;
       }
@@ -697,8 +716,7 @@
 
       if (selectedImages.length > 0) {
         const uploadedUrls = await uploadImages(product.id);
-        const { error: updateError } = await supabaseClient.from('products').update({ image_urls: uploadedUrls }).eq('id', product.id);
-        if (updateError) throw updateError;
+        await supabaseClient.from('products').update({ image_urls: uploadedUrls }).eq('id', product.id);
       }
 
       const { data: productsData } = await supabaseClient.from('products').select('*').order('created_at', { ascending: true });
