@@ -895,11 +895,12 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
 
   // ─── CHECK IF DEMO URL IS VALID ───
   function hasValidDemo(product) {
-    return product.demo_url && 
-           product.demo_url.trim() !== '' && 
-           product.demo_url !== 'null' && 
-           product.demo_url !== 'undefined' &&
-           product.demo_url.startsWith('http');
+    // Check if demo_url exists and is a valid URL
+    if (!product.demo_url) return false;
+    const url = product.demo_url.trim();
+    if (url === '' || url === 'null' || url === 'undefined') return false;
+    // Must start with http:// or https://
+    return url.startsWith('http://') || url.startsWith('https://');
   }
 
   async function renderProducts() {
@@ -1074,8 +1075,14 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
   try {
     products = await getProducts();
     console.log('✅ Products loaded:', products.length);
-    console.log('📊 Products with demo URLs:', products.filter(p => p.demo_url && p.demo_url.trim() !== '').length);
+    // Log products with demo URLs for debugging
+    const demoProducts = products.filter(p => p.demo_url && p.demo_url.trim() !== '');
+    console.log('📊 Products with demo URLs:', demoProducts.length);
+    if (demoProducts.length > 0) {
+      console.log('📊 Demo URLs:', demoProducts.map(p => ({ name: p.name, url: p.demo_url })));
+    }
   } catch(e) {
+    console.error('Error loading products:', e);
     showToast('⚠️ Error loading products');
     return;
   }
