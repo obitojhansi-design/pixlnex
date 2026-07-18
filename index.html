@@ -50,11 +50,24 @@
     .product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -8px rgba(0,20,40,0.1); border-color: #d9e2ef; }
 
     .product-img { position: relative; background: #f1f6fc; border-radius: 1.5rem; aspect-ratio: 1/1; overflow: hidden; margin-bottom: 1.2rem; cursor: pointer; }
-    .product-img img { width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; }
+    .product-img .carousel-container { width: 100%; height: 100%; position: relative; overflow: hidden; }
+    .product-img .carousel-track { display: flex; transition: transform 0.5s ease; height: 100%; }
+    .product-img .carousel-track img { width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; }
+    .product-img .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 0.9rem; z-index: 10; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+    .product-img .carousel-btn:hover { background: rgba(0,0,0,0.8); }
+    .product-img .carousel-btn.prev { left: 8px; }
+    .product-img .carousel-btn.next { right: 8px; }
+    .product-img .carousel-dots { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 10; }
+    .product-img .carousel-dots .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; transition: 0.2s; border: none; }
+    .product-img .carousel-dots .dot.active { background: white; transform: scale(1.2); }
+    .product-img .image-count-badge { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); color: white; font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 30px; z-index: 10; }
     .product-img .fallback-icon { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 4rem; color: #1e3a5f; flex-shrink: 0; background: #f1f6fc; }
 
     .product-card h3 { font-weight: 600; font-size: 1.25rem; margin-bottom: 0.2rem; }
     .product-desc { color: #475569; font-size: 0.9rem; margin: 0.25rem 0 0.7rem 0; flex: 1; }
+    .product-features { font-size: 0.85rem; color: #475569; margin: 0.5rem 0 0.8rem 0; padding-left: 1.2rem; }
+    .product-features li { list-style: none; margin-bottom: 0.2rem; }
+    .product-features li i { color: #22c55e; margin-right: 0.4rem; font-size: 0.7rem; }
     .category-badge { font-size: 0.75rem; color: #2563eb; background: #2563eb10; padding: 0.2rem 0.8rem; border-radius: 30px; display: inline-block; margin-bottom: 0.5rem; border: 1px solid #2563eb20; }
     .demo-badge { font-size: 0.65rem; background: #f59e0b10; color: #d97706; padding: 0.15rem 0.6rem; border-radius: 30px; border: 1px solid #f59e0b20; display: inline-block; margin-left: 0.3rem; }
     .product-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 0.6rem; flex-wrap: wrap; gap: 0.5rem; }
@@ -84,7 +97,8 @@
     .cart-items { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; max-height: 220px; overflow-y: auto; padding-right: 0.5rem; }
     .cart-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 0.7rem 1.2rem; border-radius: 60px; border: 1px solid #eef2f6; }
     .cart-item span:first-child { font-weight: 500; }
-    .cart-item .remove-item { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1.1rem; padding: 0.25rem; min-width: 44px; min-height: 44px; }
+    .cart-item .item-price { font-weight: 600; color: #0f2b4b; }
+    .cart-item .remove-item { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1.1rem; transition: 0.15s; padding: 0.25rem; min-width: 44px; min-height: 44px; }
     .cart-item .remove-item:hover { color: #b91c1c; }
     .cart-total { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.3rem; padding-top: 1rem; border-top: 2px dashed #dce3ec; }
     .empty-cart-msg { color: #64748b; font-style: italic; padding: 0.3rem 0 0.8rem 0; }
@@ -94,7 +108,6 @@
 
     .footer { margin-top: 4rem; border-top: 1px solid #e2e8f0; padding: 2rem 0 1rem 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: #475569; font-size: 0.9rem; }
     .footer i { color: #2563eb; margin: 0 0.2rem; }
-
     .toast { position: fixed; bottom: 90px; right: 24px; background: #0f2b4b; color: white; padding: 1rem 1.8rem; border-radius: 60px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); font-weight: 600; display: flex; align-items: center; gap: 0.7rem; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 10000; max-width: 90%; }
     .toast.show { transform: translateY(0); opacity: 1; }
     .toast i { color: #22c55e; font-size: 1.2rem; }
@@ -125,6 +138,12 @@
 
     .page-section.hidden { display: none; }
 
+    /* Empty state styling */
+    .empty-state { text-align: center; padding: 3rem 2rem; color: #94a3b8; grid-column: 1 / -1; }
+    .empty-state i { font-size: 3.5rem; color: #2563eb; margin-bottom: 1rem; display: block; opacity: 0.5; }
+    .empty-state h3 { font-size: 1.3rem; color: #0b1a2e; margin-bottom: 0.5rem; }
+    .empty-state p { font-size: 0.95rem; max-width: 400px; margin: 0 auto; }
+
     @media (max-width:700px) {
       .app { padding: 1rem; }
       .hero { padding: 1.8rem; flex-direction: column; align-items: flex-start; }
@@ -138,6 +157,7 @@
       .product-bottom { flex-direction: column; align-items: stretch; }
       .btn-group { justify-content: stretch; }
       .btn-add, .btn-order, .btn-demo { flex: 1; justify-content: center; }
+      .product-img .carousel-btn { width: 28px; height: 28px; font-size: 0.7rem; }
       .payment-modal .modal-content { padding: 1.5rem; }
       .payment-modal .payment-actions { flex-direction: column; }
       .payment-modal .payment-actions .btn-pay { width: 100%; }
@@ -238,6 +258,7 @@
             <option value="30000">₨ 30,000+</option>
           </select>
         </div>
+        <div class="full" id="dynamicQuestions"><div id="questionContainer"></div></div>
         <div class="full"><label for="customDetails">Additional Details</label><textarea id="customDetails" placeholder="Any other details you want to share..." style="min-height:60px;"></textarea></div>
         <div class="full"><button type="submit" class="submit-order-btn"><i class="fas fa-paper-plane"></i> Send Custom Order</button></div>
       </div>
@@ -263,7 +284,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ============================================
-// PIXLNEX - NO HARDCODED DATA
+// PIXLNEX - INDEX (NO HARDCODED DATA)
 // ============================================
 
 const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
@@ -535,17 +556,18 @@ function closeDemo() {
       return `<div class="fallback-icon"><i class="fas fa-cube"></i></div>`;
     }
     const hasMultiple = images.length > 1;
-    let html = `<div class="carousel-container">`;
-    html += `<div class="carousel-track">`;
+    const containerId = `carousel-${productId || Date.now()}`;
+    let html = `<div class="carousel-container" id="${containerId}" data-images='${JSON.stringify(images)}'>
+      <div class="carousel-track" id="${containerId}-track">`;
     images.forEach((img, idx) => {
-      html += `<img src="${img}" alt="${productName} - ${idx + 1}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'fallback-icon\\'><i class=\\'fas fa-cube\\'></i></div>';">`;
+      html += `<img src="${img}" alt="${productName} - ${idx + 1}" loading="lazy" data-index="${idx}" onerror="this.parentElement.innerHTML='<div class=\\'fallback-icon\\'><i class=\\'fas fa-cube\\'></i></div>';">`;
     });
     html += `</div>`;
     if (hasMultiple) {
       html += `
-        <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
-        <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
-        <div class="carousel-dots"></div>
+        <button class="carousel-btn prev" onclick="window.changeSlide('${containerId}', -1)"><i class="fas fa-chevron-left"></i></button>
+        <button class="carousel-btn next" onclick="window.changeSlide('${containerId}', 1)"><i class="fas fa-chevron-right"></i></button>
+        <div class="carousel-dots" id="${containerId}-dots"></div>
         <div class="image-count-badge">${images.length} 📸</div>
       `;
     }
@@ -553,52 +575,54 @@ function closeDemo() {
     return html;
   }
 
-  function initCarousel(container) {
-    const track = container.querySelector('.carousel-track');
+  window.changeSlide = function(containerId, direction) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const track = document.getElementById(`${containerId}-track`);
+    const dots = document.getElementById(`${containerId}-dots`);
+    if (!track) return;
     const images = track.querySelectorAll('img');
     if (images.length <= 1) return;
-    
-    const prevBtn = container.querySelector('.prev');
-    const nextBtn = container.querySelector('.next');
-    const dots = container.querySelector('.carousel-dots');
-    let currentIndex = 0;
-    
-    // Create dots
-    dots.innerHTML = '';
-    for (let i = 0; i < images.length; i++) {
-      const dot = document.createElement('button');
-      dot.className = `dot ${i === 0 ? 'active' : ''}`;
-      dot.addEventListener('click', () => goTo(i));
-      dots.appendChild(dot);
-    }
-    
-    function goTo(index) {
-      currentIndex = index;
-      track.style.transform = `translateX(-${currentIndex * 100}%)`;
-      dots.querySelectorAll('.dot').forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentIndex);
+    const currentIndex = parseInt(container.dataset.currentIndex || '0');
+    let newIndex = currentIndex + direction;
+    if (newIndex < 0) newIndex = images.length - 1;
+    if (newIndex >= images.length) newIndex = 0;
+    container.dataset.currentIndex = newIndex;
+    track.style.transform = `translateX(-${newIndex * 100}%)`;
+    if (dots) {
+      const dotElements = dots.querySelectorAll('.dot');
+      dotElements.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === newIndex);
       });
     }
-    
-    prevBtn.addEventListener('click', () => {
-      goTo(currentIndex === 0 ? images.length - 1 : currentIndex - 1);
-    });
-    
-    nextBtn.addEventListener('click', () => {
-      goTo(currentIndex === images.length - 1 ? 0 : currentIndex + 1);
-    });
-    
-    // Auto slide
-    let interval = setInterval(() => {
-      goTo(currentIndex === images.length - 1 ? 0 : currentIndex + 1);
+  };
+
+  function initCarousel(containerId, imageCount, images) {
+    const container = document.getElementById(containerId);
+    if (!container || imageCount <= 1) return;
+    container.dataset.currentIndex = '0';
+    const dotsContainer = document.getElementById(`${containerId}-dots`);
+    if (dotsContainer) {
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i < imageCount; i++) {
+        const dot = document.createElement('button');
+        dot.className = `dot ${i === 0 ? 'active' : ''}`;
+        dot.addEventListener('click', () => {
+          window.changeSlide(containerId, i - parseInt(container.dataset.currentIndex || '0'));
+        });
+        dotsContainer.appendChild(dot);
+      }
+    }
+    let autoSlideInterval = setInterval(() => {
+      window.changeSlide(containerId, 1);
     }, 4000);
-    
-    container.addEventListener('mouseenter', () => clearInterval(interval));
+    container.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
     container.addEventListener('mouseleave', () => {
-      interval = setInterval(() => {
-        goTo(currentIndex === images.length - 1 ? 0 : currentIndex + 1);
+      autoSlideInterval = setInterval(() => {
+        window.changeSlide(containerId, 1);
       }, 4000);
     });
+    container._autoSlideInterval = autoSlideInterval;
   }
 
   async function updateAuthUI() {
@@ -635,14 +659,14 @@ function closeDemo() {
     
     productGrid.innerHTML = '';
     
-    // Show ONLY products from database - NO hardcoded data
+    // ─── NO HARDCODED DATA - ONLY DATABASE ───
     if (!products || products.length === 0) {
       productGrid.innerHTML = `
-        <div style="text-align:center;padding:3rem;color:#94a3b8;grid-column:1/-1;">
-          <i class="fas fa-box-open" style="font-size:3rem;color:#2563eb;margin-bottom:1rem;display:block;"></i>
-          <p style="font-size:1.1rem;">No products available yet.</p>
-          <p style="font-size:0.9rem;margin-top:0.3rem;">Check back soon or contact us for custom websites.</p>
-          <a href="#customOrder" style="display:inline-block;margin-top:1rem;background:#0f2b4b;color:white;padding:0.6rem 1.8rem;border-radius:40px;text-decoration:none;font-weight:600;">Order Custom</a>
+        <div class="empty-state">
+          <i class="fas fa-box-open"></i>
+          <h3>No products available yet</h3>
+          <p>Check back soon for new web packages or contact us for custom websites.</p>
+          <a href="#customOrder" style="display:inline-block;margin-top:1.2rem;background:#0f2b4b;color:white;padding:0.6rem 1.8rem;border-radius:40px;text-decoration:none;font-weight:600;">Order Custom</a>
         </div>
       `;
       return;
@@ -697,9 +721,10 @@ function closeDemo() {
         });
         
         // Init carousel
+        const containerId = `carousel-${p.id || index}`;
         const carousel = imgContainer.querySelector('.carousel-container');
-        if (carousel) {
-          setTimeout(() => initCarousel(carousel), 200);
+        if (carousel && images.length > 1) {
+          setTimeout(() => initCarousel(containerId, images.length, images), 200);
         }
       }
       
@@ -767,9 +792,10 @@ function closeDemo() {
       cart.forEach(item => {
         const div = document.createElement('div');
         div.className = 'cart-item';
+        const price = item.displayPrice !== undefined ? item.displayPrice : item.price;
         div.innerHTML = `
           <span>${item.name} <span style="opacity:0.7;font-weight:400;">×${item.quantity}</span></span>
-          <span style="font-size:0.85rem;color:#64748b;">Custom Pricing</span>
+          <span class="item-price">${formatPKR(price * item.quantity)}</span>
           <button class="remove-item" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
         `;
         cartItemsContainer.appendChild(div);
@@ -778,7 +804,11 @@ function closeDemo() {
         removeFromCart(parseInt(this.dataset.id));
       }));
     }
-    cartTotalPrice.textContent = 'Custom Pricing';
+    const total = cart.reduce((sum, item) => {
+      const price = item.displayPrice !== undefined ? item.displayPrice : item.price;
+      return sum + (price * item.quantity);
+    }, 0);
+    cartTotalPrice.textContent = formatPKR(total);
     checkoutBtn.disabled = cart.length === 0;
   }
 
@@ -786,8 +816,101 @@ function closeDemo() {
     if (cart.length === 0) return;
     const user = await getCurrentUser();
     if (!user) { showToast('🔐 Please login first to checkout'); setTimeout(() => window.location.href = 'login.html', 800); return; }
+    const total = cart.reduce((sum, item) => {
+      const price = item.displayPrice !== undefined ? item.displayPrice : item.price;
+      return sum + (price * item.quantity);
+    }, 0);
     const items = cart.map(item => item.name).join(', ');
-    alert(`Your cart: ${items}\n\nContact us on WhatsApp to complete your order.\n\n📱 0332-7649422`);
+    const orderData = {
+      name: `Cart: ${items}`,
+      price: total,
+      customer_email: user.email,
+      customer_name: user.user_metadata?.full_name || user.email,
+      isCustom: false,
+      is_demo: false
+    };
+    try {
+      await createOrder(orderData);
+      alert(`✅ Order confirmed!\n\nItems: ${items}\nTotal: ${formatPKR(total)}\n\nContact us on WhatsApp for payment: 0332-7649422`);
+      cart = [];
+      localStorage.setItem('pixlnex_cart', JSON.stringify(cart));
+      updateCartUI();
+      showToast('🎉 Order confirmed!');
+    } catch(e) {
+      showToast('⚠️ Error: ' + e.message);
+    }
+  });
+
+  const questionsData = {
+    portfolio: {
+      title: '📸 Portfolio Questions',
+      questions: [
+        { id: 'goal', label: 'What is the main goal?', type: 'select', options: ['Showcase work', 'Get freelance clients', 'Apply for jobs', 'Personal brand'] },
+        { id: 'projects', label: 'How many projects to display?', type: 'select', options: ['1-5', '6-10', '11-20', '20+'] },
+        { id: 'design', label: 'What design style?', type: 'select', options: ['Minimalist', 'Creative', 'Professional', 'Modern'] }
+      ]
+    },
+    business: {
+      title: '🏢 Business Questions',
+      questions: [
+        { id: 'goal', label: 'Business goal?', type: 'select', options: ['Lead generation', 'Brand awareness', 'Online sales', 'Customer support'] },
+        { id: 'pages', label: 'How many pages?', type: 'select', options: ['1-3', '4-6', '7-10', '10+'] },
+        { id: 'design', label: 'Design style?', type: 'select', options: ['Professional', 'Modern', 'Corporate', 'Creative'] }
+      ]
+    },
+    ecommerce: {
+      title: '🛒 E-commerce Questions',
+      questions: [
+        { id: 'products', label: 'How many products?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
+        { id: 'payment', label: 'Payment methods?', type: 'select', options: ['JazzCash', 'EasyPaisa', 'Both', 'Other'] }
+      ]
+    },
+    chat: {
+      title: '💬 Chat App Questions',
+      questions: [
+        { id: 'users', label: 'How many users?', type: 'select', options: ['1-10', '11-50', '51-100', '100+'] },
+        { id: 'features', label: 'Features needed?', type: 'select', options: ['Group chat', 'File sharing', 'Video call', 'All'] }
+      ]
+    },
+    landing: {
+      title: '🎯 Landing Page Questions',
+      questions: [
+        { id: 'goal', label: 'Main goal?', type: 'select', options: ['Lead capture', 'Product launch', 'Event registration', 'Sales'] },
+        { id: 'design', label: 'Design style?', type: 'select', options: ['Minimalist', 'Bold', 'Professional', 'Creative'] }
+      ]
+    },
+    other: {
+      title: '💡 New Idea Questions',
+      questions: [
+        { id: 'idea', label: 'Tell me about your idea', type: 'textarea', placeholder: 'Describe your website idea...' }
+      ]
+    }
+  };
+
+  function renderQuestions(type) {
+    const container = document.getElementById('questionContainer');
+    const data = questionsData[type];
+    if (!data) { container.innerHTML = ''; return; }
+    let html = `<h4 style="margin-bottom:0.8rem;color:#0f2b4b;">${data.title}</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">`;
+    data.questions.forEach(q => {
+      html += `<div style="${q.type === 'textarea' ? 'grid-column:1/-1;' : ''}">`;
+      html += `<label style="font-weight:600;font-size:0.85rem;display:block;margin-bottom:0.2rem;color:#1e293b;">${q.label}</label>`;
+      if (q.type === 'select') {
+        html += `<select id="q_${q.id}" style="width:100%;padding:0.6rem 1rem;border-radius:40px;border:1px solid #e2e8f0;font-size:0.9rem;background:#f8fafc;">`;
+        html += `<option value="">Select...</option>`;
+        q.options.forEach(opt => { html += `<option value="${opt}">${opt}</option>`; });
+        html += `</select>`;
+      } else if (q.type === 'textarea') {
+        html += `<textarea id="q_${q.id}" placeholder="${q.placeholder || ''}" style="width:100%;padding:0.6rem 1rem;border-radius:1rem;border:1px solid #e2e8f0;font-size:0.9rem;background:#f8fafc;min-height:60px;"></textarea>`;
+      }
+      html += `</div>`;
+    });
+    html += `</div>`;
+    container.innerHTML = html;
+  }
+
+  document.getElementById('customType').addEventListener('change', function() {
+    renderQuestions(this.value);
   });
 
   document.getElementById('customOrderForm').addEventListener('submit', async function(e) {
@@ -808,6 +931,16 @@ function closeDemo() {
       return;
     }
     
+    const questionAnswers = {};
+    const questionContainer = document.getElementById('questionContainer');
+    const inputs = questionContainer.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+      if (input.id && input.id.startsWith('q_')) {
+        const key = input.id.replace('q_', '');
+        questionAnswers[key] = input.value;
+      }
+    });
+    
     const typeLabels = {
       'portfolio': 'Portfolio', 'business': 'Business',
       'ecommerce': 'E‑commerce', 'blog': 'Blog',
@@ -816,7 +949,15 @@ function closeDemo() {
     };
     const budgetAmount = parseInt(budget) || 0;
     
-    const customDetails = `Type: ${typeLabels[type] || type}\nBudget: ₨ ${budgetAmount}\nAdditional Details: ${details || 'None'}`;
+    let customDetails = `Type: ${typeLabels[type] || type}\n`;
+    customDetails += `Budget: ₨ ${budgetAmount}\n`;
+    customDetails += `Additional Details: ${details || 'None'}\n\n`;
+    customDetails += '=== Questions & Answers ===\n';
+    Object.keys(questionAnswers).forEach(key => {
+      if (questionAnswers[key]) {
+        customDetails += `${key}: ${questionAnswers[key]}\n`;
+      }
+    });
     
     const orderData = {
       name: `Custom: ${typeLabels[type] || type}`,
@@ -834,6 +975,7 @@ function closeDemo() {
       await createOrder(orderData);
       alert(`✅ Custom order received!\n\nWe'll contact you at ${email} within 24 hours.`);
       this.reset();
+      document.getElementById('questionContainer').innerHTML = '';
       showToast('🎉 Custom order sent!');
     } catch(e) {
       showToast('⚠️ Error: ' + e.message);
@@ -848,6 +990,7 @@ function closeDemo() {
   await updateAuthUI();
   await renderFeaturedProducts();
   updateCartUI();
+  renderQuestions('portfolio');
   console.log('✅ Pixlnex initialized successfully!');
 })();
 </script>
