@@ -8,6 +8,8 @@
   <link rel="icon" href="logo.png" type="image/png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
+    /* ... styles as before ... */
+    /* Keeping styles minimal for brevity, use your existing styles */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
     body { background: #f0f4f8; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
     .app { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; flex: 1; width: 100%; }
@@ -34,7 +36,6 @@
     .supabase-status { display: inline-block; padding: 0.2rem 0.8rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600; }
     .supabase-status.connected { background: #dcfce7; color: #166534; }
     .supabase-status.disconnected { background: #fee2e2; color: #b91c1c; }
-    .supabase-status.checking { background: #fef3c7; color: #92400e; }
 
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
     .stat-card { background: white; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #e9eef3; transition: transform 0.2s; }
@@ -166,11 +167,12 @@
     .toast { position: fixed; bottom: 2rem; right: 2rem; background: #0f2b4b; color: white; padding: 1rem 1.8rem; border-radius: 60px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); font-weight: 600; display: flex; align-items: center; gap: 0.7rem; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 999; }
     .toast.show { transform: translateY(0); opacity: 1; }
     .toast i { color: #22c55e; font-size: 1.2rem; }
+    .toast.error { background: #b91c1c; }
+    .toast.error i { color: #fee2e2; }
+    .toast.success { background: #0f2b4b; }
+    .toast.success i { color: #22c55e; }
 
     .hidden { display: none !important; }
-
-    .error-banner { background: #fee2e2; color: #b91c1c; padding: 1rem 1.5rem; border-radius: 1rem; margin-bottom: 1rem; border-left: 4px solid #b91c1c; }
-    .error-banner i { margin-right: 0.5rem; }
 
     @media (max-width:900px) { .admin-grid { grid-template-columns: 1fr; } .admin-header { flex-direction: column; align-items: flex-start; gap: 1rem; } .stats-grid { grid-template-columns: 1fr 1fr; } .product-form { grid-template-columns: 1fr; } .product-form .full { grid-column: 1; } .moment-form { grid-template-columns: 1fr; } .moment-form .full { grid-column: 1; } .login-box { padding: 2rem 1.5rem; margin: 1rem; } }
     @media (max-width:700px) { .app { padding: 1rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .admin-header { padding: 1.5rem; } .admin-header h1 { font-size: 1.6rem; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; } .stat-card { padding: 1rem; } .stat-card .stat-number { font-size: 1.5rem; } .admin-card { padding: 1.2rem 1.5rem; } }
@@ -184,7 +186,7 @@
       <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="shop.html">Webs</a>
-        <a href="one-time.html">✨ Moments</a>
+        <a href="one-time.html">✨ One Time</a>
         <a href="#" class="active auth-btn" id="authBtn"><i class="fas fa-user-shield"></i> Admin</a>
         <a href="shop.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCounter">0</span></a>
       </div>
@@ -197,11 +199,6 @@
           <span class="supabase-status" id="supabaseStatus">⏳ Checking...</span>
           <div class="admin-badge" id="adminBadge" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</div>
         </div>
-      </div>
-
-      <div id="connectionError" class="error-banner" style="display:none;">
-        <i class="fas fa-exclamation-triangle"></i> 
-        <span id="connectionErrorMsg">Unable to connect to database. Please check your internet connection and refresh.</span>
       </div>
 
       <div class="stats-grid" id="statsGrid">
@@ -256,6 +253,7 @@
               <div class="image-upload-area" id="imageUploadArea">
                 <i class="fas fa-cloud-upload-alt" style="font-size:2rem;color:#2563eb;"></i>
                 <p style="color:#64748b;margin-top:0.3rem;">Click to upload product images</p>
+                <p class="image-status" id="imageStatus" style="font-size:0.8rem;color:#94a3b8;">No images selected</p>
                 <input type="file" id="imageInput" accept="image/*" multiple style="display:none;" />
                 <div class="preview-grid" id="imagePreviewGrid"></div>
               </div>
@@ -332,11 +330,15 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   // ============================================
-  // PIXLNEX - ADMIN PANEL (FIXED CONNECTION)
+  // PIXLNEX - ADMIN PANEL (FIXED - SAME PROJECT)
   // ============================================
 
-  const SUPABASE_URL = 'https://skdthncgjwtlydtgtjze.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_k1DV8-nVcr4o5LE8s_wbLA_O7BPQFpy';
+  // ⚠️ IMPORTANT: Your database and storage must be in the SAME project!
+  // Your current project: mskhicltjsnjitwfswis.supabase.co
+  // You MUST create the bucket "product-images" in THIS project.
+  
+  const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
   const STORAGE_BUCKET = 'product-images';
 
   let supabaseClient = null;
@@ -351,66 +353,42 @@
     { email: 'noor@gmail.com', name: 'Noor' }
   ];
 
-  // ─── INIT SUPABASE ───
+  // ─── TOAST ───
+  let toastTimer;
+  function showToast(msg, type = 'success') {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    toast.className = 'toast ' + type + ' show';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove('show');
+      toast.className = 'toast';
+    }, 5000);
+  }
+
+  // ─── INIT ───
   function initSupabase() {
     try {
       if (typeof supabase === 'undefined') {
-        console.error('❌ Supabase SDK not loaded!');
         document.getElementById('supabaseStatus').textContent = '❌ SDK not loaded';
         document.getElementById('supabaseStatus').className = 'supabase-status disconnected';
-        showConnectionError('Supabase SDK not loaded. Please refresh the page.');
         return null;
       }
-
-      console.log('🔗 Connecting to Supabase...');
       supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       supabaseConnected = true;
-      
       document.getElementById('supabaseStatus').textContent = '✅ Connected';
       document.getElementById('supabaseStatus').className = 'supabase-status connected';
-      document.getElementById('connectionError').style.display = 'none';
-      
-      console.log('✅ Supabase connected successfully');
+      console.log('✅ Supabase connected to:', SUPABASE_URL);
       return supabaseClient;
     } catch (e) {
-      console.error('❌ Supabase connection error:', e);
       supabaseConnected = false;
-      document.getElementById('supabaseStatus').textContent = '❌ Connection Failed';
+      document.getElementById('supabaseStatus').textContent = '❌ Error';
       document.getElementById('supabaseStatus').className = 'supabase-status disconnected';
-      showConnectionError('Failed to connect to Supabase: ' + e.message);
+      console.error('❌ Connection error:', e);
       return null;
     }
   }
 
-  function showConnectionError(msg) {
-    const errorEl = document.getElementById('connectionError');
-    errorEl.style.display = 'block';
-    document.getElementById('connectionErrorMsg').textContent = msg;
-  }
-
-  // ─── CHECK CONNECTION ───
-  async function testConnection() {
-    if (!supabaseClient || !supabaseConnected) {
-      showConnectionError('Supabase not connected. Please refresh the page.');
-      return false;
-    }
-    try {
-      const { data, error } = await supabaseClient.from('products').select('count', { count: 'exact', head: true });
-      if (error) {
-        console.error('Connection test failed:', error);
-        showConnectionError('Database connection failed: ' + error.message);
-        return false;
-      }
-      console.log('✅ Database connection test passed');
-      return true;
-    } catch (e) {
-      console.error('Connection test error:', e);
-      showConnectionError('Database connection error: ' + e.message);
-      return false;
-    }
-  }
-
-  // ─── AUTH ───
   function checkAdminSession() {
     const session = localStorage.getItem('pixlnex_admin_session');
     if (session === 'true') {
@@ -474,16 +452,6 @@
     }, 600);
   });
 
-  // ─── TOAST ───
-  let toastTimer;
-  function showToast(msg) {
-    const toast = document.getElementById('toast');
-    document.getElementById('toastMsg').textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
-  }
-
   // ─── TABS ───
   document.querySelectorAll('.admin-tabs button').forEach(btn => {
     btn.addEventListener('click', function() {
@@ -498,17 +466,31 @@
   const imageInput = document.getElementById('imageInput');
   const imageUploadArea = document.getElementById('imageUploadArea');
   const imagePreviewGrid = document.getElementById('imagePreviewGrid');
+  const imageStatus = document.getElementById('imageStatus');
 
   imageUploadArea.addEventListener('click', function() { imageInput.click(); });
 
   imageInput.addEventListener('change', function(e) {
     const files = Array.from(e.target.files);
+    let validCount = 0;
     files.forEach(file => {
-      if (!file.type.startsWith('image/')) { showToast('⚠️ Please select image files only'); return; }
-      if (file.size > 5 * 1024 * 1024) { showToast('⚠️ Image size must be less than 5MB'); return; }
+      if (!file.type.startsWith('image/')) { 
+        showToast('⚠️ Please select image files only', 'error');
+        return; 
+      }
+      if (file.size > 5 * 1024 * 1024) { 
+        showToast('⚠️ Image size must be less than 5MB', 'error');
+        return; 
+      }
       selectedImages.push(file);
       displayImagePreview(file);
+      validCount++;
     });
+    if (validCount > 0) {
+      const total = selectedImages.length + existingImages.length;
+      imageStatus.textContent = `${total} image${total > 1 ? 's' : ''} selected`;
+      showToast(`✅ ${validCount} image${validCount > 1 ? 's' : ''} added`, 'success');
+    }
     this.value = '';
   });
 
@@ -546,7 +528,8 @@
         const index = selectedImages.indexOf(file);
         if (index > -1) selectedImages.splice(index, 1);
         div.remove();
-        if (selectedImages.length === 0 && existingImages.length === 0) imagePreviewGrid.innerHTML = '';
+        const total = selectedImages.length + existingImages.length;
+        imageStatus.textContent = total > 0 ? `${total} image${total > 1 ? 's' : ''} selected` : 'No images selected';
       };
       div.appendChild(img);
       div.appendChild(removeBtn);
@@ -588,72 +571,105 @@
         const idx = existingImages.indexOf(url);
         if (idx > -1) existingImages.splice(idx, 1);
         div.remove();
+        const total = selectedImages.length + existingImages.length;
+        imageStatus.textContent = total > 0 ? `${total} image${total > 1 ? 's' : ''} selected` : 'No images selected';
       };
       div.appendChild(img);
       div.appendChild(removeBtn);
       imagePreviewGrid.appendChild(div);
     });
+    const total = selectedImages.length + urls.length;
+    imageStatus.textContent = `${total} image${total > 1 ? 's' : ''} selected`;
   }
 
   function clearImagePreview() {
     imagePreviewGrid.innerHTML = '';
     selectedImages = [];
     existingImages = [];
+    imageStatus.textContent = 'No images selected';
   }
 
+  // ─── UPLOAD IMAGES ───
   async function uploadImages(productId) {
     const uploadedUrls = [];
     
+    if (selectedImages.length === 0) return uploadedUrls;
+    
+    showToast(`📸 Uploading ${selectedImages.length} image(s)...`, 'success');
+    
     try {
+      // Check if bucket exists in the SAME project
       const { data: buckets, error: bucketError } = await supabaseClient.storage.listBuckets();
-      if (bucketError) throw bucketError;
+      if (bucketError) {
+        console.error('Bucket list error:', bucketError);
+        showToast('⚠️ Storage error: ' + bucketError.message, 'error');
+        return [];
+      }
       
       const bucketExists = buckets.some(b => b.name === STORAGE_BUCKET);
       if (!bucketExists) {
-        showToast('⚠️ Storage bucket "product-images" not found. Please create it in Supabase Dashboard → Storage (make it PUBLIC).');
+        showToast('⚠️ Bucket "product-images" not found in this project. Please create it in Supabase Dashboard → Storage.', 'error');
+        console.error(`❌ Bucket "${STORAGE_BUCKET}" does not exist in project:`, SUPABASE_URL);
+        console.log('📋 Available buckets:', buckets.map(b => b.name));
         return [];
       }
+      
+      console.log(`✅ Bucket "${STORAGE_BUCKET}" found in project:`, SUPABASE_URL);
+      
     } catch (e) {
-      console.error('Bucket check error:', e);
-      showToast('⚠️ Storage error: ' + e.message);
+      console.error('Bucket error:', e);
+      showToast('⚠️ Storage error: ' + e.message, 'error');
       return [];
     }
     
+    // Upload each image
     for (const file of selectedImages) {
       try {
         const fileExt = file.name.split('.').pop();
         const fileName = `${productId}/${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-        const { data, error } = await supabaseClient.storage.from(STORAGE_BUCKET).upload(fileName, file, { cacheControl: '3600', upsert: false });
+        console.log('📤 Uploading to:', SUPABASE_URL, 'path:', fileName);
+        
+        const { data, error } = await supabaseClient.storage.from(STORAGE_BUCKET).upload(fileName, file, { 
+          cacheControl: '3600', 
+          upsert: false 
+        });
+        
         if (error) {
           console.error('Upload error:', error);
-          showToast('⚠️ Failed to upload: ' + file.name);
+          showToast(`⚠️ Failed: ${file.name} - ${error.message}`, 'error');
           continue;
         }
+        
         const { data: { publicUrl } } = supabaseClient.storage.from(STORAGE_BUCKET).getPublicUrl(fileName);
+        console.log('✅ Uploaded to:', publicUrl);
         uploadedUrls.push(publicUrl);
+        showToast(`✅ Uploaded: ${file.name}`, 'success');
       } catch (e) {
         console.error('Upload error:', e);
-        showToast('⚠️ Failed to upload: ' + file.name);
+        showToast(`⚠️ Failed: ${file.name}`, 'error');
       }
     }
+    
+    if (uploadedUrls.length === selectedImages.length) {
+      showToast(`✅ All ${uploadedUrls.length} images uploaded!`, 'success');
+    } else if (uploadedUrls.length > 0) {
+      showToast(`⚠️ ${uploadedUrls.length} of ${selectedImages.length} uploaded`, 'error');
+    } else {
+      showToast('❌ No images uploaded. Check console for errors.', 'error');
+    }
+    
     return uploadedUrls;
   }
 
-  // ─── LOAD ALL DATA ───
+  // ─── LOAD DATA ───
   async function loadAllData() {
-    // First check connection
-    const connected = await testConnection();
-    if (!connected) {
-      showToast('⚠️ Cannot load data - database connection failed');
-      // Show empty states
-      document.getElementById('orderList').innerHTML = '<div style="color:#b91c1c;text-align:center;padding:1rem 0;">⚠️ Database connection failed</div>';
-      document.getElementById('productList').innerHTML = '<div style="color:#b91c1c;text-align:center;padding:1rem 0;">⚠️ Database connection failed</div>';
-      document.getElementById('momentList').innerHTML = '<div style="color:#b91c1c;text-align:center;padding:1rem 0;">⚠️ Database connection failed</div>';
+    if (!supabaseConnected || !supabaseClient) {
+      showToast('⚠️ Supabase not connected', 'error');
       return;
     }
 
     try {
-      console.log('🔄 Loading fresh data from Supabase...');
+      console.log('🔄 Loading data from:', SUPABASE_URL);
       
       const [ordersRes, productsRes, momentsRes] = await Promise.all([
         supabaseClient.from('orders').select('*').order('created_at', { ascending: false }),
@@ -664,37 +680,30 @@
       if (ordersRes.error) throw ordersRes.error;
       if (productsRes.error) throw productsRes.error;
       
-      let moments = [];
-      if (momentsRes.error) {
-        console.warn('Moments table not found:', momentsRes.error.message);
-      } else {
-        moments = momentsRes.data || [];
-      }
-      
       const orders = ordersRes.data || [];
       const products = productsRes.data || [];
+      const moments = momentsRes.data || [];
 
-      console.log('📦 Orders:', orders.length, 'Products:', products.length, 'Moments:', moments.length);
+      console.log('📦 Products loaded:', products.length);
+      
+      // Log image data for debugging
+      products.forEach(p => {
+        console.log(`📸 ${p.name}: ${p.image_urls ? p.image_urls.length : 0} images`);
+      });
 
-      const totalOrders = orders.length;
-      const customers = new Set(orders.map(o => o.customer_email || '')).size;
-      const pending = orders.filter(o => o.status === 'processing' || o.status === 'demo_ready' || o.status === 'working').length;
-      const totalDemos = products.filter(p => p.demo_url && p.demo_url.trim() !== '').length;
-
-      document.getElementById('totalOrders').textContent = totalOrders;
-      document.getElementById('totalCustomers').textContent = customers || 0;
-      document.getElementById('pendingOrders').textContent = pending;
-      document.getElementById('totalDemos').textContent = totalDemos;
+      document.getElementById('totalOrders').textContent = orders.length;
+      document.getElementById('totalCustomers').textContent = new Set(orders.map(o => o.customer_email || '')).size;
+      document.getElementById('pendingOrders').textContent = orders.filter(o => o.status === 'processing' || o.status === 'demo_ready' || o.status === 'working').length;
+      document.getElementById('totalDemos').textContent = products.filter(p => p.demo_url && p.demo_url.trim() !== '').length;
       document.getElementById('totalMoments').textContent = moments.length;
 
       renderOrders(orders);
       renderProductsList(products);
       renderMomentsList(moments);
       
-      console.log('✅ Admin data loaded successfully');
     } catch (e) {
-      console.error('❌ Error loading admin data:', e);
-      showToast('⚠️ Error loading data: ' + e.message);
+      console.error('❌ Load error:', e);
+      showToast('⚠️ Error loading data: ' + e.message, 'error');
     }
   }
 
@@ -768,12 +777,12 @@
           this.className = `order-status-select status-${newStatus}`;
           try {
             await supabaseClient.from('orders').update({ status: newStatus, updated_at: new Date().toISOString() }).eq('id', order.id);
-            showToast(`✅ Order status updated to ${newStatus}`);
+            showToast(`✅ Order status updated to ${newStatus}`, 'success');
           } catch (e) {
             order.status = originalStatus;
             this.className = `order-status-select status-${originalStatus}`;
             this.value = originalStatus;
-            showToast('⚠️ Error updating order');
+            showToast('⚠️ Error updating order', 'error');
           }
         }
       });
@@ -785,7 +794,7 @@
     const productCountBadge = document.getElementById('productCountBadge');
     
     if (!products || products.length === 0) {
-      productList.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1rem 0;">No products. Add your first product below.</div>';
+      productList.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1rem 0;">No products.</div>';
       productCountBadge.textContent = '0';
       return;
     }
@@ -796,9 +805,12 @@
     products.forEach((p, index) => {
       const div = document.createElement('div');
       div.className = 'admin-product-item';
-      const firstImage = p.image_urls && p.image_urls.length > 0 ?
-        `<img class="product-thumb" src="${p.image_urls[0]}" alt="${p.name}" />` :
-        `<div class="product-thumb-placeholder"><i class="fas ${p.icon || 'fa-cube'}"></i></div>`;
+      
+      const hasImages = p.image_urls && Array.isArray(p.image_urls) && p.image_urls.length > 0;
+      const firstImage = hasImages ?
+        `<img class="product-thumb" src="${p.image_urls[0]}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=\\'product-thumb-placeholder\\'><i class=\\'fas fa-cube\\'></i></div>';">` :
+        `<div class="product-thumb-placeholder"><i class="fas fa-cube"></i></div>`;
+      
       const categoryLabel = p.category_label || p.category || 'Custom';
       const hasDemo = p.demo_url && p.demo_url.trim() !== '';
       
@@ -809,7 +821,7 @@
             <span class="product-name">${p.name}</span>
             <span class="product-category">${categoryLabel}</span>
             ${hasDemo ? '<span class="product-category" style="background:#f59e0b20;color:#d97706;">▶️ Demo</span>' : ''}
-            <span style="font-size:0.6rem;color:#94a3b8;display:block;">${p.image_urls ? p.image_urls.length : 0} images</span>
+            <span style="font-size:0.6rem;color:#94a3b8;display:block;">${hasImages ? p.image_urls.length : 0} images</span>
           </div>
         </div>
         <div class="product-actions">
@@ -820,28 +832,31 @@
       productList.appendChild(div);
     });
 
+    // ─── DELETE ───
     document.querySelectorAll('.delete-product').forEach(btn => {
       btn.addEventListener('click', async function() {
         const idx = parseInt(this.dataset.index);
         const product = products[idx];
         if (!product) return;
-        if (confirm(`Delete "${product.name}"?`)) {
-          try {
-            if (product.image_urls && product.image_urls.length > 0) {
-              for (const url of product.image_urls) {
-                const path = url.split('/').pop();
-                if (path) await supabaseClient.storage.from(STORAGE_BUCKET).remove([path]);
-              }
+        if (!confirm(`Delete "${product.name}"?`)) return;
+        try {
+          if (product.image_urls && product.image_urls.length > 0) {
+            for (const url of product.image_urls) {
+              const path = url.split('/').pop();
+              if (path) await supabaseClient.storage.from(STORAGE_BUCKET).remove([path]);
             }
-            await supabaseClient.from('products').delete().eq('id', product.id);
-            products.splice(idx, 1);
-            renderProductsList(products);
-            showToast(`🗑️ "${product.name}" deleted`);
-          } catch (e) { showToast('⚠️ Error deleting product'); }
+          }
+          await supabaseClient.from('products').delete().eq('id', product.id);
+          products.splice(idx, 1);
+          renderProductsList(products);
+          showToast(`🗑️ "${product.name}" deleted!`, 'success');
+        } catch (e) { 
+          showToast('⚠️ Error: ' + e.message, 'error'); 
         }
       });
     });
 
+    // ─── EDIT ───
     document.querySelectorAll('.edit-product').forEach(btn => {
       btn.addEventListener('click', function() {
         const idx = parseInt(this.dataset.index);
@@ -860,12 +875,13 @@
         document.getElementById('productDemoUrl').value = p.demo_url || '';
         
         clearImagePreview();
-        if (p.image_urls && p.image_urls.length > 0) {
+        if (p.image_urls && Array.isArray(p.image_urls) && p.image_urls.length > 0) {
           existingImages = [...p.image_urls];
           displayExistingImages(p.image_urls);
         }
         
         document.getElementById('productForm').scrollIntoView({ behavior: 'smooth' });
+        showToast(`✏️ Editing "${p.name}"`, 'success');
       });
     });
   }
@@ -879,7 +895,7 @@
     const demoUrl = document.getElementById('productDemoUrl').value.trim();
 
     if (!name || !desc) {
-      showToast('⚠️ Please fill in name and description');
+      showToast('⚠️ Please fill in name and description', 'error');
       return;
     }
 
@@ -912,37 +928,50 @@
       let product;
 
       if (isEditing) {
+        // UPDATE
         const { data, error } = await supabaseClient.from('products').update(productData).eq('id', editingProductId).select();
         if (error) throw error;
         product = data[0];
+        showToast(`📝 Product "${name}" updated`, 'success');
         
+        // Handle images
         if (selectedImages.length > 0) {
           const uploadedUrls = await uploadImages(editingProductId);
           const allImages = [...existingImages, ...uploadedUrls];
           if (allImages.length > 0) {
-            await supabaseClient.from('products').update({ image_urls: allImages }).eq('id', editingProductId);
+            const { error: imgError } = await supabaseClient.from('products').update({ image_urls: allImages }).eq('id', editingProductId);
+            if (imgError) throw imgError;
+            showToast(`✅ ${allImages.length} images saved`, 'success');
           }
         } else if (existingImages.length > 0) {
-          await supabaseClient.from('products').update({ image_urls: existingImages }).eq('id', editingProductId);
+          const { error: imgError } = await supabaseClient.from('products').update({ image_urls: existingImages }).eq('id', editingProductId);
+          if (imgError) throw imgError;
+        } else {
+          const { error: imgError } = await supabaseClient.from('products').update({ image_urls: [] }).eq('id', editingProductId);
+          if (imgError) throw imgError;
         }
         
-        showToast(`✅ "${name}" updated successfully!`);
+        showToast(`✅ "${name}" updated!`, 'success');
       } else {
+        // CREATE
         productData.image_urls = [];
         productData.created_at = new Date().toISOString();
         
         const { data, error } = await supabaseClient.from('products').insert([productData]).select();
         if (error) throw error;
         product = data[0];
+        showToast(`📝 Product "${name}" created`, 'success');
 
         if (selectedImages.length > 0) {
           const uploadedUrls = await uploadImages(product.id);
           if (uploadedUrls.length > 0) {
-            await supabaseClient.from('products').update({ image_urls: uploadedUrls }).eq('id', product.id);
+            const { error: imgError } = await supabaseClient.from('products').update({ image_urls: uploadedUrls }).eq('id', product.id);
+            if (imgError) throw imgError;
+            showToast(`✅ ${uploadedUrls.length} images saved`, 'success');
           }
         }
         
-        showToast(`✅ "${name}" added successfully!`);
+        showToast(`✅ "${name}" added!`, 'success');
       }
 
       resetProductForm();
@@ -952,7 +981,7 @@
 
     } catch (e) {
       console.error('Product error:', e);
-      showToast('⚠️ Error: ' + (e.message || 'Unknown error'));
+      showToast('⚠️ Error: ' + (e.message || 'Unknown error'), 'error');
     }
     this.disabled = false;
     this.innerHTML = isEditing ? '<i class="fas fa-save"></i> Update Product' : '<i class="fas fa-plus"></i> Add Product';
@@ -973,13 +1002,13 @@
 
   document.getElementById('cancelEditBtn').addEventListener('click', resetProductForm);
 
-  // ─── RENDER MOMENTS ───
+  // ─── MOMENTS ───
   function renderMomentsList(moments) {
     const momentList = document.getElementById('momentList');
     const momentCountBadge = document.getElementById('momentCountBadge');
     
     if (!moments || moments.length === 0) {
-      momentList.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1rem 0;">No moments yet. Create your first Pixlnex Moment below.</div>';
+      momentList.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1rem 0;">No moments yet.</div>';
       momentCountBadge.textContent = '0';
       return;
     }
@@ -1021,14 +1050,15 @@
         const idx = parseInt(this.dataset.index);
         const moment = moments[idx];
         if (!moment) return;
-        if (confirm(`Delete "${moment.title}"?`)) {
-          try {
-            await supabaseClient.from('one_time_items').delete().eq('id', moment.id);
-            moments.splice(idx, 1);
-            renderMomentsList(moments);
-            showToast(`🗑️ "${moment.title}" deleted`);
-            document.getElementById('totalMoments').textContent = moments.length;
-          } catch (e) { showToast('⚠️ Error deleting moment'); }
+        if (!confirm(`Delete "${moment.title}"?`)) return;
+        try {
+          await supabaseClient.from('one_time_items').delete().eq('id', moment.id);
+          moments.splice(idx, 1);
+          renderMomentsList(moments);
+          showToast(`🗑️ "${moment.title}" deleted!`, 'success');
+          document.getElementById('totalMoments').textContent = moments.length;
+        } catch (e) { 
+          showToast('⚠️ Error: ' + e.message, 'error'); 
         }
       });
     });
@@ -1052,11 +1082,11 @@
         document.getElementById('momentColor').value = m.color || '#7c3aed';
         
         document.getElementById('momentForm').scrollIntoView({ behavior: 'smooth' });
+        showToast(`✏️ Editing "${m.title}"`, 'success');
       });
     });
   }
 
-  // ─── MOMENT FORM SUBMIT ───
   document.getElementById('momentSubmitBtn').addEventListener('click', async function() {
     const type = document.getElementById('momentType').value;
     const title = document.getElementById('momentTitle').value.trim();
@@ -1066,12 +1096,11 @@
     const color = document.getElementById('momentColor').value;
 
     if (!title || !message || !recipient || !sender) {
-      showToast('⚠️ Please fill in all fields');
+      showToast('⚠️ Please fill in all fields', 'error');
       return;
     }
 
     const isEditing = editingMomentId !== null;
-
     this.disabled = true;
     this.innerHTML = '<span class="loading-spinner"></span> Processing...';
 
@@ -1083,7 +1112,7 @@
 
       if (isEditing) {
         await supabaseClient.from('one_time_items').update(momentData).eq('id', editingMomentId);
-        showToast(`✅ "${title}" updated successfully!`);
+        showToast(`✅ "${title}" updated!`, 'success');
       } else {
         const slug = generateSlug();
         momentData.slug = slug;
@@ -1091,18 +1120,16 @@
         momentData.used = false;
         momentData.created_at = new Date().toISOString();
         await supabaseClient.from('one_time_items').insert([momentData]);
-        showToast(`✅ "${title}" created! Share link: ${window.location.origin}/view.html?slug=${slug}`);
+        showToast(`✅ "${title}" created! Share: ${window.location.origin}/view.html?slug=${slug}`, 'success');
       }
 
       resetMomentForm();
-      
       const { data: momentsData } = await supabaseClient.from('one_time_items').select('*').order('created_at', { ascending: false });
       renderMomentsList(momentsData || []);
       document.getElementById('totalMoments').textContent = momentsData ? momentsData.length : 0;
-
     } catch (e) {
       console.error('Moment error:', e);
-      showToast('⚠️ Error: ' + (e.message || 'Unknown error'));
+      showToast('⚠️ Error: ' + e.message, 'error');
     }
     this.disabled = false;
     this.innerHTML = isEditing ? '<i class="fas fa-save"></i> Update Moment' : '<i class="fas fa-plus"></i> Create Moment';
@@ -1139,7 +1166,6 @@
     if (checkAdminSession()) {
       document.getElementById('authBtn').textContent = `👑 ${adminName || 'Admin'}`;
       document.getElementById('authBtn').className = 'auth-btn logout';
-      // Wait a moment for connection to stabilize
       setTimeout(() => loadAllData(), 500);
     } else {
       document.getElementById('loginOverlay').classList.remove('hidden');
