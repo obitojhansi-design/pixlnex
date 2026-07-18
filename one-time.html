@@ -1,12 +1,11 @@
-<!-- one-timee.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pixlnex · One Time Use</title>
+  <title>Pixlnex · Moments</title>
   <link rel="icon" href="logo.png" type="image/png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
     body { background: #f0f4f8; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
@@ -30,48 +29,42 @@
     .page-header h1 { font-size: 2.8rem; font-weight: 700; }
     .page-header p { opacity: 0.9; font-size: 1.1rem; max-width: 600px; margin-top: 0.3rem; }
     .page-header .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 0.2rem 1rem; border-radius: 40px; font-size: 0.8rem; margin-top: 0.5rem; border: 1px solid rgba(255,255,255,0.15); }
+    .page-header .stats { display: inline-block; background: rgba(255,255,255,0.15); padding: 0.2rem 1rem; border-radius: 40px; font-size: 0.8rem; margin-top: 0.5rem; margin-left: 0.5rem; border: 1px solid rgba(255,255,255,0.1); }
 
-    .one-timee-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
-    .one-timee-card { background: white; border-radius: 2rem; padding: 2rem; border: 1px solid #e9eef3; transition: all 0.3s ease; cursor: pointer; }
-    .one-timeecard:hover { transform: translateY(-6px); box-shadow: 0 20px 40px -8px rgba(0,20,40,0.1); }
-    .one-timee-card .icon { font-size: 3rem; margin-bottom: 1rem; }
-    .one-timee-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.3rem; }
-    .one-timee-card p { color: #64748b; font-size: 0.95rem; }
-    .one-timee-card .price-tag { display: inline-block; background: #f1f6fe; color: #2563eb; padding: 0.2rem 1rem; border-radius: 40px; font-weight: 600; font-size: 0.85rem; margin-top: 0.8rem; border: 1px solid #2563eb20; }
-    .one-timee-card .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
-    .one-timee-card .card-footer .btn-use { background: #0f2b4b; color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .one-timee-card .card-footer .btn-use:hover { background: #1a3a5e; transform: scale(1.02); }
-    .one-timee-card .card-footer .share-link { font-size: 0.8rem; color: #94a3b8; cursor: pointer; transition: 0.2s; }
-    .one-timee-card .card-footer .share-link:hover { color: #2563eb; }
+    .filter-bar { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; padding: 1rem 0; }
+    .filter-bar input { padding: 0.7rem 1.2rem; border-radius: 60px; border: 1px solid #e2e8f0; flex: 1; min-width: 200px; font-size: 0.95rem; background: white; transition: 0.2s; }
+    .filter-bar input:focus { outline: none; border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
+    .filter-bar select { padding: 0.7rem 1.2rem; border-radius: 60px; border: 1px solid #e2e8f0; background: white; font-size: 0.95rem; cursor: pointer; }
 
-    .featured-badge { position: absolute; top: 12px; right: 12px; background: #f59e0b; color: white; font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.8rem; border-radius: 30px; }
+    .moments-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+    .moment-card { background: white; border-radius: 2rem; overflow: hidden; border: 1px solid #e9eef3; transition: all 0.3s ease; }
+    .moment-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px -8px rgba(0,20,40,0.1); border-color: #d9e2ef; }
 
-    /* Modal for creating one-timee use */
-    .create-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 99998; align-items: center; justify-content: center; padding: 1.5rem; }
-    .create-modal.active { display: flex; }
-    .create-modal .modal-content { background: white; border-radius: 2rem; max-width: 560px; width: 100%; padding: 2.5rem; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
-    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    .create-modal .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-    .create-modal .modal-header h2 { font-size: 1.5rem; font-weight: 700; }
-    .create-modal .modal-header .close-modal { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #94a3b8; transition: 0.2s; padding: 0.25rem; min-width: 44px; min-height: 44px; }
-    .create-modal .modal-header .close-modal:hover { color: #0b1a2e; }
-    .create-modal .form-group { margin-bottom: 1.2rem; }
-    .create-modal .form-group label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: #1e293b; }
-    .create-modal .form-group input, .create-modal .form-group select, .create-modal .form-group textarea { width: 100%; padding: 0.7rem 1.2rem; border-radius: 60px; border: 1px solid #e2e8f0; font-size: 0.95rem; background: #f8fafc; transition: 0.2s; }
-    .create-modal .form-group input:focus, .create-modal .form-group select:focus, .create-modal .form-group textarea:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: transparent; background: white; }
-    .create-modal .form-group textarea { border-radius: 1rem; resize: vertical; min-height: 80px; }
-    .create-modal .submit-btn { width: 100%; padding: 0.85rem; border-radius: 60px; border: none; background: #0f2b4b; color: white; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.7rem; margin-top: 0.5rem; }
-    .create-modal .submit-btn:hover { background: #1a3a5e; transform: scale(1.01); }
-    .create-modal .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .moment-card .moment-preview { position: relative; width: 100%; aspect-ratio: 16/9; background: #1e293b; overflow: hidden; cursor: pointer; }
+    .moment-card .moment-preview iframe { width: 100%; height: 100%; border: none; pointer-events: none; }
+    .moment-card .moment-preview .play-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
+    .moment-card .moment-preview:hover .play-overlay { opacity: 1; }
+    .moment-card .moment-preview .play-overlay i { font-size: 3rem; color: white; background: rgba(255,255,255,0.2); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); border: 2px solid rgba(255,255,255,0.3); }
+    .moment-card .moment-preview .demo-badge { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.7); color: white; font-size: 0.65rem; padding: 0.2rem 0.8rem; border-radius: 30px; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); }
+    .moment-card .moment-preview .used-badge { position: absolute; top: 12px; left: 12px; background: #ef4444; color: white; font-size: 0.65rem; padding: 0.2rem 0.8rem; border-radius: 30px; font-weight: 600; }
+    .moment-card .moment-preview .view-count { position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.6); color: white; font-size: 0.7rem; padding: 0.2rem 0.8rem; border-radius: 30px; backdrop-filter: blur(4px); }
 
-    /* Preview Modal */
-    .preview-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 99999; align-items: center; justify-content: center; padding: 2rem; }
-    .preview-modal.active { display: flex; }
-    .preview-modal .preview-content { position: relative; width: 100%; max-width: 900px; height: 80vh; background: white; border-radius: 1.5rem; overflow: hidden; }
-    .preview-modal .preview-content iframe { width: 100%; height: 100%; border: none; }
-    .preview-modal .preview-close { position: absolute; top: 16px; right: 20px; color: white; font-size: 2rem; cursor: pointer; background: rgba(0,0,0,0.7); border: none; width: 48px; height: 48px; border-radius: 50%; z-index: 10; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
-    .preview-modal .preview-close:hover { background: rgba(0,0,0,0.9); transform: scale(1.1); }
-    .preview-modal .preview-label { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); color: white; background: rgba(0,0,0,0.6); padding: 0.3rem 1.2rem; border-radius: 30px; font-size: 0.8rem; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); z-index: 10; }
+    .moment-card .moment-info { padding: 1.5rem; }
+    .moment-card .moment-info .moment-type { font-size: 0.7rem; color: #7c3aed; background: #7c3aed10; padding: 0.15rem 0.8rem; border-radius: 30px; display: inline-block; margin-bottom: 0.5rem; border: 1px solid #7c3aed20; }
+    .moment-card .moment-info h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .moment-card .moment-info .moment-title { font-size: 0.95rem; color: #64748b; margin-bottom: 0.5rem; }
+    .moment-card .moment-info .moment-desc { font-size: 0.9rem; color: #475569; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .moment-card .moment-info .moment-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
+    .moment-card .moment-info .moment-footer .btn-preview { background: #0f2b4b; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 40px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .moment-card .moment-info .moment-footer .btn-preview:hover { background: #1a3a5e; transform: scale(1.02); }
+    .moment-card .moment-info .moment-footer .btn-preview:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .moment-card .moment-info .moment-footer .share-link { font-size: 0.8rem; color: #94a3b8; cursor: pointer; transition: 0.2s; }
+    .moment-card .moment-info .moment-footer .share-link:hover { color: #7c3aed; }
+
+    .empty-state { text-align: center; padding: 4rem 2rem; grid-column: 1 / -1; }
+    .empty-state i { font-size: 4rem; color: #7c3aed; margin-bottom: 1rem; display: block; opacity: 0.5; }
+    .empty-state h3 { font-size: 1.5rem; color: #0b1a2e; margin-bottom: 0.5rem; }
+    .empty-state p { color: #94a3b8; max-width: 400px; margin: 0 auto; }
 
     .footer { margin-top: 4rem; border-top: 1px solid #e2e8f0; padding: 2rem 0 1rem 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: #475569; font-size: 0.9rem; }
     .footer i { color: #2563eb; margin: 0 0.2rem; }
@@ -79,9 +72,20 @@
     .toast { position: fixed; bottom: 2rem; right: 2rem; background: #0f2b4b; color: white; padding: 1rem 1.8rem; border-radius: 60px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); font-weight: 600; display: flex; align-items: center; gap: 0.7rem; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; z-index: 100000; max-width: 90%; }
     .toast.show { transform: translateY(0); opacity: 1; }
     .toast i { color: #22c55e; font-size: 1.2rem; }
+    .toast.error { background: #b91c1c; }
+    .toast.error i { color: #fee2e2; }
 
-    .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 0.6s ease-in-out infinite; }
+    .loading-spinner { display: inline-block; width: 40px; height: 40px; border: 3px solid #eef2f6; border-radius: 50%; border-top-color: #7c3aed; animation: spin 0.8s linear infinite; margin: 2rem auto; grid-column: 1 / -1; }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Demo Overlay */
+    .demo-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 99999; align-items: center; justify-content: center; padding: 2rem; }
+    .demo-overlay.active { display: flex; }
+    .demo-overlay .demo-content { position: relative; width: 100%; max-width: 1200px; height: 85vh; background: white; border-radius: 1.5rem; overflow: hidden; }
+    .demo-overlay .demo-content iframe { width: 100%; height: 100%; border: none; }
+    .demo-overlay .demo-close { position: absolute; top: 16px; right: 20px; color: white; font-size: 2rem; cursor: pointer; background: rgba(0,0,0,0.7); border: none; width: 48px; height: 48px; border-radius: 50%; z-index: 10; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+    .demo-overlay .demo-close:hover { background: rgba(0,0,0,0.9); transform: scale(1.1); }
+    .demo-overlay .demo-label { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); color: white; background: rgba(0,0,0,0.6); padding: 0.3rem 1.2rem; border-radius: 30px; font-size: 0.8rem; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); z-index: 10; }
 
     @media (max-width: 700px) {
       .app { padding: 1rem; }
@@ -89,9 +93,9 @@
       .nav-links { justify-content: space-between; }
       .page-header { padding: 1.8rem; }
       .page-header h1 { font-size: 2rem; }
-      .one-timee-grid { grid-template-columns: 1fr; }
-      .preview-modal .preview-content { height: 60vh; }
-      .create-modal .modal-content { padding: 1.5rem; }
+      .moments-grid { grid-template-columns: 1fr; }
+      .demo-overlay .demo-content { height: 60vh; }
+      .moment-card .moment-preview { aspect-ratio: 4/3; }
     }
   </style>
 </head>
@@ -103,7 +107,7 @@
     <nav class="nav-links">
       <a href="index.html">Home</a>
       <a href="shop.html">Webs</a>
-      <a href="one-timee.html" class="active">✨Moments</a>
+      <a href="one-time.html" class="active">✨ Moments</a>
       <a href="#" id="navAbout">About</a>
       <a href="profile.html" id="authBtn" class="auth-btn"><i class="fas fa-user"></i> Login</a>
       <a href="shop.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCounter">0</span></a>
@@ -112,77 +116,41 @@
 
   <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Done!</span></div>
 
+  <!-- DEMO OVERLAY -->
+  <div class="demo-overlay" id="demoOverlay">
+    <div class="demo-content">
+      <button class="demo-close" onclick="closeDemo()">&times;</button>
+      <div class="demo-label">▶️ Live Demo</div>
+      <iframe id="demoIframe" src=""></iframe>
+    </div>
+  </div>
+
   <div class="page-header">
     <div>
-      <span class="badge">✨ One Time Use</span>
-      <h1>Pranks · Proposals · Wishes</h1>
-      <p>Create a special one-timee use website to surprise someone. Send a prank, propose, or wish them in a unique way!</p>
-    </div>
-    <div style="margin-top:1rem;">
-      <button class="btn-primary" onclick="openCreateModal()" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);color:white;padding:0.7rem 1.8rem;border-radius:60px;font-weight:600;cursor:pointer;transition:0.2s;font-size:1rem;">+ Create New</button>
+      <span class="badge">✨ Pixlnex Moments</span>
+      <h1>One-Time Use Websites</h1>
+      <p>Discover unique, one-time use websites created for special moments. Each one is a special experience.</p>
+      <span class="stats" id="momentCount">0 moments</span>
     </div>
   </div>
 
-  <div class="one-timee-grid" id="oneTimeGrid">
-    <!-- Cards will be rendered here -->
+  <div class="filter-bar">
+    <input type="text" id="searchInput" placeholder="🔍 Search moments...">
+    <select id="genreFilter">
+      <option value="all">All Genres</option>
+      <option value="prank">😂 Prank</option>
+      <option value="proposal">💍 Proposal</option>
+      <option value="birthday">🎂 Birthday Wish</option>
+      <option value="love">❤️ Love Letter</option>
+      <option value="apology">🙏 Apology</option>
+      <option value="encouragement">💪 Encouragement</option>
+      <option value="friendship">🤝 Friendship</option>
+      <option value="custom">🎨 Custom</option>
+    </select>
   </div>
 
-  <!-- Create Modal -->
-  <div class="create-modal" id="createModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>✨ Create one-timee Use</h2>
-        <button class="close-modal" onclick="closeCreateModal()">&times;</button>
-      </div>
-      <form id="createForm">
-        <div class="form-group">
-          <label for="otType">Type</label>
-          <select id="otType" required>
-            <option value="prank">😂 Prank</option>
-            <option value="proposal">💍 Proposal</option>
-            <option value="birthday">🎂 Birthday Wish</option>
-            <option value="custom">🎨 Custom</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="otTitle">Title</label>
-          <input type="text" id="otTitle" placeholder="e.g., Surprise Prank" required />
-        </div>
-        <div class="form-group">
-          <label for="otMessage">Message</label>
-          <textarea id="otMessage" placeholder="Write your message here..." required style="min-height:100px;"></textarea>
-        </div>
-        <div class="form-group">
-          <label for="otRecipient">Recipient Name</label>
-          <input type="text" id="otRecipient" placeholder="e.g., John" required />
-        </div>
-        <div class="form-group">
-          <label for="otSender">Your Name</label>
-          <input type="text" id="otSender" placeholder="e.g., Jane" required />
-        </div>
-        <div class="form-group">
-          <label for="otColor">Theme Color</label>
-          <select id="otColor">
-            <option value="#7c3aed">Purple</option>
-            <option value="#2563eb">Blue</option>
-            <option value="#22c55e">Green</option>
-            <option value="#f59e0b">Orange</option>
-            <option value="#ef4444">Red</option>
-            <option value="#ec4899">Pink</option>
-          </select>
-        </div>
-        <button type="submit" class="submit-btn" id="createSubmitBtn"><i class="fas fa-wand-magic-sparkles"></i> Create & Get Link</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Preview Modal -->
-  <div class="preview-modal" id="previewModal">
-    <div class="preview-content">
-      <button class="preview-close" onclick="closePreview()">&times;</button>
-      <div class="preview-label">✨ Preview</div>
-      <iframe id="previewIframe" src="" allow="fullscreen"></iframe>
-    </div>
+  <div class="moments-grid" id="momentsGrid">
+    <div class="loading-spinner"></div>
   </div>
 
   <footer class="footer">
@@ -194,7 +162,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ============================================
-// PIXLNEX - ONE TIME USE
+// PIXLNEX - MOMENTS PAGE
 // ============================================
 
 const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
@@ -202,13 +170,15 @@ const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
 
 let supabaseClient = null;
 let supabaseConnected = false;
+let allMoments = [];
+let currentUser = null;
 
 function initSupabase() {
   try {
     if (typeof supabase !== 'undefined') {
       supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       supabaseConnected = true;
-      console.log('✅ Supabase connected');
+      console.log('✅ Supabase connected (Moments)');
       return true;
     }
     return false;
@@ -255,31 +225,16 @@ async function getCurrentUser() {
   } catch(e) { return null; }
 }
 
-async function getOneTimeItems() {
+async function getMoments() {
   if (!supabaseConnected || !supabaseClient) return [];
   try {
     const { data, error } = await supabaseClient.from('one_time_items').select('*').order('created_at', { ascending: false });
     if (error) throw error;
     return data || [];
-  } catch(e) { return []; }
-}
-
-async function createOneTimeItem(data) {
-  if (!supabaseConnected || !supabaseClient) throw new Error('Supabase not connected');
-  const { data: result, error } = await supabaseClient.from('one_time_items').insert([{
-    title: data.title,
-    type: data.type,
-    message: data.message,
-    recipient: data.recipient,
-    sender: data.sender,
-    color: data.color || '#7c3aed',
-    slug: data.slug,
-    views: 0,
-    user_id: data.user_id,
-    created_at: new Date().toISOString()
-  }]).select();
-  if (error) throw error;
-  return result ? result[0] : null;
+  } catch(e) { 
+    console.error('Moments fetch error:', e);
+    return []; 
+  }
 }
 
 function waitForSupabase() {
@@ -296,56 +251,39 @@ function waitForSupabase() {
   });
 }
 
-// ─── TOAST ───
 let toastTimer;
 
-function showToast(msg) {
+function showToast(msg, type = 'success') {
   const toast = document.getElementById('toast');
-  const toastMsg = document.getElementById('toastMsg');
-  toastMsg.textContent = msg;
-  toast.classList.add('show');
+  document.getElementById('toastMsg').textContent = msg;
+  toast.className = 'toast ' + type + ' show';
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+    toast.className = 'toast';
+  }, 4000);
 }
 
-// ─── GENERATE SLUG ───
-function generateSlug() {
-  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  for (let i = 0; i < 8; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
+function openDemo(url) {
+  if (!url) {
+    showToast('⚠️ No demo URL available', 'error');
+    return;
   }
-  return result;
-}
-
-// ─── MODALS ───
-function openCreateModal() {
-  document.getElementById('createModal').classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeCreateModal() {
-  document.getElementById('createModal').classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-function openPreview(url) {
-  const modal = document.getElementById('previewModal');
-  const iframe = document.getElementById('previewIframe');
+  const overlay = document.getElementById('demoOverlay');
+  const iframe = document.getElementById('demoIframe');
   iframe.src = url;
-  modal.classList.add('active');
+  overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
 
-function closePreview() {
-  const modal = document.getElementById('previewModal');
-  const iframe = document.getElementById('previewIframe');
+function closeDemo() {
+  const overlay = document.getElementById('demoOverlay');
+  const iframe = document.getElementById('demoIframe');
   iframe.src = '';
-  modal.classList.remove('active');
+  overlay.classList.remove('active');
   document.body.style.overflow = '';
 }
 
-// ─── COPY TO CLIPBOARD ───
 function copyToClipboard(text) {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(() => {
@@ -367,56 +305,71 @@ function fallbackCopy(text) {
     document.execCommand('copy');
     showToast('✅ Link copied to clipboard!');
   } catch(e) {
-    showToast('⚠️ Could not copy. Please copy manually.');
+    showToast('⚠️ Could not copy. Please copy manually.', 'error');
   }
   document.body.removeChild(textarea);
 }
 
-// ─── RENDER ONE TIME ITEMS ───
-function renderOneTimeItems(items) {
-  const grid = document.getElementById('oneTimeGrid');
-  if (!items || items.length === 0) {
+function renderMoments(moments) {
+  const grid = document.getElementById('momentsGrid');
+  
+  if (!moments || moments.length === 0) {
     grid.innerHTML = `
-      <div style="grid-column:1/-1;text-align:center;padding:3rem;color:#94a3b8;background:white;border-radius:2rem;border:1px dashed #e2e8f0;">
-        <i class="fas fa-wand-magic-sparkles" style="font-size:3rem;color:#7c3aed;margin-bottom:1rem;display:block;"></i>
-        <p style="font-size:1.1rem;">No one-timee use creations yet.</p>
-        <p style="font-size:0.9rem;margin-top:0.3rem;">Create your first prank, proposal, or wish!</p>
-        <button onclick="openCreateModal()" style="margin-top:1rem;background:#7c3aed;color:white;border:none;padding:0.6rem 1.8rem;border-radius:40px;font-weight:600;cursor:pointer;">✨ Create One</button>
+      <div class="empty-state">
+        <i class="fas fa-wand-magic-sparkles"></i>
+        <h3>No Moments Yet</h3>
+        <p>Be the first to create a Pixlnex Moment! Each one is a unique, one-time use website.</p>
       </div>
     `;
+    document.getElementById('momentCount').textContent = '0 moments';
     return;
   }
 
+  document.getElementById('momentCount').textContent = `${moments.length} moment${moments.length > 1 ? 's' : ''}`;
   grid.innerHTML = '';
+
   const typeIcons = {
-    'prank': '😂',
-    'proposal': '💍',
-    'birthday': '🎂',
-    'custom': '🎨'
+    'prank': '😂', 'proposal': '💍', 'birthday': '🎂', 'custom': '🎨',
+    'love': '❤️', 'apology': '🙏', 'encouragement': '💪', 'friendship': '🤝'
   };
   const typeLabels = {
-    'prank': 'Prank',
-    'proposal': 'Proposal',
-    'birthday': 'Birthday Wish',
-    'custom': 'Custom'
+    'prank': 'Prank', 'proposal': 'Proposal', 'birthday': 'Birthday Wish',
+    'custom': 'Custom', 'love': 'Love Letter', 'apology': 'Apology',
+    'encouragement': 'Encouragement', 'friendship': 'Friendship'
   };
 
-  items.forEach(item => {
+  moments.forEach((m, index) => {
     const card = document.createElement('div');
-    card.className = 'one-timee-card';
-    const icon = typeIcons[item.type] || '🎨';
-    const typeLabel = typeLabels[item.type] || 'Custom';
-    const fullUrl = `${window.location.origin}/view.html?slug=${item.slug}`;
-
+    card.className = 'moment-card';
+    const icon = typeIcons[m.type] || '🎨';
+    const typeLabel = typeLabels[m.type] || m.type || 'Custom';
+    const isUsed = m.used || false;
+    const shareUrl = `${window.location.origin}/view.html?slug=${m.slug}`;
+    const hasDemo = m.demo_url && m.demo_url.trim() !== '';
+    const demoUrl = hasDemo ? m.demo_url : shareUrl;
+    
     card.innerHTML = `
-      <div style="position:relative;">
-        <div class="icon">${icon}</div>
-        <h3>${item.title}</h3>
-        <p>To: ${item.recipient} · From: ${item.sender}</p>
-        <span class="price-tag">${typeLabel} · ${item.views || 0} views</span>
-        <div class="card-footer">
-          <button class="btn-use" onclick="openPreview('${fullUrl}')"><i class="fas fa-eye"></i> Preview</button>
-          <span class="share-link" onclick="copyToClipboard('${fullUrl}')"><i class="fas fa-link"></i> Copy Link</span>
+      <div class="moment-preview" onclick="${hasDemo ? `openDemo('${demoUrl}')` : `window.open('${shareUrl}','_blank')`}">
+        <iframe src="${hasDemo ? demoUrl : 'about:blank'}" loading="lazy" allow="fullscreen"></iframe>
+        <div class="play-overlay">
+          <i class="fas fa-play"></i>
+        </div>
+        ${isUsed ? '<span class="used-badge">🔒 Used</span>' : ''}
+        ${hasDemo ? '<span class="demo-badge">▶️ Live</span>' : ''}
+        <span class="view-count"><i class="fas fa-eye"></i> ${m.views || 0}</span>
+      </div>
+      <div class="moment-info">
+        <span class="moment-type">${icon} ${typeLabel}</span>
+        <h3>${m.website_name || m.title || 'Untitled'}</h3>
+        ${m.title ? `<div class="moment-title">${m.title}</div>` : ''}
+        ${m.description ? `<div class="moment-desc">${m.description}</div>` : ''}
+        <div class="moment-footer">
+          <button class="btn-preview" onclick="${hasDemo ? `openDemo('${demoUrl}')` : `window.open('${shareUrl}','_blank')`}">
+            <i class="fas fa-eye"></i> ${hasDemo ? 'Live Demo' : 'View'}
+          </button>
+          <span class="share-link" onclick="copyToClipboard('${shareUrl}')">
+            <i class="fas fa-link"></i> Copy Link
+          </span>
         </div>
       </div>
     `;
@@ -424,78 +377,36 @@ function renderOneTimeItems(items) {
   });
 }
 
-// ─── CREATE FORM ───
-document.getElementById('createForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const user = await getCurrentUser();
-  if (!user) {
-    showToast('🔐 Please login first');
-    setTimeout(() => window.location.href = 'login.html', 800);
-    return;
+function filterMoments() {
+  const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+  const genreFilter = document.getElementById('genreFilter').value;
+  
+  let filtered = allMoments;
+  
+  if (searchTerm) {
+    filtered = filtered.filter(m => 
+      (m.website_name || '').toLowerCase().includes(searchTerm) ||
+      (m.title || '').toLowerCase().includes(searchTerm) ||
+      (m.description || '').toLowerCase().includes(searchTerm)
+    );
   }
-
-  const submitBtn = document.getElementById('createSubmitBtn');
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = '<span class="loading-spinner"></span> Creating...';
-
-  try {
-    const type = document.getElementById('otType').value;
-    const title = document.getElementById('otTitle').value.trim();
-    const message = document.getElementById('otMessage').value.trim();
-    const recipient = document.getElementById('otRecipient').value.trim();
-    const sender = document.getElementById('otSender').value.trim();
-    const color = document.getElementById('otColor').value;
-
-    if (!title || !message || !recipient || !sender) {
-      showToast('⚠️ Please fill in all fields');
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Create & Get Link';
-      return;
-    }
-
-    const slug = generateSlug();
-
-    const result = await createOneTimeItem({
-      type,
-      title,
-      message,
-      recipient,
-      sender,
-      color,
-      slug,
-      user_id: user.id
-    });
-
-    if (result) {
-      const fullUrl = `${window.location.origin}/view.html?slug=${slug}`;
-      showToast('✅ Created successfully!');
-      closeCreateModal();
-      this.reset();
-      
-      // Refresh list
-      const items = await getOneTimeItems();
-      renderOneTimeItems(items);
-      
-      // Copy link automatically
-      setTimeout(() => copyToClipboard(fullUrl), 500);
-    } else {
-      showToast('⚠️ Failed to create. Please try again.');
-    }
-  } catch(e) {
-    console.error('Create error:', e);
-    showToast('⚠️ Error: ' + e.message);
+  
+  if (genreFilter !== 'all') {
+    filtered = filtered.filter(m => m.type === genreFilter);
   }
+  
+  renderMoments(filtered);
+}
 
-  submitBtn.disabled = false;
-  submitBtn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Create & Get Link';
-});
-
-// ─── AUTH UI ───
 async function updateAuthUI() {
-  const user = await getCurrentUser();
+  try {
+    currentUser = await getCurrentUser();
+  } catch(e) { 
+    currentUser = null; 
+  }
   const authBtn = document.getElementById('authBtn');
-  if (user) {
-    const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+  if (currentUser) {
+    const name = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
     authBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
     authBtn.className = 'auth-btn logout';
     authBtn.href = 'profile.html';
@@ -508,26 +419,49 @@ async function updateAuthUI() {
   }
 }
 
-// ─── INIT ───
-(async function() {
-  console.log('🚀 One Time page loading...');
-  
-  await waitForSupabase();
-  await updateAuthUI();
-
-  const items = await getOneTimeItems();
-  renderOneTimeItems(items);
-
-  // Cart counter
-  const cart = JSON.parse(localStorage.getItem('pixlnex_cart') || '[]');
-  document.getElementById('cartCounter').textContent = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
-
-  console.log('✅ One Time page initialized!');
-})();
+document.getElementById('searchInput').addEventListener('input', filterMoments);
+document.getElementById('genreFilter').addEventListener('change', filterMoments);
 
 document.getElementById('navAbout').addEventListener('click', function(e) {
   e.preventDefault();
-  alert('📖 About One Time Use\n\nCreate special one-timee use websites for:\n\n😂 Pranks - Surprise someone with a funny prank page\n💍 Proposals - Create a beautiful proposal page\n🎂 Birthday Wishes - Send a special birthday message\n🎨 Custom - Create anything you want!\n\nEach link works only once and creates a memorable experience.');
+  alert('📖 About Pixlnex Moments\n\nPixlnex Moments are special one-time use websites created for unique experiences.\n\n✨ Each moment is a unique website\n🎯 One-time use only\n🌟 Perfect for special occasions\n🔗 Share with anyone');
+});
+
+(async function() {
+  console.log('🚀 Moments page loading...');
+  
+  const connected = await waitForSupabase();
+  if (!connected) {
+    document.getElementById('toastMsg').textContent = '⚠️ Database not connected. Please refresh.';
+    document.getElementById('toast').classList.add('show');
+    return;
+  }
+
+  await updateAuthUI();
+
+  try {
+    allMoments = await getMoments();
+    console.log('✅ Moments loaded:', allMoments.length);
+  } catch(e) {
+    console.error('Error loading moments:', e);
+    showToast('⚠️ Error loading moments', 'error');
+    return;
+  }
+
+  renderMoments(allMoments);
+  
+  // Cart counter
+  const cart = JSON.parse(localStorage.getItem('pixlnex_cart') || '[]');
+  document.getElementById('cartCounter').textContent = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+  
+  console.log('✅ Moments page initialized!');
+})();
+
+// ─── DEMO OVERLAY KEYBOARD SUPPORT ───
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeDemo();
+  }
 });
 </script>
 </body>
