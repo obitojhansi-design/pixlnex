@@ -46,6 +46,14 @@
     .stat-card .stat-number { font-size: 2rem; font-weight: 700; color: #0b1a2e; }
     .stat-card .stat-label { color: #64748b; font-size: 0.9rem; }
 
+    /* Tabs */
+    .admin-tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; flex-wrap: wrap; }
+    .admin-tabs button { background: none; border: none; padding: 0.6rem 1.8rem; border-radius: 40px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: 0.2s; color: #64748b; }
+    .admin-tabs button:hover { background: #eef2f6; color: #0f2b4b; }
+    .admin-tabs button.active { background: #0f2b4b; color: white; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
     .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
     .admin-card { background: white; border-radius: 2rem; padding: 1.8rem 2.2rem; border: 1px solid #e9eef3; }
     .admin-card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
@@ -73,6 +81,7 @@
     .payment-badge.pending { background: #fef9c3; color: #854d0e; border: 1px solid #fcd34d; }
     .custom-badge { font-size: 0.65rem; background: #7c3aed10; color: #7c3aed; padding: 0.15rem 0.5rem; border-radius: 30px; border: 1px solid #7c3aed20; display: inline-block; }
 
+    /* Product List */
     .admin-product-item { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
     .admin-product-item:last-child { border-bottom: none; }
     .admin-product-item .product-info { display: flex; align-items: center; gap: 1rem; flex: 1; }
@@ -85,21 +94,53 @@
     .admin-product-item .product-actions button:hover { background: #eef2f6; color: #0f2b4b; }
     .admin-product-item .product-actions button.delete:hover { background: #fee2e2; color: #b91c1c; }
 
-    .add-product-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
-    .add-product-form input, .add-product-form select, .add-product-form textarea { padding: 0.6rem 1rem; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.9rem; background: #f8fafc; transition: 0.2s; width: 100%; }
-    .add-product-form input:focus, .add-product-form select:focus, .add-product-form textarea:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: transparent; background: white; }
-    .add-product-form textarea { border-radius: 1rem; min-height: 60px; resize: vertical; }
-    .add-product-form .full { grid-column: 1 / -1; }
-    .add-product-form .image-upload-area { border: 2px dashed #e2e8f0; border-radius: 1rem; padding: 1.5rem; text-align: center; cursor: pointer; transition: 0.2s; background: #f8fafc; }
-    .add-product-form .image-upload-area:hover { border-color: #2563eb; background: #f1f6fe; }
-    .add-product-form .image-upload-area .preview-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; justify-content: center; }
-    .add-product-form .image-upload-area .preview-grid img { width: 60px; height: 60px; object-fit: cover; border-radius: 0.5rem; border: 1px solid #e2e8f0; }
-    .add-product-btn { background: #0f2b4b; color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
-    .add-product-btn:hover { background: #1a3a5e; transform: scale(1.02); }
-    .add-product-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    /* Add/Edit Product Form */
+    .product-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
+    .product-form input, .product-form select, .product-form textarea { padding: 0.6rem 1rem; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.9rem; background: #f8fafc; transition: 0.2s; width: 100%; }
+    .product-form input:focus, .product-form select:focus, .product-form textarea:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: transparent; background: white; }
+    .product-form textarea { border-radius: 1rem; min-height: 60px; resize: vertical; }
+    .product-form .full { grid-column: 1 / -1; }
+    .product-form .image-upload-area { border: 2px dashed #e2e8f0; border-radius: 1rem; padding: 1.5rem; text-align: center; cursor: pointer; transition: 0.2s; background: #f8fafc; }
+    .product-form .image-upload-area:hover { border-color: #2563eb; background: #f1f6fe; }
+    .product-form .image-upload-area .preview-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; justify-content: center; }
+    .product-form .image-upload-area .preview-grid img { width: 60px; height: 60px; object-fit: cover; border-radius: 0.5rem; border: 1px solid #e2e8f0; }
+    .product-form .image-upload-area .preview-grid .remove-img { position: relative; cursor: pointer; color: #ef4444; font-size: 0.8rem; }
+    .product-form .demo-url-input { display: flex; gap: 0.5rem; align-items: center; }
+    .product-form .demo-url-input input { flex: 1; }
+    .product-form .form-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 0.5rem; }
+    .product-form .form-actions button { padding: 0.6rem 1.8rem; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; border: none; font-size: 0.9rem; }
+    .product-form .form-actions .btn-submit { background: #0f2b4b; color: white; }
+    .product-form .form-actions .btn-submit:hover { background: #1a3a5e; transform: scale(1.02); }
+    .product-form .form-actions .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .product-form .form-actions .btn-cancel { background: #eef2f6; color: #1e293b; }
+    .product-form .form-actions .btn-cancel:hover { background: #e2e8f0; }
+    .product-form .edit-badge { background: #f59e0b20; color: #d97706; padding: 0.2rem 1rem; border-radius: 30px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin-bottom: 0.5rem; }
 
-    .demo-url-input { display: flex; gap: 0.5rem; align-items: center; }
-    .demo-url-input input { flex: 1; }
+    /* One Time Items */
+    .moment-item { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
+    .moment-item:last-child { border-bottom: none; }
+    .moment-item .moment-info { display: flex; align-items: center; gap: 1rem; flex: 1; }
+    .moment-item .moment-icon { font-size: 1.8rem; }
+    .moment-item .moment-name { font-weight: 600; font-size: 0.95rem; }
+    .moment-item .moment-meta { font-size: 0.75rem; color: #94a3b8; display: block; }
+    .moment-item .moment-status { font-size: 0.65rem; padding: 0.15rem 0.6rem; border-radius: 30px; font-weight: 600; }
+    .moment-item .moment-status.used { background: #fee2e2; color: #b91c1c; }
+    .moment-item .moment-status.active { background: #dcfce7; color: #166534; }
+    .moment-item .moment-actions button { background: none; border: none; color: #94a3b8; cursor: pointer; transition: 0.15s; font-size: 0.9rem; padding: 0.2rem 0.5rem; border-radius: 20px; }
+    .moment-item .moment-actions button:hover { background: #eef2f6; color: #0f2b4b; }
+    .moment-item .moment-actions button.delete:hover { background: #fee2e2; color: #b91c1c; }
+
+    .moment-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
+    .moment-form input, .moment-form select, .moment-form textarea { padding: 0.6rem 1rem; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.9rem; background: #f8fafc; transition: 0.2s; width: 100%; }
+    .moment-form input:focus, .moment-form select:focus, .moment-form textarea:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: transparent; background: white; }
+    .moment-form textarea { border-radius: 1rem; min-height: 60px; resize: vertical; }
+    .moment-form .full { grid-column: 1 / -1; }
+    .moment-form .form-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 0.5rem; }
+    .moment-form .form-actions button { padding: 0.6rem 1.8rem; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; border: none; font-size: 0.9rem; }
+    .moment-form .form-actions .btn-submit { background: #7c3aed; color: white; }
+    .moment-form .form-actions .btn-submit:hover { background: #6d28d9; transform: scale(1.02); }
+    .moment-form .form-actions .btn-cancel { background: #eef2f6; color: #1e293b; }
+    .moment-form .form-actions .btn-cancel:hover { background: #e2e8f0; }
 
     .login-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,43,75,0.95); display: flex; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(8px); transition: opacity 0.4s ease; }
     .login-overlay.hidden { opacity: 0; pointer-events: none; }
@@ -131,7 +172,9 @@
     .toast.show { transform: translateY(0); opacity: 1; }
     .toast i { color: #22c55e; font-size: 1.2rem; }
 
-    @media (max-width:900px) { .admin-grid { grid-template-columns: 1fr; } .admin-header { flex-direction: column; align-items: flex-start; gap: 1rem; } .stats-grid { grid-template-columns: 1fr 1fr; } .add-product-form { grid-template-columns: 1fr; } .add-product-form .full { grid-column: 1; } .login-box { padding: 2rem 1.5rem; margin: 1rem; } }
+    .hidden { display: none !important; }
+
+    @media (max-width:900px) { .admin-grid { grid-template-columns: 1fr; } .admin-header { flex-direction: column; align-items: flex-start; gap: 1rem; } .stats-grid { grid-template-columns: 1fr 1fr; } .product-form { grid-template-columns: 1fr; } .product-form .full { grid-column: 1; } .moment-form { grid-template-columns: 1fr; } .moment-form .full { grid-column: 1; } .login-box { padding: 2rem 1.5rem; margin: 1rem; } }
     @media (max-width:700px) { .app { padding: 1rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .admin-header { padding: 1.5rem; } .admin-header h1 { font-size: 1.6rem; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; } .stat-card { padding: 1rem; } .stat-card .stat-number { font-size: 1.5rem; } .admin-card { padding: 1.2rem 1.5rem; } }
   </style>
 </head>
@@ -143,7 +186,7 @@
       <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="shop.html">Webs</a>
-        <a href="moments.html">✨ One Time</a>
+        <a href="moments.html">✨ moments</a>
         <a href="#" class="active auth-btn" id="authBtn"><i class="fas fa-user-shield"></i> Admin</a>
         <a href="shop.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCounter">0</span></a>
       </div>
@@ -151,7 +194,7 @@
 
     <div id="adminContent">
       <div class="admin-header">
-        <div><h1><i class="fas fa-user-shield"></i> Admin Panel</h1><p>Manage all orders, products, and demos.</p></div>
+        <div><h1><i class="fas fa-user-shield"></i> Admin Panel</h1><p>Manage products, orders, and Pixlnex Moments.</p></div>
         <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
           <span class="supabase-status" id="supabaseStatus">⏳ Connecting...</span>
           <div class="admin-badge" id="adminBadge" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</div>
@@ -163,22 +206,38 @@
         <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-users"></i></div><div class="stat-number" id="totalCustomers">0</div><div class="stat-label">Customers</div></div>
         <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-hourglass-half"></i></div><div class="stat-number" id="pendingOrders">0</div><div class="stat-label">Pending Orders</div></div>
         <div class="stat-card"><div class="stat-icon green"><i class="fas fa-play-circle"></i></div><div class="stat-number" id="totalDemos">0</div><div class="stat-label">Live Demos</div></div>
+        <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-star"></i></div><div class="stat-number" id="totalMoments">0</div><div class="stat-label">Pixlnex Moments</div></div>
       </div>
 
-      <div class="admin-grid">
+      <!-- Tabs -->
+      <div class="admin-tabs">
+        <button class="active" data-tab="tab-orders"><i class="fas fa-list"></i> Orders</button>
+        <button data-tab="tab-products"><i class="fas fa-cube"></i> Products</button>
+        <button data-tab="tab-moments"><i class="fas fa-star"></i> Pixlnex Moments</button>
+      </div>
+
+      <!-- Tab: Orders -->
+      <div id="tab-orders" class="tab-content active">
         <div class="admin-card">
           <h3><i class="fas fa-list"></i> All Orders <span class="badge-count" id="orderCountBadge">0</span></h3>
-          <div id="orderList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">No orders yet.</div></div>
+          <div id="orderList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">Loading orders...</div></div>
         </div>
+      </div>
 
+      <!-- Tab: Products -->
+      <div id="tab-products" class="tab-content">
         <div class="admin-card">
           <h3><i class="fas fa-cube"></i> Products <span class="badge-count" id="productCountBadge">0</span></h3>
-          <div id="productList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">No products. Add your first product below.</div></div>
+          <div id="productList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">Loading products...</div></div>
           
-          <div class="add-product-form" id="addProductForm">
-            <input type="text" id="newProductName" placeholder="Product name" required />
-            <input type="text" id="newProductDesc" placeholder="Description" required />
-            <select id="newProductCategory">
+          <!-- Add Product Form -->
+          <div class="product-form" id="productForm">
+            <div class="full">
+              <span class="edit-badge hidden" id="editBadge">✏️ Editing Product</span>
+            </div>
+            <input type="text" id="productName" placeholder="Product name" required />
+            <input type="text" id="productDesc" placeholder="Description" required />
+            <select id="productCategory">
               <option value="portfolio">Portfolio</option>
               <option value="business">Business</option>
               <option value="ecommerce">E‑commerce</option>
@@ -188,10 +247,10 @@
               <option value="custom">Custom</option>
             </select>
             <div class="full">
-              <input type="text" id="newProductFeatures" placeholder="Features (comma separated)" />
+              <input type="text" id="productFeatures" placeholder="Features (comma separated)" />
             </div>
             <div class="full demo-url-input">
-              <input type="url" id="newProductDemoUrl" placeholder="Live Demo URL (optional)" />
+              <input type="url" id="productDemoUrl" placeholder="Live Demo URL (optional)" />
               <span style="font-size:0.7rem;color:#94a3b8;">Optional</span>
             </div>
             <div class="full">
@@ -202,8 +261,48 @@
                 <div class="preview-grid" id="imagePreviewGrid"></div>
               </div>
             </div>
+            <div class="full form-actions">
+              <button class="btn-cancel hidden" id="cancelEditBtn" type="button">Cancel</button>
+              <button class="btn-submit" id="productSubmitBtn"><i class="fas fa-plus"></i> Add Product</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Pixlnex Moments -->
+      <div id="tab-moments" class="tab-content">
+        <div class="admin-card">
+          <h3><i class="fas fa-star"></i> Pixlnex Moments <span class="badge-count" id="momentCountBadge">0</span></h3>
+          <div id="momentList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">Loading moments...</div></div>
+          
+          <!-- Add Moment Form -->
+          <div class="moment-form" id="momentForm">
             <div class="full">
-              <button class="add-product-btn" id="addProductBtn"><i class="fas fa-plus"></i> Add Package</button>
+              <span class="edit-badge hidden" id="momentEditBadge">✏️ Editing Moment</span>
+            </div>
+            <select id="momentType" required>
+              <option value="prank">😂 Prank</option>
+              <option value="proposal">💍 Proposal</option>
+              <option value="birthday">🎂 Birthday Wish</option>
+              <option value="custom">🎨 Custom</option>
+            </select>
+            <input type="text" id="momentTitle" placeholder="Title" required />
+            <div class="full">
+              <textarea id="momentMessage" placeholder="Message" required style="min-height:80px;"></textarea>
+            </div>
+            <input type="text" id="momentRecipient" placeholder="Recipient Name" required />
+            <input type="text" id="momentSender" placeholder="Sender Name" required />
+            <select id="momentColor">
+              <option value="#7c3aed">Purple</option>
+              <option value="#2563eb">Blue</option>
+              <option value="#22c55e">Green</option>
+              <option value="#f59e0b">Orange</option>
+              <option value="#ef4444">Red</option>
+              <option value="#ec4899">Pink</option>
+            </select>
+            <div class="full form-actions">
+              <button class="btn-cancel hidden" id="cancelMomentEditBtn" type="button">Cancel</button>
+              <button class="btn-submit" id="momentSubmitBtn" style="background:#7c3aed;"><i class="fas fa-plus"></i> Create Moment</button>
             </div>
           </div>
         </div>
@@ -236,7 +335,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   // ============================================
-  // PIXLNEX - ADMIN PANEL (FIXED)
+  // PIXLNEX - COMPLETE ADMIN PANEL
   // ============================================
 
   const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
@@ -246,12 +345,16 @@
   let supabaseClient = null;
   let supabaseConnected = false;
   let selectedImages = [];
+  let editingProductId = null;
+  let editingMomentId = null;
+  let existingImages = [];
 
   const ADMIN_USERS = [
     { email: 'faisalyousafyousaf3@gmail.com', name: 'Faisal' },
     { email: 'noor@gmail.com', name: 'Noor' }
   ];
 
+  // ─── INIT ───
   function initSupabase() {
     try {
       if (typeof supabase !== 'undefined') {
@@ -325,7 +428,7 @@
       if (loginAdmin(email, password)) {
         loginBtn.disabled = false;
         loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Access Admin';
-        setTimeout(() => loadAdminData(), 300);
+        setTimeout(() => loadAllData(), 300);
       } else {
         errorMsg.textContent = '⚠️ Invalid admin credentials.';
         errorMsg.classList.add('show');
@@ -346,6 +449,17 @@
     toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
   }
 
+  // ─── TABS ───
+  document.querySelectorAll('.admin-tabs button').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.admin-tabs button').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.getElementById(this.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ─── IMAGE HANDLING ───
   const imageInput = document.getElementById('imageInput');
   const imageUploadArea = document.getElementById('imageUploadArea');
   const imagePreviewGrid = document.getElementById('imagePreviewGrid');
@@ -397,7 +511,7 @@
         const index = selectedImages.indexOf(file);
         if (index > -1) selectedImages.splice(index, 1);
         div.remove();
-        if (selectedImages.length === 0) imagePreviewGrid.innerHTML = '';
+        if (selectedImages.length === 0 && existingImages.length === 0) imagePreviewGrid.innerHTML = '';
       };
       div.appendChild(img);
       div.appendChild(removeBtn);
@@ -406,14 +520,58 @@
     reader.readAsDataURL(file);
   }
 
+  function displayExistingImages(urls) {
+    urls.forEach(url => {
+      const div = document.createElement('div');
+      div.style.position = 'relative';
+      div.style.display = 'inline-block';
+      const img = document.createElement('img');
+      img.src = url;
+      img.style.width = '60px';
+      img.style.height = '60px';
+      img.style.objectFit = 'cover';
+      img.style.borderRadius = '0.5rem';
+      img.style.border = '1px solid #e2e8f0';
+      const removeBtn = document.createElement('button');
+      removeBtn.innerHTML = '×';
+      removeBtn.style.position = 'absolute';
+      removeBtn.style.top = '-8px';
+      removeBtn.style.right = '-8px';
+      removeBtn.style.width = '20px';
+      removeBtn.style.height = '20px';
+      removeBtn.style.borderRadius = '50%';
+      removeBtn.style.border = 'none';
+      removeBtn.style.background = '#ef4444';
+      removeBtn.style.color = 'white';
+      removeBtn.style.cursor = 'pointer';
+      removeBtn.style.fontSize = '12px';
+      removeBtn.style.display = 'flex';
+      removeBtn.style.alignItems = 'center';
+      removeBtn.style.justifyContent = 'center';
+      removeBtn.onclick = function(e) {
+        e.stopPropagation();
+        const idx = existingImages.indexOf(url);
+        if (idx > -1) existingImages.splice(idx, 1);
+        div.remove();
+      };
+      div.appendChild(img);
+      div.appendChild(removeBtn);
+      imagePreviewGrid.appendChild(div);
+    });
+  }
+
+  function clearImagePreview() {
+    imagePreviewGrid.innerHTML = '';
+    selectedImages = [];
+    existingImages = [];
+  }
+
   async function uploadImages(productId) {
     const uploadedUrls = [];
     
-    // Check if bucket exists first
     try {
       const { data: buckets } = await supabaseClient.storage.listBuckets();
       const bucketExists = buckets.some(b => b.name === STORAGE_BUCKET);
-      
       if (!bucketExists) {
         throw new Error(`Storage bucket "${STORAGE_BUCKET}" does not exist. Please create it in Supabase Dashboard → Storage.`);
       }
@@ -437,20 +595,27 @@
     return uploadedUrls;
   }
 
-  async function loadAdminData() {
+  // ─── LOAD ALL DATA ───
+  async function loadAllData() {
     if (!supabaseConnected || !supabaseClient) { showToast('⚠️ Supabase not connected'); return; }
     try {
       console.log('🔄 Loading fresh data from Supabase...');
       
-      const { data: ordersData, error: ordersError } = await supabaseClient.from('orders').select('*').order('created_at', { ascending: false });
-      if (ordersError) throw ordersError;
-      const orders = ordersData || [];
-      console.log('📦 Orders loaded:', orders.length);
+      const [ordersRes, productsRes, momentsRes] = await Promise.all([
+        supabaseClient.from('orders').select('*').order('created_at', { ascending: false }),
+        supabaseClient.from('products').select('*').order('created_at', { ascending: true }),
+        supabaseClient.from('one_time_items').select('*').order('created_at', { ascending: false })
+      ]);
+      
+      if (ordersRes.error) throw ordersRes.error;
+      if (productsRes.error) throw productsRes.error;
+      if (momentsRes.error) throw momentsRes.error;
+      
+      const orders = ordersRes.data || [];
+      const products = productsRes.data || [];
+      const moments = momentsRes.data || [];
 
-      const { data: productsData, error: productsError } = await supabaseClient.from('products').select('*').order('created_at', { ascending: true });
-      if (productsError) throw productsError;
-      const products = productsData || [];
-      console.log('📦 Products loaded:', products.length);
+      console.log('📦 Orders:', orders.length, 'Products:', products.length, 'Moments:', moments.length);
 
       const totalOrders = orders.length;
       const customers = new Set(orders.map(o => o.customer_email || '')).size;
@@ -461,9 +626,11 @@
       document.getElementById('totalCustomers').textContent = customers || 0;
       document.getElementById('pendingOrders').textContent = pending;
       document.getElementById('totalDemos').textContent = totalDemos;
+      document.getElementById('totalMoments').textContent = moments.length;
 
       renderOrders(orders);
       renderProductsList(products);
+      renderMomentsList(moments);
       
       console.log('✅ Admin data loaded successfully');
     } catch (e) {
@@ -472,6 +639,7 @@
     }
   }
 
+  // ─── RENDER ORDERS ───
   function renderOrders(orders) {
     const orderList = document.getElementById('orderList');
     const orderCountBadge = document.getElementById('orderCountBadge');
@@ -554,6 +722,7 @@
     });
   }
 
+  // ─── RENDER PRODUCTS ───
   function renderProductsList(products) {
     const productList = document.getElementById('productList');
     const productCountBadge = document.getElementById('productCountBadge');
@@ -583,19 +752,18 @@
             <span class="product-name">${p.name}</span>
             <span class="product-category">${categoryLabel}</span>
             ${hasDemo ? '<span class="product-category" style="background:#f59e0b20;color:#d97706;">▶️ Demo</span>' : ''}
+            <span style="font-size:0.6rem;color:#94a3b8;display:block;">${p.image_urls ? p.image_urls.length : 0} images</span>
           </div>
         </div>
-        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-          <span style="font-size:0.7rem;color:#94a3b8;">${p.image_urls ? p.image_urls.length : 0} 📸</span>
-          <div class="product-actions">
-            <button class="edit-product" data-index="${index}"><i class="fas fa-edit"></i></button>
-            <button class="delete delete-product" data-index="${index}"><i class="fas fa-trash-alt"></i></button>
-          </div>
+        <div class="product-actions">
+          <button class="edit-product" data-index="${index}"><i class="fas fa-edit"></i></button>
+          <button class="delete delete-product" data-index="${index}"><i class="fas fa-trash-alt"></i></button>
         </div>
       `;
       productList.appendChild(div);
     });
 
+    // Delete product
     document.querySelectorAll('.delete-product').forEach(btn => {
       btn.addEventListener('click', async function() {
         const idx = parseInt(this.dataset.index);
@@ -618,61 +786,56 @@
       });
     });
 
+    // Edit product - opens form with all fields populated
     document.querySelectorAll('.edit-product').forEach(btn => {
       btn.addEventListener('click', function() {
         const idx = parseInt(this.dataset.index);
         const p = products[idx];
         if (!p) return;
         
-        const currentDemo = p.demo_url || '';
-        const newDemo = prompt(`Enter demo URL for "${p.name}":`, currentDemo);
+        editingProductId = p.id;
+        document.getElementById('editBadge').classList.remove('hidden');
+        document.getElementById('productSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Update Product';
+        document.getElementById('cancelEditBtn').classList.remove('hidden');
         
-        if (newDemo === null) return;
+        // Populate form
+        document.getElementById('productName').value = p.name || '';
+        document.getElementById('productDesc').value = p.description || '';
+        document.getElementById('productCategory').value = p.category || 'custom';
+        document.getElementById('productFeatures').value = (p.features || []).join(', ');
+        document.getElementById('productDemoUrl').value = p.demo_url || '';
         
-        const demoValue = newDemo.trim();
+        // Show existing images
+        clearImagePreview();
+        if (p.image_urls && p.image_urls.length > 0) {
+          existingImages = [...p.image_urls];
+          displayExistingImages(p.image_urls);
+        }
         
-        supabaseClient.from('products').update({ 
-          demo_url: demoValue,
-          updated_at: new Date().toISOString()
-        }).eq('id', p.id)
-          .then(({ data, error }) => {
-            if (error) {
-              console.error('Update error:', error);
-              showToast('⚠️ Error: ' + error.message);
-              return;
-            }
-            p.demo_url = demoValue;
-            renderProductsList(products);
-            showToast(`✅ Demo URL updated for "${p.name}"`);
-          })
-          .catch(err => {
-            console.error('Update failed:', err);
-            showToast('⚠️ Update failed: ' + err.message);
-          });
+        // Scroll to form
+        document.getElementById('productForm').scrollIntoView({ behavior: 'smooth' });
       });
     });
   }
 
-  document.getElementById('addProductBtn').addEventListener('click', async function() {
-    const name = document.getElementById('newProductName').value.trim();
-    const desc = document.getElementById('newProductDesc').value.trim();
-    const category = document.getElementById('newProductCategory').value;
-    const featuresRaw = document.getElementById('newProductFeatures').value.trim();
-    const demoUrl = document.getElementById('newProductDemoUrl').value.trim();
+  // ─── PRODUCT FORM SUBMIT ───
+  document.getElementById('productSubmitBtn').addEventListener('click', async function() {
+    const name = document.getElementById('productName').value.trim();
+    const desc = document.getElementById('productDesc').value.trim();
+    const category = document.getElementById('productCategory').value;
+    const featuresRaw = document.getElementById('productFeatures').value.trim();
+    const demoUrl = document.getElementById('productDemoUrl').value.trim();
 
     if (!name || !desc) {
       showToast('⚠️ Please fill in name and description');
       return;
     }
-    if (selectedImages.length === 0) {
-      showToast('⚠️ Please upload at least one product image');
-      return;
-    }
 
     const features = featuresRaw ? featuresRaw.split(',').map(f => f.trim()).filter(f => f) : ['Custom features'];
+    const isEditing = editingProductId !== null;
 
     this.disabled = true;
-    this.innerHTML = '<span class="loading-spinner"></span> Adding...';
+    this.innerHTML = '<span class="loading-spinner"></span> Processing...';
 
     try {
       const categoryLabels = {
@@ -685,64 +848,248 @@
       const productData = {
         name, 
         description: desc,
-        price: 0,
         category: category, 
         category_label: categoryLabels[category] || 'Custom',
         features, 
-        image_urls: [],
-        created_at: new Date().toISOString()
+        updated_at: new Date().toISOString()
       };
 
-      if (demoUrl) {
-        productData.demo_url = demoUrl;
-      }
+      if (demoUrl) productData.demo_url = demoUrl;
 
-      const { data, error } = await supabaseClient.from('products').insert([productData]).select();
-      if (error) throw error;
-      const product = data[0];
+      let product;
 
-      if (selectedImages.length > 0) {
-        try {
+      if (isEditing) {
+        // Update existing product
+        const { data, error } = await supabaseClient.from('products').update(productData).eq('id', editingProductId).select();
+        if (error) throw error;
+        product = data[0];
+        
+        // Handle images
+        if (selectedImages.length > 0) {
+          const uploadedUrls = await uploadImages(editingProductId);
+          const allImages = [...existingImages, ...uploadedUrls];
+          await supabaseClient.from('products').update({ image_urls: allImages }).eq('id', editingProductId);
+        } else if (existingImages.length > 0) {
+          await supabaseClient.from('products').update({ image_urls: existingImages }).eq('id', editingProductId);
+        }
+        
+        showToast(`✅ "${name}" updated successfully!`);
+      } else {
+        // Create new product
+        productData.image_urls = [];
+        productData.created_at = new Date().toISOString();
+        
+        const { data, error } = await supabaseClient.from('products').insert([productData]).select();
+        if (error) throw error;
+        product = data[0];
+
+        if (selectedImages.length > 0) {
           const uploadedUrls = await uploadImages(product.id);
           await supabaseClient.from('products').update({ image_urls: uploadedUrls }).eq('id', product.id);
-        } catch (uploadError) {
-          // If upload fails, show error but keep the product
-          showToast('⚠️ Product created but images failed: ' + uploadError.message);
-          // Re-fetch products to show the product without images
-          const { data: productsData } = await supabaseClient.from('products').select('*').order('created_at', { ascending: true });
-          renderProductsList(productsData || []);
-          this.disabled = false;
-          this.innerHTML = '<i class="fas fa-plus"></i> Add Package';
-          return;
         }
+        
+        showToast(`✅ "${name}" added successfully!`);
       }
 
+      // Reset form
+      resetProductForm();
+      
+      // Refresh list
       const { data: productsData } = await supabaseClient.from('products').select('*').order('created_at', { ascending: true });
       renderProductsList(productsData || []);
 
-      document.getElementById('newProductName').value = '';
-      document.getElementById('newProductDesc').value = '';
-      document.getElementById('newProductFeatures').value = '';
-      document.getElementById('newProductDemoUrl').value = '';
-      selectedImages = [];
-      imagePreviewGrid.innerHTML = '';
-
-      showToast(`✅ "${name}" added successfully!`);
     } catch (e) {
-      console.error('Add product error:', e);
-      showToast('⚠️ Error adding product: ' + (e.message || 'Unknown error'));
+      console.error('Product error:', e);
+      showToast('⚠️ Error: ' + (e.message || 'Unknown error'));
     }
     this.disabled = false;
-    this.innerHTML = '<i class="fas fa-plus"></i> Add Package';
+    this.innerHTML = isEditing ? '<i class="fas fa-save"></i> Update Product' : '<i class="fas fa-plus"></i> Add Product';
   });
 
+  function resetProductForm() {
+    document.getElementById('productName').value = '';
+    document.getElementById('productDesc').value = '';
+    document.getElementById('productCategory').value = 'portfolio';
+    document.getElementById('productFeatures').value = '';
+    document.getElementById('productDemoUrl').value = '';
+    clearImagePreview();
+    editingProductId = null;
+    document.getElementById('editBadge').classList.add('hidden');
+    document.getElementById('cancelEditBtn').classList.add('hidden');
+    document.getElementById('productSubmitBtn').innerHTML = '<i class="fas fa-plus"></i> Add Product';
+  }
+
+  document.getElementById('cancelEditBtn').addEventListener('click', resetProductForm);
+
+  // ─── RENDER MOMENTS ───
+  function renderMomentsList(moments) {
+    const momentList = document.getElementById('momentList');
+    const momentCountBadge = document.getElementById('momentCountBadge');
+    
+    if (!moments || moments.length === 0) {
+      momentList.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1rem 0;">No moments yet. Create your first Pixlnex Moment below.</div>';
+      momentCountBadge.textContent = '0';
+      return;
+    }
+    
+    momentCountBadge.textContent = moments.length;
+    momentList.innerHTML = '';
+    
+    const typeIcons = { 'prank': '😂', 'proposal': '💍', 'birthday': '🎂', 'custom': '🎨' };
+    const typeLabels = { 'prank': 'Prank', 'proposal': 'Proposal', 'birthday': 'Birthday Wish', 'custom': 'Custom' };
+    
+    moments.forEach((m, index) => {
+      const div = document.createElement('div');
+      div.className = 'moment-item';
+      const icon = typeIcons[m.type] || '🎨';
+      const typeLabel = typeLabels[m.type] || 'Custom';
+      const isUsed = m.used || false;
+      
+      div.innerHTML = `
+        <div class="moment-info">
+          <span class="moment-icon">${icon}</span>
+          <div>
+            <span class="moment-name">${m.title}</span>
+            <span class="moment-meta">${typeLabel} · To: ${m.recipient} · From: ${m.sender} · ${m.views || 0} views</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <span class="moment-status ${isUsed ? 'used' : 'active'}">${isUsed ? '🔒 Used' : '✅ Active'}</span>
+          <div class="moment-actions">
+            <button class="edit-moment" data-index="${index}"><i class="fas fa-edit"></i></button>
+            <button class="delete delete-moment" data-index="${index}"><i class="fas fa-trash-alt"></i></button>
+          </div>
+        </div>
+      `;
+      momentList.appendChild(div);
+    });
+
+    // Delete moment
+    document.querySelectorAll('.delete-moment').forEach(btn => {
+      btn.addEventListener('click', async function() {
+        const idx = parseInt(this.dataset.index);
+        const moment = moments[idx];
+        if (!moment) return;
+        if (confirm(`Delete "${moment.title}"?`)) {
+          try {
+            await supabaseClient.from('one_time_items').delete().eq('id', moment.id);
+            moments.splice(idx, 1);
+            renderMomentsList(moments);
+            showToast(`🗑️ "${moment.title}" deleted`);
+            document.getElementById('totalMoments').textContent = moments.length;
+          } catch (e) { showToast('⚠️ Error deleting moment'); }
+        }
+      });
+    });
+
+    // Edit moment
+    document.querySelectorAll('.edit-moment').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const idx = parseInt(this.dataset.index);
+        const m = moments[idx];
+        if (!m) return;
+        
+        editingMomentId = m.id;
+        document.getElementById('momentEditBadge').classList.remove('hidden');
+        document.getElementById('momentSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Update Moment';
+        document.getElementById('cancelMomentEditBtn').classList.remove('hidden');
+        
+        document.getElementById('momentType').value = m.type || 'custom';
+        document.getElementById('momentTitle').value = m.title || '';
+        document.getElementById('momentMessage').value = m.message || '';
+        document.getElementById('momentRecipient').value = m.recipient || '';
+        document.getElementById('momentSender').value = m.sender || '';
+        document.getElementById('momentColor').value = m.color || '#7c3aed';
+        
+        document.getElementById('momentForm').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  }
+
+  // ─── MOMENT FORM SUBMIT ───
+  document.getElementById('momentSubmitBtn').addEventListener('click', async function() {
+    const type = document.getElementById('momentType').value;
+    const title = document.getElementById('momentTitle').value.trim();
+    const message = document.getElementById('momentMessage').value.trim();
+    const recipient = document.getElementById('momentRecipient').value.trim();
+    const sender = document.getElementById('momentSender').value.trim();
+    const color = document.getElementById('momentColor').value;
+
+    if (!title || !message || !recipient || !sender) {
+      showToast('⚠️ Please fill in all fields');
+      return;
+    }
+
+    const isEditing = editingMomentId !== null;
+
+    this.disabled = true;
+    this.innerHTML = '<span class="loading-spinner"></span> Processing...';
+
+    try {
+      const momentData = {
+        type, title, message, recipient, sender, color,
+        updated_at: new Date().toISOString()
+      };
+
+      if (isEditing) {
+        await supabaseClient.from('one_time_items').update(momentData).eq('id', editingMomentId);
+        showToast(`✅ "${title}" updated successfully!`);
+      } else {
+        const slug = generateSlug();
+        momentData.slug = slug;
+        momentData.views = 0;
+        momentData.used = false;
+        momentData.created_at = new Date().toISOString();
+        await supabaseClient.from('one_time_items').insert([momentData]);
+        showToast(`✅ "${title}" created! Share link: ${window.location.origin}/view.html?slug=${slug}`);
+      }
+
+      resetMomentForm();
+      
+      const { data: momentsData } = await supabaseClient.from('one_time_items').select('*').order('created_at', { ascending: false });
+      renderMomentsList(momentsData || []);
+      document.getElementById('totalMoments').textContent = momentsData ? momentsData.length : 0;
+
+    } catch (e) {
+      console.error('Moment error:', e);
+      showToast('⚠️ Error: ' + (e.message || 'Unknown error'));
+    }
+    this.disabled = false;
+    this.innerHTML = isEditing ? '<i class="fas fa-save"></i> Update Moment' : '<i class="fas fa-plus"></i> Create Moment';
+  });
+
+  function generateSlug() {
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < 8; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+
+  function resetMomentForm() {
+    document.getElementById('momentType').value = 'prank';
+    document.getElementById('momentTitle').value = '';
+    document.getElementById('momentMessage').value = '';
+    document.getElementById('momentRecipient').value = '';
+    document.getElementById('momentSender').value = '';
+    document.getElementById('momentColor').value = '#7c3aed';
+    editingMomentId = null;
+    document.getElementById('momentEditBadge').classList.add('hidden');
+    document.getElementById('cancelMomentEditBtn').classList.add('hidden');
+    document.getElementById('momentSubmitBtn').innerHTML = '<i class="fas fa-plus"></i> Create Moment';
+  }
+
+  document.getElementById('cancelMomentEditBtn').addEventListener('click', resetMomentForm);
+
+  // ─── INIT ───
   function init() {
     initSupabase();
     const adminName = localStorage.getItem('pixlnex_admin_name');
     if (checkAdminSession()) {
       document.getElementById('authBtn').textContent = `👑 ${adminName || 'Admin'}`;
       document.getElementById('authBtn').className = 'auth-btn logout';
-      loadAdminData();
+      loadAllData();
     } else {
       document.getElementById('loginOverlay').classList.remove('hidden');
       document.getElementById('authBtn').textContent = '🔒 Admin';
