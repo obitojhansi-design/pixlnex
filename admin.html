@@ -34,7 +34,6 @@
     .supabase-status { display: inline-block; padding: 0.2rem 0.8rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600; }
     .supabase-status.connected { background: #dcfce7; color: #166534; }
     .supabase-status.disconnected { background: #fee2e2; color: #b91c1c; }
-    .supabase-status.checking { background: #fef3c7; color: #92400e; }
 
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
     .stat-card { background: white; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #e9eef3; transition: transform 0.2s; }
@@ -112,7 +111,6 @@
     .product-form .form-actions .btn-cancel:hover { background: #e2e8f0; }
     .product-form .edit-badge { background: #f59e0b20; color: #d97706; padding: 0.2rem 1rem; border-radius: 30px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin-bottom: 0.5rem; }
 
-    /* ─── MOMENT ITEMS ─── */
     .moment-item { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
     .moment-item:last-child { border-bottom: none; }
     .moment-item .moment-info { display: flex; align-items: center; gap: 1rem; flex: 1; }
@@ -129,12 +127,13 @@
     .moment-item .moment-actions .btn-preview { color: #2563eb; }
     .moment-item .moment-actions .btn-preview:hover { background: #2563eb10; color: #1a56db; }
 
-    /* ─── MOMENT FORM ─── */
     .moment-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
     .moment-form input, .moment-form select, .moment-form textarea { padding: 0.6rem 1rem; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.9rem; background: #f8fafc; transition: 0.2s; width: 100%; }
     .moment-form input:focus, .moment-form select:focus, .moment-form textarea:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: transparent; background: white; }
     .moment-form textarea { border-radius: 1rem; min-height: 80px; resize: vertical; }
     .moment-form .full { grid-column: 1 / -1; }
+    .moment-form .demo-url-input { display: flex; gap: 0.5rem; align-items: center; }
+    .moment-form .demo-url-input input { flex: 1; }
     .moment-form .form-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 0.5rem; }
     .moment-form .form-actions button { padding: 0.6rem 1.8rem; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; border: none; font-size: 0.9rem; }
     .moment-form .form-actions .btn-submit { background: #7c3aed; color: white; }
@@ -143,17 +142,14 @@
     .moment-form .form-actions .btn-cancel { background: #eef2f6; color: #1e293b; }
     .moment-form .form-actions .btn-cancel:hover { background: #e2e8f0; }
     .moment-form .edit-badge { background: #f59e0b20; color: #d97706; padding: 0.2rem 1rem; border-radius: 30px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin-bottom: 0.5rem; }
+    .moment-form .combo-input { position: relative; }
+    .moment-form .combo-input input { width: 100%; padding: 0.6rem 1rem; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.9rem; background: #f8fafc; transition: 0.2s; }
+    .moment-form .combo-input input:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: transparent; background: white; }
+    .moment-form .combo-input .suggestions { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e2e8f0; border-radius: 1rem; margin-top: 0.3rem; max-height: 150px; overflow-y: auto; z-index: 100; display: none; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+    .moment-form .combo-input .suggestions.show { display: block; }
+    .moment-form .combo-input .suggestions .suggestion-item { padding: 0.5rem 1rem; cursor: pointer; transition: 0.15s; font-size: 0.85rem; }
+    .moment-form .combo-input .suggestions .suggestion-item:hover { background: #f1f6fe; color: #2563eb; }
 
-    /* ─── COMBO INPUT (Type + Select) ─── */
-    .combo-input { position: relative; }
-    .combo-input input { width: 100%; padding: 0.6rem 1rem; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.9rem; background: #f8fafc; transition: 0.2s; }
-    .combo-input input:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: transparent; background: white; }
-    .combo-input .suggestions { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e2e8f0; border-radius: 1rem; margin-top: 0.3rem; max-height: 150px; overflow-y: auto; z-index: 100; display: none; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-    .combo-input .suggestions.show { display: block; }
-    .combo-input .suggestions .suggestion-item { padding: 0.5rem 1rem; cursor: pointer; transition: 0.15s; font-size: 0.85rem; }
-    .combo-input .suggestions .suggestion-item:hover { background: #f1f6fe; color: #2563eb; }
-
-    /* ─── DEMO OVERLAY ─── */
     .demo-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 99997; align-items: center; justify-content: center; padding: 2rem; }
     .demo-overlay.active { display: flex; }
     .demo-overlay .demo-content { position: relative; width: 100%; max-width: 1200px; height: 85vh; background: white; border-radius: 1.5rem; overflow: hidden; }
@@ -239,7 +235,6 @@
         <button data-tab="tab-moments"><i class="fas fa-star"></i> Pixlnex Moments</button>
       </div>
 
-      <!-- ─── TAB: ORDERS ─── -->
       <div id="tab-orders" class="tab-content active">
         <div class="admin-card">
           <h3><i class="fas fa-list"></i> All Orders <span class="badge-count" id="orderCountBadge">0</span></h3>
@@ -247,7 +242,6 @@
         </div>
       </div>
 
-      <!-- ─── TAB: PRODUCTS ─── -->
       <div id="tab-products" class="tab-content">
         <div class="admin-card">
           <h3><i class="fas fa-cube"></i> Products <span class="badge-count" id="productCountBadge">0</span></h3>
@@ -292,7 +286,6 @@
         </div>
       </div>
 
-      <!-- ─── TAB: MOMENTS ─── -->
       <div id="tab-moments" class="tab-content">
         <div class="admin-card">
           <h3><i class="fas fa-star"></i> Pixlnex Moments <span class="badge-count" id="momentCountBadge">0</span></h3>
@@ -302,7 +295,8 @@
             <div class="full">
               <span class="edit-badge hidden" id="momentEditBadge">✏️ Editing Moment</span>
             </div>
-            <!-- ─── COMBO INPUT: Type (select + type) ─── -->
+            
+            <!-- Genre / Type - Combo Input -->
             <div class="full combo-input" id="typeCombo">
               <label style="font-weight:600;font-size:0.85rem;display:block;margin-bottom:0.3rem;color:#1e293b;">Genre / Type</label>
               <input type="text" id="momentTypeInput" placeholder="Type or select a genre..." autocomplete="off" />
@@ -317,12 +311,16 @@
                 <div class="suggestion-item" data-value="friendship">🤝 Friendship</div>
               </div>
             </div>
+            
             <input type="text" id="momentTitle" placeholder="Title" required />
+            
             <div class="full">
               <textarea id="momentMessage" placeholder="Message" required style="min-height:80px;"></textarea>
             </div>
+            
             <input type="text" id="momentRecipient" placeholder="Recipient Name" required />
             <input type="text" id="momentSender" placeholder="Sender Name" required />
+            
             <select id="momentColor">
               <option value="#7c3aed">Purple</option>
               <option value="#2563eb">Blue</option>
@@ -333,6 +331,13 @@
               <option value="#8b5cf6">Violet</option>
               <option value="#06b6d4">Cyan</option>
             </select>
+            
+            <!-- ─── LIVE DEMO URL FOR MOMENTS ─── -->
+            <div class="full demo-url-input">
+              <input type="url" id="momentDemoUrl" placeholder="Live Demo URL (optional)" />
+              <span style="font-size:0.7rem;color:#94a3b8;">Optional - for preview</span>
+            </div>
+            
             <div class="full form-actions">
               <button class="btn-cancel hidden" id="cancelMomentEditBtn" type="button">Cancel</button>
               <button class="btn-submit" id="momentSubmitBtn" style="background:#7c3aed;"><i class="fas fa-plus"></i> Create Moment</button>
@@ -348,7 +353,6 @@
     </footer>
   </div>
 
-  <!-- ─── TOAST ─── -->
   <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Done!</span></div>
 
   <!-- ─── DEMO OVERLAY ─── -->
@@ -360,7 +364,6 @@
     </div>
   </div>
 
-  <!-- ─── LOGIN OVERLAY ─── -->
   <div class="login-overlay" id="loginOverlay">
     <div class="login-box">
       <a href="index.html" class="logo"><img src="logo.png" alt="Pixlnex" /><span>Pixlnex</span></a>
@@ -379,10 +382,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   // ============================================
-  // PIXLNEX - ADMIN PANEL (FULL FEATURES)
+  // PIXLNEX - ADMIN PANEL (WITH MOMENT DEMO URL)
   // ============================================
 
-  const SUPABASE_URL = 'https://skdthncgjwtlydtgtjze.supabase.co';
+   const SUPABASE_URL = 'https://skdthncgjwtlydtgtjze.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_k1DV8-nVcr4o5LE8s_wbLA_O7BPQFpy';
   const STORAGE_BUCKET = 'product-images';
 
@@ -441,7 +444,6 @@
       const { data: buckets, error: listError } = await supabaseClient.storage.listBuckets();
       if (listError) {
         console.error('Failed to list buckets:', listError);
-        showToast('⚠️ Cannot access storage: ' + listError.message, 'error');
         return false;
       }
 
@@ -459,7 +461,6 @@
       });
       if (createError) {
         console.error('Failed to create bucket:', createError);
-        showToast('⚠️ Could not create bucket: ' + createError.message, 'error');
         return false;
       }
 
@@ -468,7 +469,6 @@
       return true;
     } catch (e) {
       console.error('Error ensuring bucket:', e);
-      showToast('⚠️ Storage error: ' + e.message, 'error');
       return false;
     }
   }
@@ -542,27 +542,23 @@
     document.body.style.overflow = '';
   }
 
-  // ─── COMBO INPUT (Type + Select) ───
+  // ─── COMBO INPUT ───
   function setupComboInput(inputId, suggestionsId) {
     const input = document.getElementById(inputId);
     const suggestions = document.getElementById(suggestionsId);
     if (!input || !suggestions) return;
 
-    // Show suggestions on focus
     input.addEventListener('focus', function() {
-      suggestions.classList.add('show');
-      // Filter based on current value
       filterSuggestions();
+      suggestions.classList.add('show');
     });
 
-    // Hide suggestions on blur (with delay to allow click)
     input.addEventListener('blur', function() {
       setTimeout(() => {
         suggestions.classList.remove('show');
       }, 200);
     });
 
-    // Filter suggestions as user types
     input.addEventListener('input', function() {
       filterSuggestions();
     });
@@ -590,23 +586,19 @@
       }
     }
 
-    // Select suggestion on click
     suggestions.querySelectorAll('.suggestion-item').forEach(item => {
       item.addEventListener('click', function() {
         input.value = this.textContent;
         input.dataset.value = this.dataset.value;
         suggestions.classList.remove('show');
         input.focus();
-        // Trigger change event
         input.dispatchEvent(new Event('change'));
       });
     });
 
-    // If user types a custom value, use it as-is
     input.addEventListener('change', function() {
-      // If no suggestion was selected, use the typed value
       if (!this.dataset.value) {
-        // Keep the typed value
+        // Keep typed value
       }
     });
   }
@@ -1176,7 +1168,8 @@
       const icon = typeIcons[m.type] || '🎨';
       const typeLabel = typeLabels[m.type] || m.type || 'Custom';
       const isUsed = m.used || false;
-      const viewUrl = `${window.location.origin}/view.html?slug=${m.slug}`;
+      // Use the demo_url if available, otherwise fallback to view.html
+      const viewUrl = m.demo_url || `${window.location.origin}/view.html?slug=${m.slug}`;
       
       div.innerHTML = `
         <div class="moment-info">
@@ -1184,6 +1177,7 @@
           <div>
             <span class="moment-name">${m.title}</span>
             <span class="moment-meta">${typeLabel} · To: ${m.recipient} · From: ${m.sender} · ${m.views || 0} views</span>
+            ${m.demo_url ? '<span style="font-size:0.6rem;color:#94a3b8;display:block;">🔗 Has Demo URL</span>' : ''}
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:1rem;">
@@ -1242,6 +1236,7 @@
         document.getElementById('momentRecipient').value = m.recipient || '';
         document.getElementById('momentSender').value = m.sender || '';
         document.getElementById('momentColor').value = m.color || '#7c3aed';
+        document.getElementById('momentDemoUrl').value = m.demo_url || '';
         
         document.getElementById('momentForm').scrollIntoView({ behavior: 'smooth' });
         showToast(`✏️ Editing "${m.title}"`, 'success');
@@ -1254,7 +1249,6 @@
     // Get type from combo input
     const typeInput = document.getElementById('momentTypeInput');
     let type = typeInput.dataset.value || typeInput.value.trim().toLowerCase().replace(/\s+/g, '_');
-    // If type is empty or just a label, use 'custom'
     if (!type || type === '' || type === 'custom' || typeInput.value.includes('Custom')) {
       type = 'custom';
     }
@@ -1264,6 +1258,7 @@
     const recipient = document.getElementById('momentRecipient').value.trim();
     const sender = document.getElementById('momentSender').value.trim();
     const color = document.getElementById('momentColor').value;
+    const demoUrl = document.getElementById('momentDemoUrl').value.trim();
 
     if (!title || !message || !recipient || !sender) {
       showToast('⚠️ Please fill in all fields', 'error');
@@ -1284,6 +1279,11 @@
         color: color,
         updated_at: new Date().toISOString()
       };
+
+      // Add demo_url if provided
+      if (demoUrl) {
+        momentData.demo_url = demoUrl;
+      }
 
       if (isEditing) {
         await supabaseClient.from('one_time_items').update(momentData).eq('id', editingMomentId);
@@ -1327,6 +1327,7 @@
     document.getElementById('momentRecipient').value = '';
     document.getElementById('momentSender').value = '';
     document.getElementById('momentColor').value = '#7c3aed';
+    document.getElementById('momentDemoUrl').value = '';
     editingMomentId = null;
     document.getElementById('momentEditBadge').classList.add('hidden');
     document.getElementById('cancelMomentEditBtn').classList.add('hidden');
@@ -1339,7 +1340,7 @@
   function init() {
     initSupabase();
     
-    // Setup combo input
+    // Setup combo input for type
     setupComboInput('momentTypeInput', 'typeSuggestions');
     
     const adminName = localStorage.getItem('pixlnex_admin_name');
