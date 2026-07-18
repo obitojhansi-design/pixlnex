@@ -8,12 +8,10 @@
   <link rel="icon" href="logo.png" type="image/png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
-    /* ... styles as before ... */
-    /* Keeping styles minimal for brevity, use your existing styles */
+    /* (Same styles as before - keep as is) */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
     body { background: #f0f4f8; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
     .app { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; flex: 1; width: 100%; }
-    
     .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; padding: 0.75rem 0 1.5rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem; }
     .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; text-decoration: none; }
     .logo img { height: 35px; width: auto; }
@@ -36,6 +34,7 @@
     .supabase-status { display: inline-block; padding: 0.2rem 0.8rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600; }
     .supabase-status.connected { background: #dcfce7; color: #166534; }
     .supabase-status.disconnected { background: #fee2e2; color: #b91c1c; }
+    .supabase-status.checking { background: #fef3c7; color: #92400e; }
 
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
     .stat-card { background: white; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #e9eef3; transition: transform 0.2s; }
@@ -330,13 +329,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   // ============================================
-  // PIXLNEX - ADMIN PANEL (FIXED - SAME PROJECT)
+  // PIXLNEX - ADMIN PANEL (AUTO-CREATE BUCKET)
   // ============================================
 
-  // ⚠️ IMPORTANT: Your database and storage must be in the SAME project!
-  // Your current project: mskhicltjsnjitwfswis.supabase.co
-  // You MUST create the bucket "product-images" in THIS project.
-  
+  // ⚠️ Use the SAME project for database and storage
   const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
   const STORAGE_BUCKET = 'product-images';
@@ -389,6 +385,100 @@
     }
   }
 
+  // ─── ENSURE BUCKET EXISTS (AUTO-CREATE) ───
+  async function ensureBucket() {
+    if (!supabaseClient) return false;
+    try {
+      // List buckets to check if ours exists
+      const { data: buckets, error: listError } = await supabaseClient.storage.listBuckets();
+      if (listError) {
+        console.error('Failed to list buckets:', listError);
+        showToast('⚠️ Cannot access storage: ' + listError.message, 'error');
+        return false;
+      }
+
+      const bucketExists = buckets.some(b => b.name === STORAGE_BUCKET);
+      if (bucketExists) {
+        console.log(`✅ Bucket "${STORAGE_BUCKET}" already exists.`);
+        return true;
+      }
+
+      // Bucket does not exist – create it
+      console.log(`🔧 Bucket "${STORAGE_BUCKET}" not found. Creating...`);
+      const { error: createError } = await supabaseClient.storage.createBucket(STORAGE_BUCKET, {
+        public: true,
+        allowedMimeTypes: ['image/*'],
+        fileSizeLimit: 5 * 1024 * 1024 // 5MB
+      });
+      if (createError) {
+        console.error('Failed to create bucket:', createError);
+        showToast('⚠️ Could not create bucket: ' + createError.message, 'error');
+        return false;
+      }
+
+      console.log(`✅ Bucket "${STORAGE_BUCKET}" created successfully.`);
+      showToast('✅ Storage bucket created automatically!', 'success');
+      return true;
+    } catch (e) {
+      console.error('Error ensuring bucket:', e);
+      showToast('⚠️ Storage error: ' + e.message, 'error');
+      return false;
+    }
+  }
+
+  // ─── UPLOAD IMAGES (with bucket guarantee) ───
+  async function uploadImages(productId) {
+    const uploadedUrls = [];
+    if (selectedImages.length === 0) return uploadedUrls;
+
+    // Ensure bucket exists before uploading
+    const bucketReady = await ensureBucket();
+    if (!bucketReady) {
+      showToast('❌ Bucket not available. Upload aborted.', 'error');
+      return [];
+    }
+
+    showToast(`📸 Uploading ${selectedImages.length} image(s)...`, 'success');
+
+    for (const file of selectedImages) {
+      try {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${productId}/${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+        console.log('📤 Uploading:', fileName);
+
+        const { data, error } = await supabaseClient.storage.from(STORAGE_BUCKET).upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+        if (error) {
+          console.error('Upload error:', error);
+          showToast(`⚠️ Failed: ${file.name} - ${error.message}`, 'error');
+          continue;
+        }
+
+        const { data: { publicUrl } } = supabaseClient.storage.from(STORAGE_BUCKET).getPublicUrl(fileName);
+        console.log('✅ Uploaded:', publicUrl);
+        uploadedUrls.push(publicUrl);
+        showToast(`✅ Uploaded: ${file.name}`, 'success');
+      } catch (e) {
+        console.error('Upload error:', e);
+        showToast(`⚠️ Failed: ${file.name}`, 'error');
+      }
+    }
+
+    if (uploadedUrls.length === selectedImages.length) {
+      showToast(`✅ All ${uploadedUrls.length} images uploaded!`, 'success');
+    } else if (uploadedUrls.length > 0) {
+      showToast(`⚠️ ${uploadedUrls.length} of ${selectedImages.length} uploaded`, 'error');
+    } else {
+      showToast('❌ No images uploaded. Check console for errors.', 'error');
+    }
+
+    return uploadedUrls;
+  }
+
+  // ─── AUTH ───
   function checkAdminSession() {
     const session = localStorage.getItem('pixlnex_admin_session');
     if (session === 'true') {
@@ -474,13 +564,13 @@
     const files = Array.from(e.target.files);
     let validCount = 0;
     files.forEach(file => {
-      if (!file.type.startsWith('image/')) { 
+      if (!file.type.startsWith('image/')) {
         showToast('⚠️ Please select image files only', 'error');
-        return; 
+        return;
       }
-      if (file.size > 5 * 1024 * 1024) { 
+      if (file.size > 5 * 1024 * 1024) {
         showToast('⚠️ Image size must be less than 5MB', 'error');
-        return; 
+        return;
       }
       selectedImages.push(file);
       displayImagePreview(file);
@@ -589,78 +679,6 @@
     imageStatus.textContent = 'No images selected';
   }
 
-  // ─── UPLOAD IMAGES ───
-  async function uploadImages(productId) {
-    const uploadedUrls = [];
-    
-    if (selectedImages.length === 0) return uploadedUrls;
-    
-    showToast(`📸 Uploading ${selectedImages.length} image(s)...`, 'success');
-    
-    try {
-      // Check if bucket exists in the SAME project
-      const { data: buckets, error: bucketError } = await supabaseClient.storage.listBuckets();
-      if (bucketError) {
-        console.error('Bucket list error:', bucketError);
-        showToast('⚠️ Storage error: ' + bucketError.message, 'error');
-        return [];
-      }
-      
-      const bucketExists = buckets.some(b => b.name === STORAGE_BUCKET);
-      if (!bucketExists) {
-        showToast('⚠️ Bucket "product-images" not found in this project. Please create it in Supabase Dashboard → Storage.', 'error');
-        console.error(`❌ Bucket "${STORAGE_BUCKET}" does not exist in project:`, SUPABASE_URL);
-        console.log('📋 Available buckets:', buckets.map(b => b.name));
-        return [];
-      }
-      
-      console.log(`✅ Bucket "${STORAGE_BUCKET}" found in project:`, SUPABASE_URL);
-      
-    } catch (e) {
-      console.error('Bucket error:', e);
-      showToast('⚠️ Storage error: ' + e.message, 'error');
-      return [];
-    }
-    
-    // Upload each image
-    for (const file of selectedImages) {
-      try {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${productId}/${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-        console.log('📤 Uploading to:', SUPABASE_URL, 'path:', fileName);
-        
-        const { data, error } = await supabaseClient.storage.from(STORAGE_BUCKET).upload(fileName, file, { 
-          cacheControl: '3600', 
-          upsert: false 
-        });
-        
-        if (error) {
-          console.error('Upload error:', error);
-          showToast(`⚠️ Failed: ${file.name} - ${error.message}`, 'error');
-          continue;
-        }
-        
-        const { data: { publicUrl } } = supabaseClient.storage.from(STORAGE_BUCKET).getPublicUrl(fileName);
-        console.log('✅ Uploaded to:', publicUrl);
-        uploadedUrls.push(publicUrl);
-        showToast(`✅ Uploaded: ${file.name}`, 'success');
-      } catch (e) {
-        console.error('Upload error:', e);
-        showToast(`⚠️ Failed: ${file.name}`, 'error');
-      }
-    }
-    
-    if (uploadedUrls.length === selectedImages.length) {
-      showToast(`✅ All ${uploadedUrls.length} images uploaded!`, 'success');
-    } else if (uploadedUrls.length > 0) {
-      showToast(`⚠️ ${uploadedUrls.length} of ${selectedImages.length} uploaded`, 'error');
-    } else {
-      showToast('❌ No images uploaded. Check console for errors.', 'error');
-    }
-    
-    return uploadedUrls;
-  }
-
   // ─── LOAD DATA ───
   async function loadAllData() {
     if (!supabaseConnected || !supabaseClient) {
@@ -708,6 +726,7 @@
   }
 
   function renderOrders(orders) {
+    // ... (same as before, keep as is)
     const orderList = document.getElementById('orderList');
     const orderCountBadge = document.getElementById('orderCountBadge');
     if (!orders || orders.length === 0) {
@@ -790,6 +809,7 @@
   }
 
   function renderProductsList(products) {
+    // ... (same as before, keep as is)
     const productList = document.getElementById('productList');
     const productCountBadge = document.getElementById('productCountBadge');
     
@@ -832,7 +852,6 @@
       productList.appendChild(div);
     });
 
-    // ─── DELETE ───
     document.querySelectorAll('.delete-product').forEach(btn => {
       btn.addEventListener('click', async function() {
         const idx = parseInt(this.dataset.index);
@@ -856,7 +875,6 @@
       });
     });
 
-    // ─── EDIT ───
     document.querySelectorAll('.edit-product').forEach(btn => {
       btn.addEventListener('click', function() {
         const idx = parseInt(this.dataset.index);
