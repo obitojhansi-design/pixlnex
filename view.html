@@ -1,4 +1,4 @@
-<!-- moments.html -->
+<!-- one-time.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,22 +31,22 @@
     .page-header p { opacity: 0.9; font-size: 1.1rem; max-width: 600px; margin-top: 0.3rem; }
     .page-header .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 0.2rem 1rem; border-radius: 40px; font-size: 0.8rem; margin-top: 0.5rem; border: 1px solid rgba(255,255,255,0.15); }
 
-    .moments-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
-    .moments-card { background: white; border-radius: 2rem; padding: 2rem; border: 1px solid #e9eef3; transition: all 0.3s ease; cursor: pointer; }
-    .moments-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px -8px rgba(0,20,40,0.1); }
-    .moments-card .icon { font-size: 3rem; margin-bottom: 1rem; }
-    .moments-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.3rem; }
-    .moments-card p { color: #64748b; font-size: 0.95rem; }
-    .moments-card .price-tag { display: inline-block; background: #f1f6fe; color: #2563eb; padding: 0.2rem 1rem; border-radius: 40px; font-weight: 600; font-size: 0.85rem; margin-top: 0.8rem; border: 1px solid #2563eb20; }
-    .moments-card .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
-    .moments-card .card-footer .btn-use { background: #0f2b4b; color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .moments-card .card-footer .btn-use:hover { background: #1a3a5e; transform: scale(1.02); }
-    .moments-card .card-footer .share-link { font-size: 0.8rem; color: #94a3b8; cursor: pointer; transition: 0.2s; }
-    .moments-card .card-footer .share-link:hover { color: #2563eb; }
+    .one-time-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+    .one-time-card { background: white; border-radius: 2rem; padding: 2rem; border: 1px solid #e9eef3; transition: all 0.3s ease; cursor: pointer; }
+    .one-time-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px -8px rgba(0,20,40,0.1); }
+    .one-time-card .icon { font-size: 3rem; margin-bottom: 1rem; }
+    .one-time-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .one-time-card p { color: #64748b; font-size: 0.95rem; }
+    .one-time-card .price-tag { display: inline-block; background: #f1f6fe; color: #2563eb; padding: 0.2rem 1rem; border-radius: 40px; font-weight: 600; font-size: 0.85rem; margin-top: 0.8rem; border: 1px solid #2563eb20; }
+    .one-time-card .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
+    .one-time-card .card-footer .btn-use { background: #0f2b4b; color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+    .one-time-card .card-footer .btn-use:hover { background: #1a3a5e; transform: scale(1.02); }
+    .one-time-card .card-footer .share-link { font-size: 0.8rem; color: #94a3b8; cursor: pointer; transition: 0.2s; }
+    .one-time-card .card-footer .share-link:hover { color: #2563eb; }
 
     .featured-badge { position: absolute; top: 12px; right: 12px; background: #f59e0b; color: white; font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.8rem; border-radius: 30px; }
 
-    /* Modal for creating moments use */
+    /* Modal for creating one-time use */
     .create-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 99998; align-items: center; justify-content: center; padding: 1.5rem; }
     .create-modal.active { display: flex; }
     .create-modal .modal-content { background: white; border-radius: 2rem; max-width: 560px; width: 100%; padding: 2.5rem; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
@@ -89,7 +89,7 @@
       .nav-links { justify-content: space-between; }
       .page-header { padding: 1.8rem; }
       .page-header h1 { font-size: 2rem; }
-      .moments-grid { grid-template-columns: 1fr; }
+      .one-time-grid { grid-template-columns: 1fr; }
       .preview-modal .preview-content { height: 60vh; }
       .create-modal .modal-content { padding: 1.5rem; }
     }
@@ -103,7 +103,7 @@
     <nav class="nav-links">
       <a href="index.html">Home</a>
       <a href="shop.html">Webs</a>
-      <a href="moments.html" class="active">✨ One Time</a>
+      <a href="one-time.html" class="active">✨ One Time</a>
       <a href="#" id="navAbout">About</a>
       <a href="profile.html" id="authBtn" class="auth-btn"><i class="fas fa-user"></i> Login</a>
       <a href="shop.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCounter">0</span></a>
@@ -116,14 +116,14 @@
     <div>
       <span class="badge">✨ One Time Use</span>
       <h1>Pranks · Proposals · Wishes</h1>
-      <p>Create a special moments use website to surprise someone. Send a prank, propose, or wish them in a unique way!</p>
+      <p>Create a special one-time use website to surprise someone. Send a prank, propose, or wish them in a unique way!</p>
     </div>
     <div style="margin-top:1rem;">
       <button class="btn-primary" onclick="openCreateModal()" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);color:white;padding:0.7rem 1.8rem;border-radius:60px;font-weight:600;cursor:pointer;transition:0.2s;font-size:1rem;">+ Create New</button>
     </div>
   </div>
 
-  <div class="moments-grid" id="oneTimeGrid">
+  <div class="one-time-grid" id="oneTimeGrid">
     <!-- Cards will be rendered here -->
   </div>
 
@@ -131,7 +131,7 @@
   <div class="create-modal" id="createModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>✨ Create moments Use</h2>
+        <h2>✨ Create one-time Use</h2>
         <button class="close-modal" onclick="closeCreateModal()">&times;</button>
       </div>
       <form id="createForm">
@@ -379,7 +379,7 @@ function renderOneTimeItems(items) {
     grid.innerHTML = `
       <div style="grid-column:1/-1;text-align:center;padding:3rem;color:#94a3b8;background:white;border-radius:2rem;border:1px dashed #e2e8f0;">
         <i class="fas fa-wand-magic-sparkles" style="font-size:3rem;color:#7c3aed;margin-bottom:1rem;display:block;"></i>
-        <p style="font-size:1.1rem;">No moments use creations yet.</p>
+        <p style="font-size:1.1rem;">No one-time use creations yet.</p>
         <p style="font-size:0.9rem;margin-top:0.3rem;">Create your first prank, proposal, or wish!</p>
         <button onclick="openCreateModal()" style="margin-top:1rem;background:#7c3aed;color:white;border:none;padding:0.6rem 1.8rem;border-radius:40px;font-weight:600;cursor:pointer;">✨ Create One</button>
       </div>
@@ -403,7 +403,7 @@ function renderOneTimeItems(items) {
 
   items.forEach(item => {
     const card = document.createElement('div');
-    card.className = 'moments-card';
+    card.className = 'one-time-card';
     const icon = typeIcons[item.type] || '🎨';
     const typeLabel = typeLabels[item.type] || 'Custom';
     const fullUrl = `${window.location.origin}/view.html?slug=${item.slug}`;
@@ -527,7 +527,7 @@ async function updateAuthUI() {
 
 document.getElementById('navAbout').addEventListener('click', function(e) {
   e.preventDefault();
-  alert('📖 About Moments Use\n\nCreate special moments use websites for:\n\n😂 Pranks - Surprise someone with a funny prank page\n💍 Proposals - Create a beautiful proposal page\n🎂 Birthday Wishes - Send a special birthday message\n🎨 Custom - Create anything you want!\n\nEach link works only once and creates a memorable experience.');
+  alert('📖 About one-time Use\n\nCreate special one-time use websites for:\n\n😂 Pranks - Surprise someone with a funny prank page\n💍 Proposals - Create a beautiful proposal page\n🎂 Birthday Wishes - Send a special birthday message\n🎨 Custom - Create anything you want!\n\nEach link works only once and creates a memorable experience.');
 });
 </script>
 </body>
