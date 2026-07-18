@@ -189,7 +189,7 @@
 
     <div id="adminContent">
       <div class="admin-header">
-        <div><h1><i class="fas fa-user-shield"></i> Admin Panel</h1><p>Manage products, orders, and Pixlnex Moments.</p></div>
+        <div><h1><i class="fas fa-user-shield"></i> Admin Panel</h1><p>Manage products, orders, and Pixlnex one-time</p></div>
         <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
           <span class="supabase-status" id="supabaseStatus">⏳ Connecting...</span>
           <div class="admin-badge" id="adminBadge" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</div>
@@ -263,7 +263,7 @@
       <div id="tab-moments" class="tab-content">
         <div class="admin-card">
           <h3><i class="fas fa-star"></i> Pixlnex Moments <span class="badge-count" id="momentCountBadge">0</span></h3>
-          <div id="momentList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">Loading moments...</div></div>
+          <div id="momentList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">Loading one-time..</div></div>
           
           <div class="moment-form" id="momentForm">
             <div class="full">
@@ -609,7 +609,7 @@
       const orders = ordersRes.data || [];
       const products = productsRes.data || [];
 
-      console.log('📦 Orders:', orders.length, 'Products:', products.length, 'Moments:', moments.length);
+      console.log('📦 Orders:', orders.length, 'Products:', products.length, 'Moments:', one-timelength);
 
       const totalOrders = orders.length;
       const customers = new Set(orders.map(o => o.customer_email || '')).size;
@@ -620,7 +620,7 @@
       document.getElementById('totalCustomers').textContent = customers || 0;
       document.getElementById('pendingOrders').textContent = pending;
       document.getElementById('totalDemos').textContent = totalDemos;
-      document.getElementById('totalMoments').textContent = moments.length;
+      document.getElementById('totalMoments').textContent = one-timelength;
 
       renderOrders(orders);
       renderProductsList(products);
@@ -909,19 +909,19 @@
     const momentList = document.getElementById('momentList');
     const momentCountBadge = document.getElementById('momentCountBadge');
     
-    if (!moments || moments.length === 0) {
+    if (!moments || one-timelength === 0) {
       momentList.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1rem 0;">No moments yet. Create your first Pixlnex Moment below.</div>';
       momentCountBadge.textContent = '0';
       return;
     }
     
-    momentCountBadge.textContent = moments.length;
+    momentCountBadge.textContent = one-timelength;
     momentList.innerHTML = '';
     
     const typeIcons = { 'prank': '😂', 'proposal': '💍', 'birthday': '🎂', 'custom': '🎨' };
     const typeLabels = { 'prank': 'Prank', 'proposal': 'Proposal', 'birthday': 'Birthday Wish', 'custom': 'Custom' };
     
-    moments.forEach((m, index) => {
+    one-timeforEach((m, index) => {
       const div = document.createElement('div');
       div.className = 'moment-item';
       const icon = typeIcons[m.type] || '🎨';
@@ -955,10 +955,10 @@
         if (confirm(`Delete "${moment.title}"?`)) {
           try {
             await supabaseClient.from('one_time_items').delete().eq('id', moment.id);
-            moments.splice(idx, 1);
+            one-timesplice(idx, 1);
             renderMomentsList(moments);
             showToast(`🗑️ "${moment.title}" deleted`);
-            document.getElementById('totalMoments').textContent = moments.length;
+            document.getElementById('totalMoments').textContent = one-timelength;
           } catch (e) { showToast('⚠️ Error deleting moment'); }
         }
       });
