@@ -34,6 +34,7 @@
     .supabase-status { display: inline-block; padding: 0.2rem 0.8rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600; }
     .supabase-status.connected { background: #dcfce7; color: #166534; }
     .supabase-status.disconnected { background: #fee2e2; color: #b91c1c; }
+    .supabase-status.checking { background: #fef3c7; color: #92400e; }
 
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
     .stat-card { background: white; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #e9eef3; transition: transform 0.2s; }
@@ -53,7 +54,6 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
     .admin-card { background: white; border-radius: 2rem; padding: 1.8rem 2.2rem; border: 1px solid #e9eef3; }
     .admin-card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
     .admin-card h3 i { color: #2563eb; }
@@ -169,6 +169,9 @@
 
     .hidden { display: none !important; }
 
+    .error-banner { background: #fee2e2; color: #b91c1c; padding: 1rem 1.5rem; border-radius: 1rem; margin-bottom: 1rem; border-left: 4px solid #b91c1c; }
+    .error-banner i { margin-right: 0.5rem; }
+
     @media (max-width:900px) { .admin-grid { grid-template-columns: 1fr; } .admin-header { flex-direction: column; align-items: flex-start; gap: 1rem; } .stats-grid { grid-template-columns: 1fr 1fr; } .product-form { grid-template-columns: 1fr; } .product-form .full { grid-column: 1; } .moment-form { grid-template-columns: 1fr; } .moment-form .full { grid-column: 1; } .login-box { padding: 2rem 1.5rem; margin: 1rem; } }
     @media (max-width:700px) { .app { padding: 1rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .admin-header { padding: 1.5rem; } .admin-header h1 { font-size: 1.6rem; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; } .stat-card { padding: 1rem; } .stat-card .stat-number { font-size: 1.5rem; } .admin-card { padding: 1.2rem 1.5rem; } }
   </style>
@@ -191,17 +194,22 @@
       <div class="admin-header">
         <div><h1><i class="fas fa-user-shield"></i> Admin Panel</h1><p>Manage products, orders, and Pixlnex Moments.</p></div>
         <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-          <span class="supabase-status" id="supabaseStatus">⏳ Connecting...</span>
+          <span class="supabase-status" id="supabaseStatus">⏳ Checking...</span>
           <div class="admin-badge" id="adminBadge" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</div>
         </div>
       </div>
 
+      <div id="connectionError" class="error-banner" style="display:none;">
+        <i class="fas fa-exclamation-triangle"></i> 
+        <span id="connectionErrorMsg">Unable to connect to database. Please check your internet connection and refresh.</span>
+      </div>
+
       <div class="stats-grid" id="statsGrid">
-        <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-shopping-bag"></i></div><div class="stat-number" id="totalOrders">0</div><div class="stat-label">Total Orders</div></div>
-        <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-users"></i></div><div class="stat-number" id="totalCustomers">0</div><div class="stat-label">Customers</div></div>
-        <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-hourglass-half"></i></div><div class="stat-number" id="pendingOrders">0</div><div class="stat-label">Pending Orders</div></div>
-        <div class="stat-card"><div class="stat-icon green"><i class="fas fa-play-circle"></i></div><div class="stat-number" id="totalDemos">0</div><div class="stat-label">Live Demos</div></div>
-        <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-star"></i></div><div class="stat-number" id="totalMoments">0</div><div class="stat-label">Pixlnex Moments</div></div>
+        <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-shopping-bag"></i></div><div class="stat-number" id="totalOrders">-</div><div class="stat-label">Total Orders</div></div>
+        <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-users"></i></div><div class="stat-number" id="totalCustomers">-</div><div class="stat-label">Customers</div></div>
+        <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-hourglass-half"></i></div><div class="stat-number" id="pendingOrders">-</div><div class="stat-label">Pending Orders</div></div>
+        <div class="stat-card"><div class="stat-icon green"><i class="fas fa-play-circle"></i></div><div class="stat-number" id="totalDemos">-</div><div class="stat-label">Live Demos</div></div>
+        <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-star"></i></div><div class="stat-number" id="totalMoments">-</div><div class="stat-label">Pixlnex Moments</div></div>
       </div>
 
       <div class="admin-tabs">
@@ -324,12 +332,11 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   // ============================================
-  // PIXLNEX - COMPLETE ADMIN PANEL
+  // PIXLNEX - ADMIN PANEL (FIXED CONNECTION)
   // ============================================
 
-  const SUPABASE_URL = 'https://skdthncgjwtlydtgtjze.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_k1DV8-nVcr4o5LE8s_wbLA_O7BPQFpy';
-
+  const SUPABASE_URL = 'https://mskhicltjsnjitwfswis.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_5dgWT5HaVjV6PaEpOrhcWw_6DUUC4uY';
   const STORAGE_BUCKET = 'product-images';
 
   let supabaseClient = null;
@@ -344,28 +351,66 @@
     { email: 'noor@gmail.com', name: 'Noor' }
   ];
 
+  // ─── INIT SUPABASE ───
   function initSupabase() {
     try {
-      if (typeof supabase !== 'undefined') {
-        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        supabaseConnected = true;
-        document.getElementById('supabaseStatus').textContent = '✅ Connected';
-        document.getElementById('supabaseStatus').className = 'supabase-status connected';
-        return supabaseClient;
-      } else {
-        supabaseConnected = false;
-        document.getElementById('supabaseStatus').textContent = '❌ Not connected';
+      if (typeof supabase === 'undefined') {
+        console.error('❌ Supabase SDK not loaded!');
+        document.getElementById('supabaseStatus').textContent = '❌ SDK not loaded';
         document.getElementById('supabaseStatus').className = 'supabase-status disconnected';
+        showConnectionError('Supabase SDK not loaded. Please refresh the page.');
         return null;
       }
+
+      console.log('🔗 Connecting to Supabase...');
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      supabaseConnected = true;
+      
+      document.getElementById('supabaseStatus').textContent = '✅ Connected';
+      document.getElementById('supabaseStatus').className = 'supabase-status connected';
+      document.getElementById('connectionError').style.display = 'none';
+      
+      console.log('✅ Supabase connected successfully');
+      return supabaseClient;
     } catch (e) {
+      console.error('❌ Supabase connection error:', e);
       supabaseConnected = false;
-      document.getElementById('supabaseStatus').textContent = '❌ Error';
+      document.getElementById('supabaseStatus').textContent = '❌ Connection Failed';
       document.getElementById('supabaseStatus').className = 'supabase-status disconnected';
+      showConnectionError('Failed to connect to Supabase: ' + e.message);
       return null;
     }
   }
 
+  function showConnectionError(msg) {
+    const errorEl = document.getElementById('connectionError');
+    errorEl.style.display = 'block';
+    document.getElementById('connectionErrorMsg').textContent = msg;
+  }
+
+  // ─── CHECK CONNECTION ───
+  async function testConnection() {
+    if (!supabaseClient || !supabaseConnected) {
+      showConnectionError('Supabase not connected. Please refresh the page.');
+      return false;
+    }
+    try {
+      const { data, error } = await supabaseClient.from('products').select('count', { count: 'exact', head: true });
+      if (error) {
+        console.error('Connection test failed:', error);
+        showConnectionError('Database connection failed: ' + error.message);
+        return false;
+      }
+      console.log('✅ Database connection test passed');
+      return true;
+    } catch (e) {
+      console.error('Connection test error:', e);
+      showConnectionError('Database connection error: ' + e.message);
+      return false;
+    }
+  }
+
+  // ─── AUTH ───
   function checkAdminSession() {
     const session = localStorage.getItem('pixlnex_admin_session');
     if (session === 'true') {
@@ -429,6 +474,7 @@
     }, 600);
   });
 
+  // ─── TOAST ───
   let toastTimer;
   function showToast(msg) {
     const toast = document.getElementById('toast');
@@ -438,6 +484,7 @@
     toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
   }
 
+  // ─── TABS ───
   document.querySelectorAll('.admin-tabs button').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.admin-tabs button').forEach(b => b.classList.remove('active'));
@@ -558,15 +605,12 @@
     const uploadedUrls = [];
     
     try {
-      // Check if bucket exists
       const { data: buckets, error: bucketError } = await supabaseClient.storage.listBuckets();
       if (bucketError) throw bucketError;
       
       const bucketExists = buckets.some(b => b.name === STORAGE_BUCKET);
       if (!bucketExists) {
-        // Show a clear message telling the user what to do
         showToast('⚠️ Storage bucket "product-images" not found. Please create it in Supabase Dashboard → Storage (make it PUBLIC).');
-        console.error('Bucket "product-images" does not exist. Please create it manually.');
         return [];
       }
     } catch (e) {
@@ -582,7 +626,7 @@
         const { data, error } = await supabaseClient.storage.from(STORAGE_BUCKET).upload(fileName, file, { cacheControl: '3600', upsert: false });
         if (error) {
           console.error('Upload error:', error);
-          showToast('⚠️ Failed to upload: ' + file.name + ' - ' + error.message);
+          showToast('⚠️ Failed to upload: ' + file.name);
           continue;
         }
         const { data: { publicUrl } } = supabaseClient.storage.from(STORAGE_BUCKET).getPublicUrl(fileName);
@@ -597,10 +641,17 @@
 
   // ─── LOAD ALL DATA ───
   async function loadAllData() {
-    if (!supabaseConnected || !supabaseClient) { 
-      showToast('⚠️ Supabase not connected. Please refresh and try again.'); 
-      return; 
+    // First check connection
+    const connected = await testConnection();
+    if (!connected) {
+      showToast('⚠️ Cannot load data - database connection failed');
+      // Show empty states
+      document.getElementById('orderList').innerHTML = '<div style="color:#b91c1c;text-align:center;padding:1rem 0;">⚠️ Database connection failed</div>';
+      document.getElementById('productList').innerHTML = '<div style="color:#b91c1c;text-align:center;padding:1rem 0;">⚠️ Database connection failed</div>';
+      document.getElementById('momentList').innerHTML = '<div style="color:#b91c1c;text-align:center;padding:1rem 0;">⚠️ Database connection failed</div>';
+      return;
     }
+
     try {
       console.log('🔄 Loading fresh data from Supabase...');
       
@@ -616,7 +667,6 @@
       let moments = [];
       if (momentsRes.error) {
         console.warn('Moments table not found:', momentsRes.error.message);
-        showToast('⚠️ Moments table not found. Run SQL to create it.');
       } else {
         moments = momentsRes.data || [];
       }
@@ -1089,7 +1139,8 @@
     if (checkAdminSession()) {
       document.getElementById('authBtn').textContent = `👑 ${adminName || 'Admin'}`;
       document.getElementById('authBtn').className = 'auth-btn logout';
-      loadAllData();
+      // Wait a moment for connection to stabilize
+      setTimeout(() => loadAllData(), 500);
     } else {
       document.getElementById('loginOverlay').classList.remove('hidden');
       document.getElementById('authBtn').textContent = '🔒 Admin';
