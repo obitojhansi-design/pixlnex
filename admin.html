@@ -111,6 +111,7 @@
     .product-form .form-actions .btn-cancel:hover { background: #e2e8f0; }
     .product-form .edit-badge { background: #f59e0b20; color: #d97706; padding: 0.2rem 1rem; border-radius: 30px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin-bottom: 0.5rem; }
 
+    /* ─── MOMENTS ─── */
     .moment-item { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
     .moment-item:last-child { border-bottom: none; }
     .moment-item .moment-info { display: flex; align-items: center; gap: 1rem; flex: 1; }
@@ -296,11 +297,17 @@
               <span class="edit-badge hidden" id="momentEditBadge">✏️ Editing Moment</span>
             </div>
             
+            <!-- Website Name -->
+            <input type="text" id="momentWebsiteName" placeholder="Website Name" required />
+            
+            <!-- Title -->
+            <input type="text" id="momentTitle" placeholder="Title" required />
+            
             <!-- Genre / Type - Combo Input -->
             <div class="full combo-input" id="typeCombo">
-              <label style="font-weight:600;font-size:0.85rem;display:block;margin-bottom:0.3rem;color:#1e293b;">Genre / Type</label>
-              <input type="text" id="momentTypeInput" placeholder="Type or select a genre..." autocomplete="off" />
-              <div class="suggestions" id="typeSuggestions">
+              <label style="font-weight:600;font-size:0.85rem;display:block;margin-bottom:0.3rem;color:#1e293b;">Genre</label>
+              <input type="text" id="momentGenreInput" placeholder="Type or select a genre..." autocomplete="off" />
+              <div class="suggestions" id="genreSuggestions">
                 <div class="suggestion-item" data-value="prank">😂 Prank</div>
                 <div class="suggestion-item" data-value="proposal">💍 Proposal</div>
                 <div class="suggestion-item" data-value="birthday">🎂 Birthday Wish</div>
@@ -312,30 +319,15 @@
               </div>
             </div>
             
-            <input type="text" id="momentTitle" placeholder="Title" required />
-            
+            <!-- Description -->
             <div class="full">
-              <textarea id="momentMessage" placeholder="Message" required style="min-height:80px;"></textarea>
+              <textarea id="momentDescription" placeholder="Description" required style="min-height:80px;"></textarea>
             </div>
             
-            <input type="text" id="momentRecipient" placeholder="Recipient Name" required />
-            <input type="text" id="momentSender" placeholder="Sender Name" required />
-            
-            <select id="momentColor">
-              <option value="#7c3aed">Purple</option>
-              <option value="#2563eb">Blue</option>
-              <option value="#22c55e">Green</option>
-              <option value="#f59e0b">Orange</option>
-              <option value="#ef4444">Red</option>
-              <option value="#ec4899">Pink</option>
-              <option value="#8b5cf6">Violet</option>
-              <option value="#06b6d4">Cyan</option>
-            </select>
-            
-            <!-- ─── LIVE DEMO URL FOR MOMENTS ─── -->
+            <!-- Demo URL -->
             <div class="full demo-url-input">
-              <input type="url" id="momentDemoUrl" placeholder="Live Demo URL (optional)" />
-              <span style="font-size:0.7rem;color:#94a3b8;">Optional - for preview</span>
+              <input type="url" id="momentDemoUrl" placeholder="Live Demo URL" />
+              <span style="font-size:0.7rem;color:#94a3b8;">Required - this will be the live preview</span>
             </div>
             
             <div class="full form-actions">
@@ -367,7 +359,7 @@
   <div class="login-overlay" id="loginOverlay">
     <div class="login-box">
       <a href="index.html" class="logo"><img src="logo.png" alt="Pixlnex" /><span>Pixlnex</span></a>
-      <h2><i class="fas fa-user-shield" style="color:#2563eb;"></i> Admin Access</h2>
+      <h2><i class="fas fa-user-shield" style="color:#0c2b70;"></i> Admin Access</h2>
       <p class="sub"><i class="fas fa-lock"></i> Enter admin credentials</p>
       <div id="loginError" class="error-msg">⚠️ Invalid credentials.</div>
       <form id="adminLoginForm">
@@ -382,10 +374,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   // ============================================
-  // PIXLNEX - ADMIN PANEL (WITH MOMENT DEMO URL)
+  // PIXLNEX - ADMIN PANEL (FIXED MOMENTS)
   // ============================================
 
-   const SUPABASE_URL = 'https://skdthncgjwtlydtgtjze.supabase.co';
+  const SUPABASE_URL = 'https://skdthncgjwtlydtgtjze.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_k1DV8-nVcr4o5LE8s_wbLA_O7BPQFpy';
   const STORAGE_BUCKET = 'product-images';
 
@@ -526,7 +518,10 @@
 
   // ─── DEMO OVERLAY ───
   function openDemo(url) {
-    if (!url) return;
+    if (!url) {
+      showToast('⚠️ No demo URL available for this moment', 'error');
+      return;
+    }
     const overlay = document.getElementById('demoOverlay');
     const iframe = document.getElementById('demoIframe');
     iframe.src = url;
@@ -1144,7 +1139,7 @@
     const momentCountBadge = document.getElementById('momentCountBadge');
     
     if (!moments || moments.length === 0) {
-      momentList.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1rem 0;">No moments yet.</div>';
+      momentList.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1rem 0;">No moments yet. Create your first Pixlnex Moment above.</div>';
       momentCountBadge.textContent = '0';
       return;
     }
@@ -1168,22 +1163,20 @@
       const icon = typeIcons[m.type] || '🎨';
       const typeLabel = typeLabels[m.type] || m.type || 'Custom';
       const isUsed = m.used || false;
-      // Use the demo_url if available, otherwise fallback to view.html
-      const viewUrl = m.demo_url || `${window.location.origin}/view.html?slug=${m.slug}`;
       
       div.innerHTML = `
         <div class="moment-info">
           <span class="moment-icon">${icon}</span>
           <div>
-            <span class="moment-name">${m.title}</span>
-            <span class="moment-meta">${typeLabel} · To: ${m.recipient} · From: ${m.sender} · ${m.views || 0} views</span>
-            ${m.demo_url ? '<span style="font-size:0.6rem;color:#94a3b8;display:block;">🔗 Has Demo URL</span>' : ''}
+            <span class="moment-name">${m.website_name || m.title || 'Untitled'}</span>
+            <span class="moment-meta">${typeLabel} · ${m.title || ''} · ${m.views || 0} views</span>
+            ${m.demo_url ? '<span style="font-size:0.6rem;color:#22c55e;display:block;">🔗 Has Demo</span>' : '<span style="font-size:0.6rem;color:#b91c1c;display:block;">⚠️ No Demo URL</span>'}
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:1rem;">
           <span class="moment-status ${isUsed ? 'used' : 'active'}">${isUsed ? '🔒 Used' : '✅ Active'}</span>
           <div class="moment-actions">
-            <button class="btn-preview" onclick="openDemo('${viewUrl}')" title="Preview"><i class="fas fa-eye"></i></button>
+            ${m.demo_url ? `<button class="btn-preview" onclick="openDemo('${m.demo_url}')" title="Preview"><i class="fas fa-eye"></i></button>` : ''}
             <button class="edit-moment" data-index="${index}"><i class="fas fa-edit"></i></button>
             <button class="delete delete-moment" data-index="${index}"><i class="fas fa-trash-alt"></i></button>
           </div>
@@ -1197,12 +1190,12 @@
         const idx = parseInt(this.dataset.index);
         const moment = moments[idx];
         if (!moment) return;
-        if (!confirm(`Delete "${moment.title}"?`)) return;
+        if (!confirm(`Delete "${moment.website_name || moment.title}"?`)) return;
         try {
           await supabaseClient.from('one_time_items').delete().eq('id', moment.id);
           moments.splice(idx, 1);
           renderMomentsList(moments);
-          showToast(`🗑️ "${moment.title}" deleted!`, 'success');
+          showToast(`🗑️ "${moment.website_name || moment.title}" deleted!`, 'success');
           document.getElementById('totalMoments').textContent = moments.length;
         } catch (e) { 
           showToast('⚠️ Error: ' + e.message, 'error'); 
@@ -1221,47 +1214,57 @@
         document.getElementById('momentSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Update Moment';
         document.getElementById('cancelMomentEditBtn').classList.remove('hidden');
         
-        // Set type (combo input)
-        const typeInput = document.getElementById('momentTypeInput');
+        // Set website name
+        document.getElementById('momentWebsiteName').value = m.website_name || '';
+        
+        // Set title
+        document.getElementById('momentTitle').value = m.title || '';
+        
+        // Set genre (combo input)
+        const genreInput = document.getElementById('momentGenreInput');
         const typeLabelsMap = {
           'prank': '😂 Prank', 'proposal': '💍 Proposal', 'birthday': '🎂 Birthday Wish',
           'custom': '🎨 Custom', 'love': '❤️ Love Letter', 'apology': '🙏 Apology',
           'encouragement': '💪 Encouragement', 'friendship': '🤝 Friendship'
         };
-        typeInput.value = typeLabelsMap[m.type] || m.type || 'Custom';
-        typeInput.dataset.value = m.type || 'custom';
+        genreInput.value = typeLabelsMap[m.type] || m.type || 'Custom';
+        genreInput.dataset.value = m.type || 'custom';
         
-        document.getElementById('momentTitle').value = m.title || '';
-        document.getElementById('momentMessage').value = m.message || '';
-        document.getElementById('momentRecipient').value = m.recipient || '';
-        document.getElementById('momentSender').value = m.sender || '';
-        document.getElementById('momentColor').value = m.color || '#7c3aed';
+        // Set description
+        document.getElementById('momentDescription').value = m.description || '';
+        
+        // Set demo URL
         document.getElementById('momentDemoUrl').value = m.demo_url || '';
         
         document.getElementById('momentForm').scrollIntoView({ behavior: 'smooth' });
-        showToast(`✏️ Editing "${m.title}"`, 'success');
+        showToast(`✏️ Editing "${m.website_name || m.title}"`, 'success');
       });
     });
   }
 
   // ─── MOMENT FORM SUBMIT ───
   document.getElementById('momentSubmitBtn').addEventListener('click', async function() {
-    // Get type from combo input
-    const typeInput = document.getElementById('momentTypeInput');
-    let type = typeInput.dataset.value || typeInput.value.trim().toLowerCase().replace(/\s+/g, '_');
-    if (!type || type === '' || type === 'custom' || typeInput.value.includes('Custom')) {
+    // Get website name
+    const websiteName = document.getElementById('momentWebsiteName').value.trim();
+    
+    // Get title
+    const title = document.getElementById('momentTitle').value.trim();
+    
+    // Get genre from combo input
+    const genreInput = document.getElementById('momentGenreInput');
+    let type = genreInput.dataset.value || genreInput.value.trim().toLowerCase().replace(/\s+/g, '_');
+    if (!type || type === '' || type === 'custom' || genreInput.value.includes('Custom')) {
       type = 'custom';
     }
     
-    const title = document.getElementById('momentTitle').value.trim();
-    const message = document.getElementById('momentMessage').value.trim();
-    const recipient = document.getElementById('momentRecipient').value.trim();
-    const sender = document.getElementById('momentSender').value.trim();
-    const color = document.getElementById('momentColor').value;
+    // Get description
+    const description = document.getElementById('momentDescription').value.trim();
+    
+    // Get demo URL
     const demoUrl = document.getElementById('momentDemoUrl').value.trim();
 
-    if (!title || !message || !recipient || !sender) {
-      showToast('⚠️ Please fill in all fields', 'error');
+    if (!websiteName || !title || !description || !demoUrl) {
+      showToast('⚠️ Please fill in all fields (Website Name, Title, Description, and Demo URL are required)', 'error');
       return;
     }
 
@@ -1271,23 +1274,17 @@
 
     try {
       const momentData = {
-        type: type,
+        website_name: websiteName,
         title: title,
-        message: message,
-        recipient: recipient,
-        sender: sender,
-        color: color,
+        type: type,
+        description: description,
+        demo_url: demoUrl,
         updated_at: new Date().toISOString()
       };
 
-      // Add demo_url if provided
-      if (demoUrl) {
-        momentData.demo_url = demoUrl;
-      }
-
       if (isEditing) {
         await supabaseClient.from('one_time_items').update(momentData).eq('id', editingMomentId);
-        showToast(`✅ "${title}" updated!`, 'success');
+        showToast(`✅ "${websiteName}" updated successfully!`, 'success');
       } else {
         const slug = generateSlug();
         momentData.slug = slug;
@@ -1295,7 +1292,7 @@
         momentData.used = false;
         momentData.created_at = new Date().toISOString();
         await supabaseClient.from('one_time_items').insert([momentData]);
-        showToast(`✅ "${title}" created! Share: ${window.location.origin}/view.html?slug=${slug}`, 'success');
+        showToast(`✅ "${websiteName}" created! Share: ${window.location.origin}/view.html?slug=${slug}`, 'success');
       }
 
       resetMomentForm();
@@ -1320,13 +1317,11 @@
   }
 
   function resetMomentForm() {
-    document.getElementById('momentTypeInput').value = '';
-    document.getElementById('momentTypeInput').dataset.value = '';
+    document.getElementById('momentWebsiteName').value = '';
     document.getElementById('momentTitle').value = '';
-    document.getElementById('momentMessage').value = '';
-    document.getElementById('momentRecipient').value = '';
-    document.getElementById('momentSender').value = '';
-    document.getElementById('momentColor').value = '#7c3aed';
+    document.getElementById('momentGenreInput').value = '';
+    document.getElementById('momentGenreInput').dataset.value = '';
+    document.getElementById('momentDescription').value = '';
     document.getElementById('momentDemoUrl').value = '';
     editingMomentId = null;
     document.getElementById('momentEditBadge').classList.add('hidden');
@@ -1340,8 +1335,8 @@
   function init() {
     initSupabase();
     
-    // Setup combo input for type
-    setupComboInput('momentTypeInput', 'typeSuggestions');
+    // Setup combo input for genre
+    setupComboInput('momentGenreInput', 'genreSuggestions');
     
     const adminName = localStorage.getItem('pixlnex_admin_name');
     if (checkAdminSession()) {
