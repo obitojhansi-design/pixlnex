@@ -8,10 +8,10 @@
   <link rel="icon" href="logo.png" type="image/png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
-    /* (Same styles as before - keep as is) */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
     body { background: #f0f4f8; color: #0b1a2e; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
     .app { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; flex: 1; width: 100%; }
+    
     .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; padding: 0.75rem 0 1.5rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem; }
     .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.8rem; font-weight: 700; color: #0f2b4b; text-decoration: none; }
     .logo img { height: 35px; width: auto; }
@@ -112,6 +112,7 @@
     .product-form .form-actions .btn-cancel:hover { background: #e2e8f0; }
     .product-form .edit-badge { background: #f59e0b20; color: #d97706; padding: 0.2rem 1rem; border-radius: 30px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin-bottom: 0.5rem; }
 
+    /* ─── MOMENT ITEMS ─── */
     .moment-item { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid #f1f5f9; }
     .moment-item:last-child { border-bottom: none; }
     .moment-item .moment-info { display: flex; align-items: center; gap: 1rem; flex: 1; }
@@ -121,21 +122,45 @@
     .moment-item .moment-status { font-size: 0.65rem; padding: 0.15rem 0.6rem; border-radius: 30px; font-weight: 600; }
     .moment-item .moment-status.used { background: #fee2e2; color: #b91c1c; }
     .moment-item .moment-status.active { background: #dcfce7; color: #166534; }
+    .moment-item .moment-actions { display: flex; gap: 0.3rem; align-items: center; }
     .moment-item .moment-actions button { background: none; border: none; color: #94a3b8; cursor: pointer; transition: 0.15s; font-size: 0.9rem; padding: 0.2rem 0.5rem; border-radius: 20px; }
     .moment-item .moment-actions button:hover { background: #eef2f6; color: #0f2b4b; }
     .moment-item .moment-actions button.delete:hover { background: #fee2e2; color: #b91c1c; }
+    .moment-item .moment-actions .btn-preview { color: #2563eb; }
+    .moment-item .moment-actions .btn-preview:hover { background: #2563eb10; color: #1a56db; }
 
+    /* ─── MOMENT FORM ─── */
     .moment-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
     .moment-form input, .moment-form select, .moment-form textarea { padding: 0.6rem 1rem; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.9rem; background: #f8fafc; transition: 0.2s; width: 100%; }
     .moment-form input:focus, .moment-form select:focus, .moment-form textarea:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: transparent; background: white; }
-    .moment-form textarea { border-radius: 1rem; min-height: 60px; resize: vertical; }
+    .moment-form textarea { border-radius: 1rem; min-height: 80px; resize: vertical; }
     .moment-form .full { grid-column: 1 / -1; }
     .moment-form .form-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 0.5rem; }
     .moment-form .form-actions button { padding: 0.6rem 1.8rem; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; border: none; font-size: 0.9rem; }
     .moment-form .form-actions .btn-submit { background: #7c3aed; color: white; }
     .moment-form .form-actions .btn-submit:hover { background: #6d28d9; transform: scale(1.02); }
+    .moment-form .form-actions .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
     .moment-form .form-actions .btn-cancel { background: #eef2f6; color: #1e293b; }
     .moment-form .form-actions .btn-cancel:hover { background: #e2e8f0; }
+    .moment-form .edit-badge { background: #f59e0b20; color: #d97706; padding: 0.2rem 1rem; border-radius: 30px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin-bottom: 0.5rem; }
+
+    /* ─── COMBO INPUT (Type + Select) ─── */
+    .combo-input { position: relative; }
+    .combo-input input { width: 100%; padding: 0.6rem 1rem; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.9rem; background: #f8fafc; transition: 0.2s; }
+    .combo-input input:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: transparent; background: white; }
+    .combo-input .suggestions { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e2e8f0; border-radius: 1rem; margin-top: 0.3rem; max-height: 150px; overflow-y: auto; z-index: 100; display: none; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+    .combo-input .suggestions.show { display: block; }
+    .combo-input .suggestions .suggestion-item { padding: 0.5rem 1rem; cursor: pointer; transition: 0.15s; font-size: 0.85rem; }
+    .combo-input .suggestions .suggestion-item:hover { background: #f1f6fe; color: #2563eb; }
+
+    /* ─── DEMO OVERLAY ─── */
+    .demo-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 99997; align-items: center; justify-content: center; padding: 2rem; }
+    .demo-overlay.active { display: flex; }
+    .demo-overlay .demo-content { position: relative; width: 100%; max-width: 1200px; height: 85vh; background: white; border-radius: 1.5rem; overflow: hidden; }
+    .demo-overlay .demo-content iframe { width: 100%; height: 100%; border: none; }
+    .demo-overlay .demo-close { position: absolute; top: 16px; right: 20px; color: white; font-size: 2rem; cursor: pointer; background: rgba(0,0,0,0.7); border: none; width: 48px; height: 48px; border-radius: 50%; z-index: 10; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+    .demo-overlay .demo-close:hover { background: rgba(0,0,0,0.9); transform: scale(1.1); }
+    .demo-overlay .demo-label { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); color: white; background: rgba(0,0,0,0.6); padding: 0.3rem 1.2rem; border-radius: 30px; font-size: 0.8rem; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); z-index: 10; }
 
     .login-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,43,75,0.95); display: flex; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(8px); transition: opacity 0.4s ease; }
     .login-overlay.hidden { opacity: 0; pointer-events: none; }
@@ -174,7 +199,7 @@
     .hidden { display: none !important; }
 
     @media (max-width:900px) { .admin-grid { grid-template-columns: 1fr; } .admin-header { flex-direction: column; align-items: flex-start; gap: 1rem; } .stats-grid { grid-template-columns: 1fr 1fr; } .product-form { grid-template-columns: 1fr; } .product-form .full { grid-column: 1; } .moment-form { grid-template-columns: 1fr; } .moment-form .full { grid-column: 1; } .login-box { padding: 2rem 1.5rem; margin: 1rem; } }
-    @media (max-width:700px) { .app { padding: 1rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .admin-header { padding: 1.5rem; } .admin-header h1 { font-size: 1.6rem; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; } .stat-card { padding: 1rem; } .stat-card .stat-number { font-size: 1.5rem; } .admin-card { padding: 1.2rem 1.5rem; } }
+    @media (max-width:700px) { .app { padding: 1rem; } .navbar { flex-direction: column; align-items: stretch; } .nav-links { justify-content: space-between; } .admin-header { padding: 1.5rem; } .admin-header h1 { font-size: 1.6rem; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; } .stat-card { padding: 1rem; } .stat-card .stat-number { font-size: 1.5rem; } .admin-card { padding: 1.2rem 1.5rem; } .demo-overlay .demo-content { height: 60vh; } .demo-overlay { padding: 1rem; } }
   </style>
 </head>
 <body>
@@ -214,6 +239,7 @@
         <button data-tab="tab-moments"><i class="fas fa-star"></i> Pixlnex Moments</button>
       </div>
 
+      <!-- ─── TAB: ORDERS ─── -->
       <div id="tab-orders" class="tab-content active">
         <div class="admin-card">
           <h3><i class="fas fa-list"></i> All Orders <span class="badge-count" id="orderCountBadge">0</span></h3>
@@ -221,6 +247,7 @@
         </div>
       </div>
 
+      <!-- ─── TAB: PRODUCTS ─── -->
       <div id="tab-products" class="tab-content">
         <div class="admin-card">
           <h3><i class="fas fa-cube"></i> Products <span class="badge-count" id="productCountBadge">0</span></h3>
@@ -265,6 +292,7 @@
         </div>
       </div>
 
+      <!-- ─── TAB: MOMENTS ─── -->
       <div id="tab-moments" class="tab-content">
         <div class="admin-card">
           <h3><i class="fas fa-star"></i> Pixlnex Moments <span class="badge-count" id="momentCountBadge">0</span></h3>
@@ -274,12 +302,21 @@
             <div class="full">
               <span class="edit-badge hidden" id="momentEditBadge">✏️ Editing Moment</span>
             </div>
-            <select id="momentType" required>
-              <option value="prank">😂 Prank</option>
-              <option value="proposal">💍 Proposal</option>
-              <option value="birthday">🎂 Birthday Wish</option>
-              <option value="custom">🎨 Custom</option>
-            </select>
+            <!-- ─── COMBO INPUT: Type (select + type) ─── -->
+            <div class="full combo-input" id="typeCombo">
+              <label style="font-weight:600;font-size:0.85rem;display:block;margin-bottom:0.3rem;color:#1e293b;">Genre / Type</label>
+              <input type="text" id="momentTypeInput" placeholder="Type or select a genre..." autocomplete="off" />
+              <div class="suggestions" id="typeSuggestions">
+                <div class="suggestion-item" data-value="prank">😂 Prank</div>
+                <div class="suggestion-item" data-value="proposal">💍 Proposal</div>
+                <div class="suggestion-item" data-value="birthday">🎂 Birthday Wish</div>
+                <div class="suggestion-item" data-value="custom">🎨 Custom</div>
+                <div class="suggestion-item" data-value="love">❤️ Love Letter</div>
+                <div class="suggestion-item" data-value="apology">🙏 Apology</div>
+                <div class="suggestion-item" data-value="encouragement">💪 Encouragement</div>
+                <div class="suggestion-item" data-value="friendship">🤝 Friendship</div>
+              </div>
+            </div>
             <input type="text" id="momentTitle" placeholder="Title" required />
             <div class="full">
               <textarea id="momentMessage" placeholder="Message" required style="min-height:80px;"></textarea>
@@ -293,6 +330,8 @@
               <option value="#f59e0b">Orange</option>
               <option value="#ef4444">Red</option>
               <option value="#ec4899">Pink</option>
+              <option value="#8b5cf6">Violet</option>
+              <option value="#06b6d4">Cyan</option>
             </select>
             <div class="full form-actions">
               <button class="btn-cancel hidden" id="cancelMomentEditBtn" type="button">Cancel</button>
@@ -309,8 +348,19 @@
     </footer>
   </div>
 
+  <!-- ─── TOAST ─── -->
   <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Done!</span></div>
 
+  <!-- ─── DEMO OVERLAY ─── -->
+  <div class="demo-overlay" id="demoOverlay">
+    <div class="demo-content">
+      <button class="demo-close" onclick="closeDemo()">&times;</button>
+      <div class="demo-label">✨ Pixlnex Moment Preview</div>
+      <iframe id="demoIframe" src=""></iframe>
+    </div>
+  </div>
+
+  <!-- ─── LOGIN OVERLAY ─── -->
   <div class="login-overlay" id="loginOverlay">
     <div class="login-box">
       <a href="index.html" class="logo"><img src="logo.png" alt="Pixlnex" /><span>Pixlnex</span></a>
@@ -329,10 +379,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   // ============================================
-  // PIXLNEX - ADMIN PANEL (AUTO-CREATE BUCKET)
+  // PIXLNEX - ADMIN PANEL (FULL FEATURES)
   // ============================================
 
-  // ⚠️ Use the SAME project for database and storage
   const SUPABASE_URL = 'https://skdthncgjwtlydtgtjze.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_k1DV8-nVcr4o5LE8s_wbLA_O7BPQFpy';
   const STORAGE_BUCKET = 'product-images';
@@ -385,11 +434,10 @@
     }
   }
 
-  // ─── ENSURE BUCKET EXISTS (AUTO-CREATE) ───
+  // ─── ENSURE BUCKET EXISTS ───
   async function ensureBucket() {
     if (!supabaseClient) return false;
     try {
-      // List buckets to check if ours exists
       const { data: buckets, error: listError } = await supabaseClient.storage.listBuckets();
       if (listError) {
         console.error('Failed to list buckets:', listError);
@@ -403,12 +451,11 @@
         return true;
       }
 
-      // Bucket does not exist – create it
       console.log(`🔧 Bucket "${STORAGE_BUCKET}" not found. Creating...`);
       const { error: createError } = await supabaseClient.storage.createBucket(STORAGE_BUCKET, {
         public: true,
         allowedMimeTypes: ['image/*'],
-        fileSizeLimit: 5 * 1024 * 1024 // 5MB
+        fileSizeLimit: 5 * 1024 * 1024
       });
       if (createError) {
         console.error('Failed to create bucket:', createError);
@@ -426,12 +473,11 @@
     }
   }
 
-  // ─── UPLOAD IMAGES (with bucket guarantee) ───
+  // ─── UPLOAD IMAGES ───
   async function uploadImages(productId) {
     const uploadedUrls = [];
     if (selectedImages.length === 0) return uploadedUrls;
 
-    // Ensure bucket exists before uploading
     const bucketReady = await ensureBucket();
     if (!bucketReady) {
       showToast('❌ Bucket not available. Upload aborted.', 'error');
@@ -476,6 +522,93 @@
     }
 
     return uploadedUrls;
+  }
+
+  // ─── DEMO OVERLAY ───
+  function openDemo(url) {
+    if (!url) return;
+    const overlay = document.getElementById('demoOverlay');
+    const iframe = document.getElementById('demoIframe');
+    iframe.src = url;
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDemo() {
+    const overlay = document.getElementById('demoOverlay');
+    const iframe = document.getElementById('demoIframe');
+    iframe.src = '';
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // ─── COMBO INPUT (Type + Select) ───
+  function setupComboInput(inputId, suggestionsId) {
+    const input = document.getElementById(inputId);
+    const suggestions = document.getElementById(suggestionsId);
+    if (!input || !suggestions) return;
+
+    // Show suggestions on focus
+    input.addEventListener('focus', function() {
+      suggestions.classList.add('show');
+      // Filter based on current value
+      filterSuggestions();
+    });
+
+    // Hide suggestions on blur (with delay to allow click)
+    input.addEventListener('blur', function() {
+      setTimeout(() => {
+        suggestions.classList.remove('show');
+      }, 200);
+    });
+
+    // Filter suggestions as user types
+    input.addEventListener('input', function() {
+      filterSuggestions();
+    });
+
+    function filterSuggestions() {
+      const value = input.value.toLowerCase().trim();
+      const items = suggestions.querySelectorAll('.suggestion-item');
+      let hasMatch = false;
+      items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        const dataValue = item.dataset.value.toLowerCase();
+        if (value === '' || text.includes(value) || dataValue.includes(value)) {
+          item.style.display = 'block';
+          hasMatch = true;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+      if (hasMatch && value !== '') {
+        suggestions.classList.add('show');
+      } else if (value === '') {
+        suggestions.classList.add('show');
+      } else {
+        suggestions.classList.remove('show');
+      }
+    }
+
+    // Select suggestion on click
+    suggestions.querySelectorAll('.suggestion-item').forEach(item => {
+      item.addEventListener('click', function() {
+        input.value = this.textContent;
+        input.dataset.value = this.dataset.value;
+        suggestions.classList.remove('show');
+        input.focus();
+        // Trigger change event
+        input.dispatchEvent(new Event('change'));
+      });
+    });
+
+    // If user types a custom value, use it as-is
+    input.addEventListener('change', function() {
+      // If no suggestion was selected, use the typed value
+      if (!this.dataset.value) {
+        // Keep the typed value
+      }
+    });
   }
 
   // ─── AUTH ───
@@ -703,11 +836,7 @@
       const moments = momentsRes.data || [];
 
       console.log('📦 Products loaded:', products.length);
-      
-      // Log image data for debugging
-      products.forEach(p => {
-        console.log(`📸 ${p.name}: ${p.image_urls ? p.image_urls.length : 0} images`);
-      });
+      console.log('📦 Moments loaded:', moments.length);
 
       document.getElementById('totalOrders').textContent = orders.length;
       document.getElementById('totalCustomers').textContent = new Set(orders.map(o => o.customer_email || '')).size;
@@ -725,8 +854,8 @@
     }
   }
 
+  // ─── RENDER ORDERS ───
   function renderOrders(orders) {
-    // ... (same as before, keep as is)
     const orderList = document.getElementById('orderList');
     const orderCountBadge = document.getElementById('orderCountBadge');
     if (!orders || orders.length === 0) {
@@ -808,8 +937,8 @@
     });
   }
 
+  // ─── RENDER PRODUCTS ───
   function renderProductsList(products) {
-    // ... (same as before, keep as is)
     const productList = document.getElementById('productList');
     const productCountBadge = document.getElementById('productCountBadge');
     
@@ -946,13 +1075,11 @@
       let product;
 
       if (isEditing) {
-        // UPDATE
         const { data, error } = await supabaseClient.from('products').update(productData).eq('id', editingProductId).select();
         if (error) throw error;
         product = data[0];
         showToast(`📝 Product "${name}" updated`, 'success');
         
-        // Handle images
         if (selectedImages.length > 0) {
           const uploadedUrls = await uploadImages(editingProductId);
           const allImages = [...existingImages, ...uploadedUrls];
@@ -971,7 +1098,6 @@
         
         showToast(`✅ "${name}" updated!`, 'success');
       } else {
-        // CREATE
         productData.image_urls = [];
         productData.created_at = new Date().toISOString();
         
@@ -1020,7 +1146,7 @@
 
   document.getElementById('cancelEditBtn').addEventListener('click', resetProductForm);
 
-  // ─── MOMENTS ───
+  // ─── RENDER MOMENTS ───
   function renderMomentsList(moments) {
     const momentList = document.getElementById('momentList');
     const momentCountBadge = document.getElementById('momentCountBadge');
@@ -1034,15 +1160,23 @@
     momentCountBadge.textContent = moments.length;
     momentList.innerHTML = '';
     
-    const typeIcons = { 'prank': '😂', 'proposal': '💍', 'birthday': '🎂', 'custom': '🎨' };
-    const typeLabels = { 'prank': 'Prank', 'proposal': 'Proposal', 'birthday': 'Birthday Wish', 'custom': 'Custom' };
+    const typeIcons = {
+      'prank': '😂', 'proposal': '💍', 'birthday': '🎂', 'custom': '🎨',
+      'love': '❤️', 'apology': '🙏', 'encouragement': '💪', 'friendship': '🤝'
+    };
+    const typeLabels = {
+      'prank': 'Prank', 'proposal': 'Proposal', 'birthday': 'Birthday Wish',
+      'custom': 'Custom', 'love': 'Love Letter', 'apology': 'Apology',
+      'encouragement': 'Encouragement', 'friendship': 'Friendship'
+    };
     
     moments.forEach((m, index) => {
       const div = document.createElement('div');
       div.className = 'moment-item';
       const icon = typeIcons[m.type] || '🎨';
-      const typeLabel = typeLabels[m.type] || 'Custom';
+      const typeLabel = typeLabels[m.type] || m.type || 'Custom';
       const isUsed = m.used || false;
+      const viewUrl = `${window.location.origin}/view.html?slug=${m.slug}`;
       
       div.innerHTML = `
         <div class="moment-info">
@@ -1055,6 +1189,7 @@
         <div style="display:flex;align-items:center;gap:1rem;">
           <span class="moment-status ${isUsed ? 'used' : 'active'}">${isUsed ? '🔒 Used' : '✅ Active'}</span>
           <div class="moment-actions">
+            <button class="btn-preview" onclick="openDemo('${viewUrl}')" title="Preview"><i class="fas fa-eye"></i></button>
             <button class="edit-moment" data-index="${index}"><i class="fas fa-edit"></i></button>
             <button class="delete delete-moment" data-index="${index}"><i class="fas fa-trash-alt"></i></button>
           </div>
@@ -1092,7 +1227,16 @@
         document.getElementById('momentSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Update Moment';
         document.getElementById('cancelMomentEditBtn').classList.remove('hidden');
         
-        document.getElementById('momentType').value = m.type || 'custom';
+        // Set type (combo input)
+        const typeInput = document.getElementById('momentTypeInput');
+        const typeLabelsMap = {
+          'prank': '😂 Prank', 'proposal': '💍 Proposal', 'birthday': '🎂 Birthday Wish',
+          'custom': '🎨 Custom', 'love': '❤️ Love Letter', 'apology': '🙏 Apology',
+          'encouragement': '💪 Encouragement', 'friendship': '🤝 Friendship'
+        };
+        typeInput.value = typeLabelsMap[m.type] || m.type || 'Custom';
+        typeInput.dataset.value = m.type || 'custom';
+        
         document.getElementById('momentTitle').value = m.title || '';
         document.getElementById('momentMessage').value = m.message || '';
         document.getElementById('momentRecipient').value = m.recipient || '';
@@ -1105,8 +1249,16 @@
     });
   }
 
+  // ─── MOMENT FORM SUBMIT ───
   document.getElementById('momentSubmitBtn').addEventListener('click', async function() {
-    const type = document.getElementById('momentType').value;
+    // Get type from combo input
+    const typeInput = document.getElementById('momentTypeInput');
+    let type = typeInput.dataset.value || typeInput.value.trim().toLowerCase().replace(/\s+/g, '_');
+    // If type is empty or just a label, use 'custom'
+    if (!type || type === '' || type === 'custom' || typeInput.value.includes('Custom')) {
+      type = 'custom';
+    }
+    
     const title = document.getElementById('momentTitle').value.trim();
     const message = document.getElementById('momentMessage').value.trim();
     const recipient = document.getElementById('momentRecipient').value.trim();
@@ -1124,7 +1276,12 @@
 
     try {
       const momentData = {
-        type, title, message, recipient, sender, color,
+        type: type,
+        title: title,
+        message: message,
+        recipient: recipient,
+        sender: sender,
+        color: color,
         updated_at: new Date().toISOString()
       };
 
@@ -1163,7 +1320,8 @@
   }
 
   function resetMomentForm() {
-    document.getElementById('momentType').value = 'prank';
+    document.getElementById('momentTypeInput').value = '';
+    document.getElementById('momentTypeInput').dataset.value = '';
     document.getElementById('momentTitle').value = '';
     document.getElementById('momentMessage').value = '';
     document.getElementById('momentRecipient').value = '';
@@ -1180,6 +1338,10 @@
   // ─── INIT ───
   function init() {
     initSupabase();
+    
+    // Setup combo input
+    setupComboInput('momentTypeInput', 'typeSuggestions');
+    
     const adminName = localStorage.getItem('pixlnex_admin_name');
     if (checkAdminSession()) {
       document.getElementById('authBtn').textContent = `👑 ${adminName || 'Admin'}`;
