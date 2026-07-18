@@ -181,7 +181,7 @@
       <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="shop.html">Webs</a>
-        <a href="one-time.html">✨ Moments</a>
+        <a href="one-time.html">✨ One Time</a>
         <a href="#" class="active auth-btn" id="authBtn"><i class="fas fa-user-shield"></i> Admin</a>
         <a href="shop.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCounter">0</span></a>
       </div>
@@ -189,7 +189,7 @@
 
     <div id="adminContent">
       <div class="admin-header">
-        <div><h1><i class="fas fa-user-shield"></i> Admin Panel</h1><p>Manage products, orders, and Pixlnex one-time</p></div>
+        <div><h1><i class="fas fa-user-shield"></i> Admin Panel</h1><p>Manage products, orders, and Pixlnex Moments.</p></div>
         <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
           <span class="supabase-status" id="supabaseStatus">⏳ Connecting...</span>
           <div class="admin-badge" id="adminBadge" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</div>
@@ -263,7 +263,7 @@
       <div id="tab-moments" class="tab-content">
         <div class="admin-card">
           <h3><i class="fas fa-star"></i> Pixlnex Moments <span class="badge-count" id="momentCountBadge">0</span></h3>
-          <div id="momentList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">Loading one-time..</div></div>
+          <div id="momentList"><div style="color:#94a3b8;text-align:center;padding:1rem 0;">Loading moments...</div></div>
           
           <div class="moment-form" id="momentForm">
             <div class="full">
@@ -557,13 +557,22 @@
     const uploadedUrls = [];
     
     try {
-      const { data: buckets } = await supabaseClient.storage.listBuckets();
+      // Check if bucket exists
+      const { data: buckets, error: bucketError } = await supabaseClient.storage.listBuckets();
+      if (bucketError) throw bucketError;
+      
       const bucketExists = buckets.some(b => b.name === STORAGE_BUCKET);
       if (!bucketExists) {
-        showToast('⚠️ Storage bucket "product-images" not found. Please create it in Supabase Dashboard → Storage.');
-        return [];
+        showToast('⚠️ Storage bucket "product-images" not found. Creating it now...');
+        // Try to create the bucket
+        const { error: createError } = await supabaseClient.storage.createBucket(STORAGE_BUCKET, { public: true });
+        if (createError) {
+          throw new Error('Failed to create bucket. Please create it manually in Supabase Dashboard → Storage.');
+        }
+        showToast('✅ Bucket "product-images" created successfully!');
       }
     } catch (e) {
+      console.error('Bucket error:', e);
       showToast('⚠️ Storage error: ' + e.message);
       return [];
     }
@@ -586,7 +595,10 @@
 
   // ─── LOAD ALL DATA ───
   async function loadAllData() {
-    if (!supabaseConnected || !supabaseClient) { showToast('⚠️ Supabase not connected'); return; }
+    if (!supabaseConnected || !supabaseClient) { 
+      showToast('⚠️ Supabase not connected. Please refresh and try again.'); 
+      return; 
+    }
     try {
       console.log('🔄 Loading fresh data from Supabase...');
       
@@ -602,6 +614,7 @@
       let moments = [];
       if (momentsRes.error) {
         console.warn('Moments table not found:', momentsRes.error.message);
+        showToast('⚠️ Moments table not found. Run SQL to create it.');
       } else {
         moments = momentsRes.data || [];
       }
@@ -609,7 +622,7 @@
       const orders = ordersRes.data || [];
       const products = productsRes.data || [];
 
-      console.log('📦 Orders:', orders.length, 'Products:', products.length, 'Moments:', one-timelength);
+      console.log('📦 Orders:', orders.length, 'Products:', products.length, 'Moments:', moments.length);
 
       const totalOrders = orders.length;
       const customers = new Set(orders.map(o => o.customer_email || '')).size;
@@ -620,7 +633,7 @@
       document.getElementById('totalCustomers').textContent = customers || 0;
       document.getElementById('pendingOrders').textContent = pending;
       document.getElementById('totalDemos').textContent = totalDemos;
-      document.getElementById('totalMoments').textContent = one-timelength;
+      document.getElementById('totalMoments').textContent = moments.length;
 
       renderOrders(orders);
       renderProductsList(products);
@@ -838,7 +851,7 @@
         category: category, 
         category_label: categoryLabels[category] || 'Custom',
         features,
-        price: 0, // Add price to fix the NOT NULL constraint
+        price: 0,
         updated_at: new Date().toISOString()
       };
 
@@ -909,19 +922,19 @@
     const momentList = document.getElementById('momentList');
     const momentCountBadge = document.getElementById('momentCountBadge');
     
-    if (!moments || one-timelength === 0) {
+    if (!moments || moments.length === 0) {
       momentList.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1rem 0;">No moments yet. Create your first Pixlnex Moment below.</div>';
       momentCountBadge.textContent = '0';
       return;
     }
     
-    momentCountBadge.textContent = one-timelength;
+    momentCountBadge.textContent = moments.length;
     momentList.innerHTML = '';
     
     const typeIcons = { 'prank': '😂', 'proposal': '💍', 'birthday': '🎂', 'custom': '🎨' };
     const typeLabels = { 'prank': 'Prank', 'proposal': 'Proposal', 'birthday': 'Birthday Wish', 'custom': 'Custom' };
     
-    one-timeforEach((m, index) => {
+    moments.forEach((m, index) => {
       const div = document.createElement('div');
       div.className = 'moment-item';
       const icon = typeIcons[m.type] || '🎨';
@@ -955,10 +968,10 @@
         if (confirm(`Delete "${moment.title}"?`)) {
           try {
             await supabaseClient.from('one_time_items').delete().eq('id', moment.id);
-            one-timesplice(idx, 1);
+            moments.splice(idx, 1);
             renderMomentsList(moments);
             showToast(`🗑️ "${moment.title}" deleted`);
-            document.getElementById('totalMoments').textContent = one-timelength;
+            document.getElementById('totalMoments').textContent = moments.length;
           } catch (e) { showToast('⚠️ Error deleting moment'); }
         }
       });
